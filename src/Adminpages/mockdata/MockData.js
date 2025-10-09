@@ -1,0 +1,201 @@
+import {
+  Games,
+  Image,
+  LeaderboardSharp,
+  SelfImprovement,
+  WheelchairPickupOutlined
+} from "@mui/icons-material";
+import AddToPhotosIcon from "@mui/icons-material/AddToPhotos";
+import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
+import DashboardCustomizeIcon from "@mui/icons-material/DashboardCustomize";
+export const all_Data = [
+  // {
+  //   id: 1,
+  //   navLink: "/master",
+  //   navItem: "Master",
+  //   navIcon: (
+  //     <span>
+  //       <LeaderboardSharp color="#15317E" fontSize="medium" />
+  //     </span>
+  //   ),
+  //   subcomponent: [],
+  // },
+ 
+  {
+    id: 2,
+    navLink: "/admindashboard",
+    navItem: "Dashboard",
+    navIcon: (
+      <span>
+        <DashboardCustomizeIcon color="#15317E" fontSize="medium" />
+      </span>
+    ),
+    subcomponent: [],
+  },
+   {
+    id: 2,
+    navLink: "/banner",
+    navItem: "NFT Image",
+    navIcon: (
+      <span>
+        <Image color="#15317E" fontSize="medium" />
+      </span>
+    ),
+    subcomponent: [],
+  },
+    {
+    id: 14,
+    navLink: "/nft_create",
+    navItem: "Animal  ",
+    navIcon: (
+      <span>
+        <AddToPhotosIcon color="#15317E" fontSize="medium" />
+      </span>
+    ),
+    subcomponent: [],
+  },
+//   {
+//     id: 14,
+//     navLink: "/user_detail",
+//     navItem: "Member ",
+//     navIcon: (
+//       <span>
+//         <AddToPhotosIcon color="#15317E" fontSize="medium" />
+//       </span>
+//     ),
+//     subcomponent: [],
+//   },
+//   {
+//     id: 14,
+//     navLink: "/trader_detail",
+//     navItem: "Invester ",
+//     navIcon: (
+//       <span>
+//         <AddToPhotosIcon color="#15317E" fontSize="medium" />
+//       </span>
+//     ),
+//     subcomponent: [
+//        {
+//         id: 6.3,
+//         navLink: "/trader_detail",
+//         navItem: "Investor",
+//         navIcon: (
+//           <span>
+//             <SelfImprovement color="#15317E" fontSize="medium" />
+//           </span>
+//         ),
+//       },
+//        {
+//         id: 6.3,
+//         navLink: "/trader_sucess",
+//         navItem: "Verified Investor",
+//         navIcon: (
+//           <span>
+//             <SelfImprovement color="#15317E" fontSize="medium" />
+//           </span>
+//         ),
+//       },
+      
+//       {
+//         id: 6.3,
+//         navLink: "/trader_reject",
+//         navItem: "Reject Investor",
+//         navIcon: (
+//           <span>
+//             <SelfImprovement color="#15317E" fontSize="medium" />
+//           </span>
+//         ),
+//       },
+//     ],
+//   },
+//     {
+//     id: 6,
+//     navLink: "/levelBonus",
+//     navItem: "Income",
+//     navIcon: (
+//       <span>
+//         <CardGiftcardIcon color="#15317E" fontSize="medium" />
+//       </span>
+//     ),
+//     subcomponent: [
+
+//       {
+//         id: 6.3,
+//         navLink: "/levelBonus",
+//         navItem: "Level Bonus",
+//         navIcon: (
+//           <span>
+//             <SelfImprovement color="#15317E" fontSize="medium" />
+//           </span>
+//         ),
+//       },
+//      {
+//         id: 8.5,
+//         navLink: "/giftBonus",
+//         navItem: "Salary Bonus",
+//         navIcon: (
+//           <span>
+//             <WheelchairPickupOutlined color="#15317E" fontSize="medium" />
+//           </span>
+//         ),
+//       },
+      
+//       {
+//         id: 8.6,
+//         navLink: "/vipbonus",
+//         navItem: "Reward Bonus",
+//         navIcon: (
+//           <span>
+//             <WheelchairPickupOutlined color="#15317E" fontSize="medium" />
+//           </span>
+//         ),
+//       },
+    
+//     ],
+//   },
+
+//   {
+//     id: 11,
+//     navLink: "/inr_Payout",
+//     navItem: "Payout",
+//     navIcon: (
+//       <span>
+//         <Games color="#15317E" fontSize="medium" />
+//       </span>
+//     ),
+//     subcomponent: [],
+//   },
+//    {
+//     id: 11,
+//     navLink: "/inr_Paying",
+//     navItem: "Fund Request",
+//     navIcon: (
+//       <span>
+//         <Games color="#15317E" fontSize="medium" />
+//       </span>
+//     ),
+//     subcomponent: [],
+//   },
+//  {
+//     id: 1,
+//     navLink: "/contact",
+//     navItem: "Contact",
+//     navIcon: (
+//       <span>
+//         <LeaderboardSharp color="#15317E" fontSize="medium" />
+//       </span>
+//     ),
+//     subcomponent: [],
+//   },
+//   {
+//     id: 1,
+//     navLink: "/ticket_list",
+//     navItem: "Ticket List",
+//     navIcon: (
+//       <span>
+//         <LeaderboardSharp color="#15317E" fontSize="medium" />
+//       </span>
+//     ),
+//     subcomponent: [],
+//   },
+];

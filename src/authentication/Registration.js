@@ -121,12 +121,13 @@ const Registration = () => {
         // setOpenDialogBox(true);
         return;
       }
+      console.log(response?.data?.result?.[0]?.token)
       if (response?.data?.success) {
         dispatch(saveUid(reqBodyy?.mobile));
-        dispatch(saveToken(response?.data?.result?.token));
+        dispatch(saveToken(response?.data?.result?.[0]?.token));
         dispatch(saveUsername(reqBodyy?.username));
         dispatch(saveUserCP(response?.data?.result?.isCP));
-        localStorage.setItem("logindataen", response?.data?.result?.token);
+        localStorage.setItem("logindataen", response?.data?.result?.[0]?.token);
         localStorage.setItem("uid", reqBodyy?.mobile);
         localStorage.setItem("username", reqBodyy?.username);
         localStorage.setItem("isCP", response?.data?.result?.isCP);
@@ -143,10 +144,10 @@ const Registration = () => {
           icon: "success",
           confirmButtonColor: "#75edf2",
         }).then((result) => {
-          if (result.isConfirmed) {
-            navigate("/dashboard");
-            window.location.reload();
-          }
+          // if (result.isConfirmed) {
+          //   navigate("/dashboard");
+          //   window.location.reload();
+          // }
         });
       } else {
         Swal.fire({

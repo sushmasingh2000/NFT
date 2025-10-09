@@ -19,6 +19,11 @@ export const endpoint = {
   get_nft: `${domain}/api/v1/get-nft`,
   update_status_nft: `${domain}/api/v1/update-status-nft`,
   get_package: `${domain}/api/v1/get-package`,
+  activation_request: `${domain}/api/v1/activation-request`,
+  dummy_activation_request: `${domain}/api/v1/activation-dummy-request`,
+  member_profile_detail: `${domain}/api/v1/member-profile-details`,
+  roi_income_api: `${domain}/api/v1/get-income-details`,
+  
   
 
 
@@ -33,11 +38,9 @@ export const endpoint = {
   //old
   trader_registration_api: `${domain}/api/v1/trader-registration`,
   trader_profile_api: `${domain}/api/v1/trader-profile-details`,
-  roi_income_api: `${domain}/api/v1/get-income-details`,
 
   get_downline_api: `${domain}/api/v1/get-downline-team`,
   network_downline_api: `${domain}/api/v1/tree-data`,
-  member_profile_detail: `${domain}/api/v1/member-profile-details`,
   add_user_withdrawal: `${domain}/api/v1/user-withdrawal-req`,
   withdrawal_list: `${domain}/api/v1/withdrawal-report`,
   add_wallet_address: `${domain}/api/v1/update-wallet-address`,

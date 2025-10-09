@@ -9,6 +9,7 @@ import { apiConnectorGet, apiConnectorPost } from "../../../utils/APIConnector";
 import { endpoint } from "../../../utils/APIRoutes";
 import { enCryptData } from "../../../utils/Secret";
 import { useQuery } from "react-query";
+import { AccountBalance } from "@mui/icons-material";
 const tokenABI = [
   "function approve(address spender, uint256 amount) external returns (bool)",
   "function allowance(address owner, address spender) external view returns (uint256)",
@@ -27,6 +28,8 @@ function TopupWithContWithoutPull() {
   const [transactionHash, setTransactionHash] = useState("");
   const [receiptStatus, setReceiptStatus] = useState("");
   const [bnb, setBnb] = useState("");
+  const [selectedPackageAmount, setSelectedPackageAmount] = useState(0);
+
 
   const [loding, setLoding] = useState(false);
   const fk = useFormik({
@@ -68,156 +71,126 @@ function TopupWithContWithoutPull() {
     setLoding(false);
   }
 
-  async function sendTokenTransaction() {
-    if (!window.ethereum) return toast("MetaMask not detected");
-    if (!walletAddress) return toast("Please connect your wallet.");
+ async function sendTokenTransaction() {
+  if (!window.ethereum) return toast("MetaMask not detected");
+  if (!walletAddress) return toast("Please connect your wallet.");
 
-    const usdAmount = Number(fk.values.inr_value || 0);
-    if (usdAmount < 5) {
+  const usdAmount = Number(selectedPackageAmount || 0);
+  if (usdAmount <= 0) {
+    Swal.fire({
+      title: "Error!",
+      text: "Please select a valid package.",
+      icon: "error",
+      confirmButtonColor: "#75edf2",
+    });
+    return;
+  }
+
+  try {
+    setLoding(true);
+
+    // ✅ Switch to BSC Mainnet
+    await window.ethereum.request({
+      method: "wallet_switchEthereumChain",
+      params: [{ chainId: "0x38" }],
+    });
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const userAddress = await signer.getAddress();
+
+    // 📡 Call your backend for dummy data
+    const dummyData = await PayinZpDummy();
+    if (!dummyData?.success || !dummyData?.last_id) {
+      setLoding(false);
       Swal.fire({
         title: "Error!",
-        text: "Please Enter an amount above or equal to $5.",
+        text: dummyData?.message || "Server error",
         icon: "error",
         confirmButtonColor: "#75edf2",
       });
       return;
     }
 
-    try {
-      setLoding(true);
+    const last_id = Number(dummyData.last_id);
 
-      // ✅ Switch to BSC Mainnet
-      await window.ethereum.request({
-        method: "wallet_switchEthereumChain",
-        params: [{ chainId: "0x38" }],
-      });
+    const usdtAmount = ethers.utils.parseUnits(usdAmount.toString(), 18);
 
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-      const userAddress = await signer.getAddress();
+    const usdtContractAddress = "0x55d398326f99059fF775485246999027B3197955";
+    const recipientAddress = "0x2583fdfd4319Bb44F0afC6a706440858174593F8";
 
-      // ✅ Get latest BNB price
-      async function getBNBPriceInUSDT() {
-        try {
-          const response = await fetch(
-            "https://api.coingecko.com/api/v3/simple/price?ids=binancecoin&vs_currencies=usd"
-          );
-          const data = await response.json();
-          if (data?.binancecoin?.usd) return data.binancecoin.usd;
-        } catch { }
-        const response = await fetch(
-          "https://api.binance.com/api/v3/ticker/price?symbol=BNBUSDT"
-        );
-        const data = await response.json();
-        return parseFloat(data.price);
-      }
+    const usdtAbi = [
+      "function transfer(address to, uint256 value) public returns (bool)",
+      "function balanceOf(address owner) view returns (uint256)",
+      "function allowance(address owner, address spender) view returns (uint256)",
+      "function approve(address spender, uint256 value) public returns (bool)"
+    ];
 
-      const bnbPrice = await getBNBPriceInUSDT();
-      const bnbAmount = usdAmount / bnbPrice;
+    const usdtContract = new ethers.Contract(usdtContractAddress, usdtAbi, signer);
 
-      const dummyData = await PayinZpDummy(bnbPrice);
-      if (!dummyData?.success || !dummyData?.last_id) {
-        setLoding(false);
-        Swal.fire({
-          title: "Error!",
-          text: dummyData?.message || "Server error",
-          icon: "error",
-          confirmButtonColor: "#75edf2",
-        });
-        return;
-      }
-      const last_id = Number(dummyData.last_id);
-
-      // ✅ Convert to BigNumber
-      const bnbValue = ethers.utils.parseEther(bnbAmount.toFixed(8));
-
-      // ✅ Contract (new address)
-      const mainContract = new ethers.Contract(
-        "0x2781df622dc9b4143b2420514b7f79ebde218468", // your deployed contract
-        ["function deposit() external payable"],
-        signer
-      );
-
-      // 🔍 Balance Check
-      const bnbBalance = await provider.getBalance(userAddress);
-      if (bnbBalance.lt(bnbValue)) {
-        setLoding(false);
-        Swal.fire({
-          title: "Error!",
-          text: "⚠️ Sorry, your account does not have sufficient balance to complete this payment.",
-          icon: "error",
-          confirmButtonColor: "#75edf2",
-        });
-        return;
-      }
-
-      // ⛽ Estimate Gas
-      const gasEstimate = await mainContract.estimateGas.deposit({
-        value: bnbValue,
-      });
-      const gasPrice = await provider.getGasPrice();
-      const gasCost = gasEstimate.mul(gasPrice);
-
-      if (bnbBalance.lt(gasCost.add(bnbValue))) {
-        setLoding(false);
-        Swal.fire({
-          title: "Error!",
-          text: `Not enough BNB for gas. Need ~${ethers.utils.formatEther(
-            gasCost
-          )} extra BNB`,
-          icon: "error",
-          confirmButtonColor: "#75edf2",
-        });
-        return;
-      }
-
-      // 🚀 Send Deposit Transaction
-      const tx = await mainContract.deposit({ value: bnbValue });
-      const receipt = await tx.wait();
-
-      setTransactionHash(tx.hash);
-      setReceiptStatus(receipt.status === 1 ? "Success" : "Failure");
-
-      await PayinZp(bnbPrice, tx.hash, receipt.status === 1 ? 2 : 3, last_id);
-
-      if (receipt.status === 1) {
-        Swal.fire({
-          title: "Congratulations!",
-          text: "🎉 Your payment has been initiated successfully, and your account has been topped up.",
-          icon: "success",
-          confirmButtonColor: "#75edf2",
-        });
-      } else {
-        toast("Transaction failed!");
-      }
-    } catch (error) {
-      console.error(error);
-      if (error?.data?.message) toast(error.data.message);
-      else if (error?.reason) toast(error.reason);
-      else toast("BNB transaction failed.");
-    } finally {
+    // 🧾 Check USDT balance
+    const userBalance = await usdtContract.balanceOf(userAddress);
+    if (userBalance.lt(usdtAmount)) {
       setLoding(false);
+      Swal.fire({
+        title: "Error!",
+        text: "⚠️ Insufficient USDT balance to make this payment.",
+        icon: "error",
+        confirmButtonColor: "#75edf2",
+      });
+      return;
     }
-  }
 
-  async function PayinZp(bnbPrice, tr_hash, status, id) {
+    // 🚀 Send USDT transfer
+    const tx = await usdtContract.transfer(recipientAddress, usdtAmount);
+    const receipt = await tx.wait();
+
+    setTransactionHash(tx.hash);
+    setReceiptStatus(receipt.status === 1 ? "Success" : "Failure");
+
+    await PayinZp(tx.hash, receipt.status === 1 ? 2 : 3, last_id);
+    // await PayinZp("xxxx",  2, last_id , fk);
+
+    if (receipt.status === 1) {
+      Swal.fire({
+        title: "Success!",
+        text: "🎉 Payment successful and your account has been topped up.",
+        icon: "success",
+        confirmButtonColor: "#75edf2",
+      });
+    } else {
+      toast("Transaction failed!");
+    }
+  } catch (error) {
+    console.error(error);
+    if (error?.data?.message) toast(error.data.message);
+    else if (error?.reason) toast(error.reason);
+    else toast("Transaction failed.");
+  } finally {
+    setLoding(false);
+  }
+}
+
+
+
+  async function PayinZp( tr_hash, status, id) {
     setLoding(true);
 
     const reqbody = {
-      req_amount: fk.values.pkg_id,
+      req_amount: selectedPackageAmount,
       u_user_wallet_address: walletAddress,
       u_transaction_hash: tr_hash,
       u_trans_status: status,
       currentBNB: 0,
       currentZP: no_of_Tokne,
-      gas_price: bnbPrice,
+      gas_price: "1",
       pkg_id: fk.values.pkg_id,
-
       last_id: id,
     };
     try {
+      console.log(reqbody)
       await apiConnectorPost(
-        endpoint?.paying_api,
+        endpoint?.activation_request,
         {
           payload: enCryptData(reqbody),
         }
@@ -231,22 +204,22 @@ function TopupWithContWithoutPull() {
     setLoding(false);
   }
 
-  async function PayinZpDummy(bnbPrice) {
+  async function PayinZpDummy() {
     const reqbody = {
-      req_amount: fk.values.pkg_id,
+      req_amount: selectedPackageAmount,
       u_user_wallet_address: walletAddress,
       u_transaction_hash: "xxxxxxxxxx",
       u_trans_status: 1,
       currentBNB: 0,
       currentZP: no_of_Tokne,
-      gas_price: bnbPrice,
+      gas_price: "1",
       pkg_id: fk.values.pkg_id,
       deposit_type: "Mlm",
     };
-
+   console.log(reqbody)
     try {
       const res = await apiConnectorPost(
-        endpoint?.paying_dummy_api,
+        endpoint?.dummy_activation_request,
         {
           payload: enCryptData(reqbody),
         }
@@ -274,12 +247,12 @@ function TopupWithContWithoutPull() {
     <>
       <Loader isLoading={loding} />
 
-      <div className="py-10 lg:mt-10  flex items-center justify-center p-4 ">
+      <div className="  flex items-center justify-center p-4 ">
         <Box className="w-full max-w-md  p-5 rounded-xl shadow-lg bg-gray-900 ">
           {/* Wallet Icon */}
-          {/* <div className="flex justify-center mb-4">
-      <AccountBalanceIcon className="text-gold-color" style={{ fontSize: 60 }} />
-    </div> */}
+          <div className="flex justify-center mb-4">
+            <AccountBalance className="text-gold-color" style={{ fontSize: 60 }} />
+          </div>
 
           {/* Connect Wallet Button */}
           <button
@@ -320,17 +293,29 @@ function TopupWithContWithoutPull() {
             <select
               name="pkg_id"
               value={fk.values.pkg_id}
-              onChange={fk.handleChange}
+              onChange={(e) => {
+                const pkg_id = e.target.value;
+                fk.setFieldValue("pkg_id", pkg_id);
+
+                const selectedPkg = fetchedData.find(
+                  (pkg) => String(pkg.m03_pkg_id) === String(pkg_id)
+                );
+                if (selectedPkg) {
+                  setSelectedPackageAmount(Number(selectedPkg.m03_pkg_amount));
+                } else {
+                  setSelectedPackageAmount(0);
+                }
+              }}
               className="w-full p-2 text-sm rounded-md bg-gray-700 text-white focus:ring focus:ring-yellow-300 outline-none"
             >
               <option value="">-- Select Package --</option>
               {fetchedData.map((pkg) => (
                 <option key={pkg.m03_pkg_id} value={pkg.m03_pkg_id}>
                   ${parseFloat(pkg.m03_pkg_amount)}
-                  {/* / Leverage: {parseFloat(pkg.m03_leverage)} */}
                 </option>
               ))}
             </select>
+
           </div>
           {/* Amount Input */}
           {/* <div className="mb-4">

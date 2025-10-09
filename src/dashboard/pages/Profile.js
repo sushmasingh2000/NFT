@@ -123,24 +123,24 @@ const Profile = () => {
 
     return (
         <>
-            <div className=" bg-gray-900 rounded-xl lg:mt-8 text-gray-100 p-6">
+            <div className="  rounded-xl lg:mt-8 text-gray-100 p-6">
                 <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
 
                     <div className="bg-gray-800 p-3 rounded-lg shadow-lg">
                         <div className="flex flex-col items-center mb-6">
-                            <img src={logo} alt="Coin Icon" className="w-16 h-16 mb-3" />
+                            <img src={logo} alt="Coin Icon" className="w-16  mb-3" />
                             <h2 className="text-lg font-semibold text-white">General Account Information</h2>
                         </div>
 
                         <div className="space-y-3 text-sm text-gray-300">
                             <div className="flex justify-between py-1 border-b border-gray-700">
                                 <span>Registration Date:</span>
-                                <span className="text-gray-100">{moment(user_profile?.lgn_created_at )?.format("DD-MM-YYYY")|| "--"}</span>
+                                <span className="text-gray-100">{moment(user_profile?.lgn_created_at)?.format("DD-MM-YYYY") || "--"}</span>
                             </div>
-                            
+
                             <div className="flex justify-between py-1 border-b border-gray-700">
                                 <span>Name:</span>
-                                <span className="text-gray-100">{user_profile?.jnr_name || "--"}</span>
+                                <span className="text-gray-100">{user_profile?.lgn_name || "--"}</span>
                             </div>
                             <div className="flex justify-between py-1 border-b border-gray-700">
                                 <span>Email Id:</span>
@@ -157,8 +157,10 @@ const Profile = () => {
                             </div>
                             <div className="flex justify-between py-1">
                                 <span>Account Status:</span>
-                                <span className={`font-medium ${user_profile?.td_account_status === "Active" ? "text-green-400" : "text-red-400"}`}>
-                                    {user_profile?.td_account_status}
+                                <span className={`font-medium `}>
+                                    {user_profile?.tr03_topup_date ?
+                                        "Active" : "DeActive"
+                                    }
                                 </span>
                             </div>
                         </div>
@@ -166,7 +168,7 @@ const Profile = () => {
 
                     <div className="bg-gray-800 h-fit p-3 rounded-lg shadow-lg">
                         <div className="flex flex-col items-center mb-6">
-                            <img src={logo} alt="Coin Icon" className="w-16 h-16 mb-3" />
+                            <img src={logo} alt="Coin Icon" className="w-16  mb-3" />
                             <h2 className="text-lg font-semibold text-white">Password &  Address</h2>
                             <p className="text-gray-400 text-sm">Manage account settings securely</p>
                         </div>

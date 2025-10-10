@@ -207,17 +207,17 @@ export const all_Data = [
 //     ),
 //     subcomponent: [],
 //   },
-//    {
-//     id: 11,
-//     navLink: "/inr_Paying",
-//     navItem: "Fund Request",
-//     navIcon: (
-//       <span>
-//         <Games color="#15317E" fontSize="medium" />
-//       </span>
-//     ),
-//     subcomponent: [],
-//   },
+   {
+    id: 11,
+    navLink: "/inr_Paying",
+    navItem: "Fund Request",
+    navIcon: (
+      <span>
+        <Games color="#15317E" fontSize="medium" />
+      </span>
+    ),
+    subcomponent: [],
+  },
 //  {
 //     id: 1,
 //     navLink: "/contact",

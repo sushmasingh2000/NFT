@@ -27,15 +27,16 @@ const INRPaying = () => {
     enableReinitialize: true,
 
   })
-  const { data, isLoading } = useQuery(
-    ['get_paying_Admin', fk.values.search, fk.values.start_date, fk.values.end_date, page],
+const { data, isLoading } = useQuery(
+    ['get_actiavtion_admin', fk.values.search, fk.values.start_date, fk.values.end_date, page],
     () =>
-      apiConnectorPost(endpoint?.user_deposit_req, {
+      apiConnectorPost(endpoint?.roi_income_api, {
+        income_type:"IN",
         search: fk.values.search,
         start_date: fk.values.start_date,
         end_date: fk.values.end_date,
         page: page,
-        count: 10,
+        count: "10",
       }),
     {
       keepPreviousData: true,
@@ -48,78 +49,31 @@ const INRPaying = () => {
 
   const allData = data?.data?.result || [];
 
-  const handleSubmit = (id) => {
-    SweetAlert.fire({
-      title: "Are you sure?",
-      text: "You want to Approve this Amount!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Confirm",
-      cancelButtonText: "Cancel",
-      customClass: {
-        confirmButton: "custom-confirm",
-        cancelButton: "custom-cancel",
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        handleRequestStatus(id,2);
-      }
-    });
-  };
-  const handleRequestStatus = async (id,status) => {
-    try {
-      const res = await apiConnectorPost(endpoint?.change_status_fund, {
-        tr09_req_id: id,
-        status: status,
-      });
-      client.refetchQueries("get_paying_Admin")
-      toast(res?.data?.message);
-      console.log(res);
-    } catch (e) {
-      console.log(e);
-    }
-  };
 
-  const handleRejectSubmit = (id) => {
-    SweetAlert.fire({
-      title: "Are you sure?",
-      text: "You want to Reject this Amount!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Confirm",
-      cancelButtonText: "Cancel",
-      customClass: {
-        confirmButton: "custom-confirm",
-        cancelButton: "custom-cancel",
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        handleRequestStatus(id,3);
-      }
-    });
-  };
-  const tablehead = [
-    <span>S.No.</span>,
-    <span>User Id</span>,
-    <span>Name</span>,
-    <span>Amount ($)</span>,
-    <span>Status</span>,
-    <span>Date</span>,
+ const tablehead = [
+  <span>S.No.</span>,
+  <span>Date</span>,
+  <span>Transaction ID</span>,
+  <span>User</span>,
+  <span>Email</span>,
+  <span>Amount ($)</span>,
+  // <span>Wallet</span>,
+  // <span>Description</span>,
+];
 
-
+const tablerow = allData?.data?.map((row, index) => {
+  return [
+    <span>{(page - 1) * 10 + index + 1}</span>,
+    <span>{moment.utc(row.tr07_created_at).format("DD-MM-YYYY HH:mm:ss")}</span>,
+    <span>{row.tr07_trans_id}</span>,
+    <span>{row.lgn_name || 'N/A'}</span>,
+    <span>{row.lgn_email || 'N/A'}</span>,
+    <span>{Number(row.tr07_amount).toFixed(2)}</span>,
+    // <span>{row.tr07_wallet || 'N/A'}</span>,
+    // <span>{row.tr07_description || 'N/A'}</span>,
+   
   ];
-  const tablerow = allData?.data?.map((row, index) => {
-    return [
-     <span> {(page - 1) * 10 + index + 1}</span>,
-      <span>{row?.lgn_cust_id || "--"}</span>,
-      <span> {row?.jnr_name || 0}</span>,
-      <span>{row?.topup_real_amount || "--"}</span>,
-      <span>
-        {row?.topup_roi_status || "N/A"}
-      </span>,
-      <span>{row?.created_at ? moment(row?.created_at)?.format("DD-MM-YYYY HH:mm:ss") : "--"}</span>,
-    ]
-  })
+});
 
   return (
     <>

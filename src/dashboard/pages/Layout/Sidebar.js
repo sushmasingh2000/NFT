@@ -50,6 +50,8 @@ const Sidebar = () => {
     { title: "Dashboard", icon: <FaTachometerAlt />, path: "/dashboard" },
     { title: "NFT List ", icon: <Analytics />, path: "/nft_purchase" },
     { title: "TopUp ", icon: <FaUserCog />, path: "/topup_data" },
+    { title: "Activation", icon: <FaCheck />, path: "/activation" },
+
     // {
     //   title: "Associate Reg",
     //   icon: <FaCheck />,
@@ -76,7 +78,6 @@ const Sidebar = () => {
       ],
     },
 
-    // { title: "Activation", icon: <FaCheck />, path: "/activation" },
     // {
     //   title: "Network",
     //   icon: <FaNetworkWired />,

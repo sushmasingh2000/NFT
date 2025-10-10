@@ -25,7 +25,8 @@ const Activation = () => {
   const { data, isLoading } = useQuery(
     ['get_actiavtion', fk.values.search, fk.values.start_date, fk.values.end_date, page],
     () =>
-      apiConnectorPost(endpoint?.user_deposit_req, {
+      apiConnectorPost(endpoint?.roi_income_api, {
+        income_type:"IN",
         search: fk.values.search,
         start_date: fk.values.start_date,
         end_date: fk.values.end_date,
@@ -43,26 +44,27 @@ const Activation = () => {
 
   const allData = data?.data?.result || [];
 
-  const tablehead = [
-    <span>S.No.</span>,
-    <span>Date</span>,
-    <span>Invoice</span>,
-    <span>Pkg Amount ($)</span>,
-    <span>Pkg Fee</span>,
-    <span>INC Status</span>
+const tablehead = [
+  <span>S.No.</span>,
+  <span>Date</span>,
+  <span>Transaction ID</span>,
+  <span>Amount ($)</span>,
+  // <span>Wallet</span>,
+  <span>Description</span>,
+];
 
-
+const tablerow = allData?.data?.map((row, index) => {
+  return [
+    <span>{(page - 1) * 10 + index + 1}</span>,
+    <span>{moment.utc(row.tr07_created_at).format("DD-MM-YYYY HH:mm:ss")}</span>,
+    <span>{row.tr07_trans_id}</span>,
+    <span>{Number(row.tr07_amount).toFixed(2)}</span>,
+    // <span>{row.tr07_wallet || 'N/A'}</span>,
+    <span>{row.tr07_description || 'N/A'}</span>,
+   
   ];
-  const tablerow = allData?.data?.map((row, index) => {
-    return [
-     <span> {(page - 1) * 10 + index + 1}</span>,
-      <span>{moment?.utc(row.tr_date).format("DD-MM-YYYY HH:mm:ss")}</span>,
-      <span>{row.tr_invoice}</span>,
-      <span> {row.m_pack_name}</span>,
-      <span>{row.m_pack_fee}</span>,
-      <span>{row.tr_status}</span>
-    ];
-  });
+});
+
   return (
     <div className="p-2">
       <div className="bg-gray-800 rounded-lg shadow-lg p-3 text-white border border-gray-700 mb-6">

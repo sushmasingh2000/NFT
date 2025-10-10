@@ -162,10 +162,7 @@ const Sidebar = () => {
         {/* Mobile Sidebar Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-700 lg:hidden">
           <div className="flex items-center space-x-2 text-xl font-bold">
-            <span className="bg-gold-color text-black px-2 py-1 font-bold">
-              Buy
-            </span>
-            <span>Buy NFT</span>
+           <img src={logo} alt=""/>
           </div>
           <button
             onClick={() => setShowSidebar(false)}
@@ -177,7 +174,7 @@ const Sidebar = () => {
 
         {/* Desktop Sidebar Header */}
         <div className="hidden lg:flex text-xl font-bold p-4 border-b border-gray-700 items-center justify-center space-x-2">
-          <span>Buy NFT</span>
+          <img src={logo} alt=""/>
 
         </div>
 

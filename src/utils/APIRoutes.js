@@ -18,13 +18,22 @@ export const endpoint = {
   create_nft: `${domain}/api/v1/craete-nft`,
   get_nft: `${domain}/api/v1/get-nft`,
   update_status_nft: `${domain}/api/v1/update-status-nft`,
+
+  get_nft_by_user: `${domain}/api/v1/get-nft-by-user`,
+  trading: `${domain}/api/v1/trading`,
+  get_nft_details: `${domain}/api/v1/get-trading-details`,
+
+
+
   get_package: `${domain}/api/v1/get-package`,
+  member_topup_admin: `${domain}/api/v1/member-topup-by-admin`,
   activation_request: `${domain}/api/v1/activation-request`,
   dummy_activation_request: `${domain}/api/v1/activation-dummy-request`,
   member_profile_detail: `${domain}/api/v1/member-profile-details`,
+  member_detail: `${domain}/api/v1/member-details`,
   roi_income_api: `${domain}/api/v1/get-income-details`,
-  
-  
+
+
 
 
 

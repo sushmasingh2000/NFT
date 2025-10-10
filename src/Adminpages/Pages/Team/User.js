@@ -31,7 +31,7 @@ const UserDetail = () => {
     const { data, isLoading } = useQuery(
         ['get_user_admin', fk.values.search, fk.values.start_date, fk.values.end_date, page],
         () =>
-            apiConnectorPost(endpoint?.member_list_details, {
+            apiConnectorPost(endpoint?.member_detail, {
                 search: fk.values.search,
                 start_date: fk.values.start_date,
                 end_date: fk.values.end_date,
@@ -89,12 +89,12 @@ const UserDetail = () => {
         <span>S.No.</span>,
         <span>User ID</span>,
         <span>User Name</span>,
-        // <span>Email</span>,
+        <span>Email</span>,
         <span>Mobile No</span>,
         <span>Fund Wallet ($)</span>,
         // <span>Income Wallet ($)</span>,
-        <span>Total Income ($)</span>,
-        <span>Password</span>,
+        <span>Wallet Address</span>,
+        // <span>Password</span>,
         <span> Status</span>,
         <span>Join. Date</span>,
 
@@ -103,22 +103,22 @@ const UserDetail = () => {
     const tablerow = allData?.data?.map((row, index) => {
         return [
            <span> {(page - 1) * 10 + index + 1}</span>,
-            <span>{row.lgn_cust_id}</span>,
-            <span>{row.jnr_name}</span>,
-            // <span>{row.lgn_email}</span>,
+            <span>{row.lgn_cust_id || "--"}</span>,
+            <span>{row.lgn_name || "--"}</span>,
+            <span>{row.lgn_email || "--"}</span>,
             // <span>{row.lgn_mobile}</span>,
-            <span>{row?.lgn_mobile}</span>,
-            <span>{row.jnr_curr_wallet}</span>,
-            <span>{row.jnr_total_income}</span>,
-            <span>{row?.lgn_pass}</span>,
+            <span>{row?.lgn_mobile || "--"}</span>,
+            <span>{row.tr03_fund_wallet || "--"}</span>,
+            <span>{row.lgn_wallet_add || "--"}</span>,
+            // <span>{row?.lgn_pass}</span>,
             <span>
                 <Switch
                     checked={row?.lgn_is_blocked === "No"}
-                    onChange={() => changestatus(row?.lgn_jnr_id)}
+                    onChange={() => changestatus(row?.tr03_lgn_id)}
                     color="primary"
                 />
             </span>,
-            <span>{row.lgn_created_at ? moment?.utc(row.lgn_created_at).format("DD-MM-YYYY") : "--"}</span>,
+            <span>{row.tr03_reg_date ? moment?.utc(row.tr03_reg_date).format("DD-MM-YYYY") : "--"}</span>,
         ];
     });
     return (

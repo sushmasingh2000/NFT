@@ -46,7 +46,7 @@ export const all_Data = [
     {
     id: 14,
     navLink: "/nft_create",
-    navItem: "Animal  ",
+    navItem: "NFT  ",
     navIcon: (
       <span>
         <AddToPhotosIcon color="#15317E" fontSize="medium" />
@@ -54,17 +54,38 @@ export const all_Data = [
     ),
     subcomponent: [],
   },
-//   {
-//     id: 14,
-//     navLink: "/user_detail",
-//     navItem: "Member ",
-//     navIcon: (
-//       <span>
-//         <AddToPhotosIcon color="#15317E" fontSize="medium" />
-//       </span>
-//     ),
-//     subcomponent: [],
-//   },
+    {
+    id: 14,
+    navLink: "/topup",
+    navItem: "TopUp ",
+    navIcon: (
+      <span>
+        <SelfImprovement color="#15317E" fontSize="medium" />
+      </span>
+    ),
+    subcomponent: [],
+  },
+  {
+    id: 14,
+    navLink: "/user_detail",
+    navItem: "Member ",
+    navIcon: (
+      <span>
+        <AddToPhotosIcon color="#15317E" fontSize="medium" />
+      </span>
+    ),
+    subcomponent: [],
+  },
+    {
+        id: 6.3,
+        navLink: "/trader_detail",
+        navItem: "NFT Details",
+        navIcon: (
+          <span>
+            <SelfImprovement color="#15317E" fontSize="medium" />
+          </span>
+        ),
+      },
 //   {
 //     id: 14,
 //     navLink: "/trader_detail",
@@ -75,16 +96,7 @@ export const all_Data = [
 //       </span>
 //     ),
 //     subcomponent: [
-//        {
-//         id: 6.3,
-//         navLink: "/trader_detail",
-//         navItem: "Investor",
-//         navIcon: (
-//           <span>
-//             <SelfImprovement color="#15317E" fontSize="medium" />
-//           </span>
-//         ),
-//       },
+//      
 //        {
 //         id: 6.3,
 //         navLink: "/trader_sucess",
@@ -108,51 +120,81 @@ export const all_Data = [
 //       },
 //     ],
 //   },
-//     {
-//     id: 6,
-//     navLink: "/levelBonus",
-//     navItem: "Income",
-//     navIcon: (
-//       <span>
-//         <CardGiftcardIcon color="#15317E" fontSize="medium" />
-//       </span>
-//     ),
-//     subcomponent: [
+    {
+    id: 6,
+    navLink: "/levelBonus",
+    navItem: "Income",
+    navIcon: (
+      <span>
+        <CardGiftcardIcon color="#15317E" fontSize="medium" />
+      </span>
+    ),
+    subcomponent: [
 
-//       {
-//         id: 6.3,
-//         navLink: "/levelBonus",
-//         navItem: "Level Bonus",
-//         navIcon: (
-//           <span>
-//             <SelfImprovement color="#15317E" fontSize="medium" />
-//           </span>
-//         ),
-//       },
-//      {
-//         id: 8.5,
-//         navLink: "/giftBonus",
-//         navItem: "Salary Bonus",
-//         navIcon: (
-//           <span>
-//             <WheelchairPickupOutlined color="#15317E" fontSize="medium" />
-//           </span>
-//         ),
-//       },
+      {
+        id: 6.3,
+        navLink: "/levelBonus",
+        navItem: "Level Bonus",
+        navIcon: (
+          <span>
+            <SelfImprovement color="#15317E" fontSize="medium" />
+          </span>
+        ),
+      },
+     {
+        id: 8.5,
+        navLink: "/giftBonus",
+        navItem: "Direct Bonus",
+        navIcon: (
+          <span>
+            <WheelchairPickupOutlined color="#15317E" fontSize="medium" />
+          </span>
+        ),
+      },
       
-//       {
-//         id: 8.6,
-//         navLink: "/vipbonus",
-//         navItem: "Reward Bonus",
-//         navIcon: (
-//           <span>
-//             <WheelchairPickupOutlined color="#15317E" fontSize="medium" />
-//           </span>
-//         ),
-//       },
+      {
+        id: 8.6,
+        navLink: "/vipbonus",
+        navItem: "NFT Trading Bonus",
+        navIcon: (
+          <span>
+            <WheelchairPickupOutlined color="#15317E" fontSize="medium" />
+          </span>
+        ),
+      },
+       {
+        id: 8.6,
+        navLink: "/matching",
+        navItem: "NFT Level Bonus",
+        navIcon: (
+          <span>
+            <WheelchairPickupOutlined color="#15317E" fontSize="medium" />
+          </span>
+        ),
+      },
+       {
+        id: 8.6,
+        navLink: "/weeklybonus",
+        navItem: "MileStone Bonus",
+        navIcon: (
+          <span>
+            <WheelchairPickupOutlined color="#15317E" fontSize="medium" />
+          </span>
+        ),
+      },
+       {
+        id: 8.6,
+        navLink: "/salarybonus",
+        navItem: "NFT Delay ROI Bonus",
+        navIcon: (
+          <span>
+            <WheelchairPickupOutlined color="#15317E" fontSize="medium" />
+          </span>
+        ),
+      },
     
-//     ],
-//   },
+    ],
+  },
 
 //   {
 //     id: 11,

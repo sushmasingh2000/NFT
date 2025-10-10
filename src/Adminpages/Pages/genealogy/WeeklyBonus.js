@@ -1,104 +1,144 @@
-import { FilterAlt } from "@mui/icons-material";
-import { Button, TextField } from "@mui/material";
-import moment from "moment";
-import React, { useEffect, useState } from "react";
-import { API_URLS } from "../../config/APIUrls";
-import axiosInstance from "../../config/axios";
-import CustomTable from "../../Shared/CustomTable";
+import React, { useState } from 'react';
+import { useQuery, useQueryClient } from 'react-query';
+import { apiConnectorPost } from '../../../utils/APIConnector';
+import { endpoint } from '../../../utils/APIRoutes';
+import CustomToPagination from '../../../Shared/Pagination';
+import { useFormik } from 'formik';
+import CustomTable from '../../Shared/CustomTable';
+import moment from 'moment';
+const MILESTONE = () => {
+  const [page, setPage] = useState(1)
+  const client = useQueryClient();
+  const initialValues = {
+    income_Type: "",
+    search: '',
+    count: 10,
+    page: "",
+    start_date: '',
+    end_date: '',
+  };
 
-const WeeklyBonus = () => {
-  const [loding, setloding] = useState(false);
-    const [data, setData] = useState([]);
-    const [from_date, setFrom_date] = useState("");
-    const [to_date, setTo_date] = useState("");
-    const [search, setSearch] = useState("");
+  const fk = useFormik({
+    initialValues: initialValues,
+    enableReinitialize: true,
 
-    const WeeklyBonusFn = async () => {
-        setloding(true);
-        try {
-          const res = await axiosInstance.post(API_URLS?.level_bonus_data, {
-            income_type:"WEEKLY",
-            created_at: from_date,
-            updated_at: to_date,
-            page: 1,
-            count:10
-          });
-          setData(res?.data?.data?.data || []);
-          if (res) {
-            setTo_date("");
-            setFrom_date("");
-          }
-        } catch (e) {
-          console.log(e);
-        }
-        setloding(false);
-      };
+  })
+  const { data, isLoading } = useQuery(
+    ['get_roiroi', fk.values.search, fk.values.start_date, fk.values.end_date, page],
+    () =>
+      apiConnectorPost(endpoint?.roi_income_api, {
+        income_type: 'MILESTONE',
+        search: fk.values.search,
+        start_date: fk.values.start_date,
+        end_date: fk.values.end_date,
+        page: page,
+        count: 10,
+      }),
+    {
+      keepPreviousData: true,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
+      onError: (err) => console.error("Error fetching level data:", err),
+    }
+  );
+
+  const allData = data?.data?.result || [];
+
+ const tablehead = [
+     <span>S.No.</span>,
+     <span>Date</span>,
+     <span>Customer Id</span>,
+     <span>Amount ($)</span>,
+     <span>User Name</span>,
+    //  <span>Mobile</span>,
+     <span>Description</span>,
+   ];
+   const tablerow = allData?.data?.map((row, index) => {
+     return [
+      <span> {(page - 1) * 10 + index + 1}</span>,
+       <span>{moment(row.ledger_created_at)?.format("DD-MM-YYYY")}</span>,
+       <span>{row.lgn_cust_id || "--"}</span>,
+       <span> {row.tr07_amount ||'$0.00'}</span>,
+       <span>{row.from_name}</span>,
+      //  <span>{row.lgn_mobile || '--'}</span>,
+       <span>{row.tr07_description || '--'}</span>,
  
-      useEffect(() => {
-        WeeklyBonusFn()
-    }, []) 
+ 
+     ];
+   });
+  return (
+    <div className="p-2">
+      <div className="bg-white bg-opacity-50 rounded-lg shadow-lg p-3 text-white mb-6">
+      
 
-    const tablehead = [
-        <span>S.No.</span>,
-        <span>User Id</span>,
-        <span>Name</span>,
-        <span>Mobile</span>,
-        <span>Type</span>,
-        <span>Amount</span>,
-        <span>Date/Time</span>,
-        <span>Description</span>,
-    ];
-
-    const tablerow = data?.map((i, index) => {
-        return [
-            <span>{index + 1}</span>,
-            <span>{i?.lgn_cust_id}</span>,
-            <span>{i?.jnr_name}</span>,
-            <span>{i?.lgn_mobile}</span>,
-            <span>{i?.ledger_income_type}</span>,
-            <span>{i?.ledger_amount}</span>,
-            <span>{moment(i?.ledger_created_at).format("DD-MM-YYYY HH:mm:ss")}</span>,
-            <span>{i?.ledger_des}</span>,
-        ];
-    });
-
-    return (
-        <div>
-            <div className="flex px-2 gap-5 !justify-start py-2">
-                <span className="font-bold">From:</span>
-                <TextField
-                    type="date"
-                    value={from_date}
-                    onChange={(e) => setFrom_date(e.target.value)}
-                />
-                <span className="font-bold">To:</span>
-                <TextField
-                    type="date"
-                    value={to_date}
-                    onChange={(e) => setTo_date(e.target.value)}
-                />
-                <TextField
-                    type="search"
-                    placeholder="Search by user id"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                />
-                <Button
-                    onClick={() => WeeklyBonusFn()}
-                    variant="contained"
-                    startIcon={<FilterAlt />}
-                >
-                    Filter
-                </Button>
-            </div>
-            <CustomTable
-                tablehead={tablehead}
-                tablerow={tablerow}
-                isLoading={loding}
-            />
-          
+        <div className="flex flex-col sm:flex-wrap md:flex-row items-center gap-3 sm:gap-4 w-full text-sm sm:text-base">
+          <input
+            type="date"
+            name="start_date"
+            id="start_date"
+            value={fk.values.start_date}
+            onChange={fk.handleChange}
+            className="bg-white bg-opacity-50 border border-gray-600 rounded-md py-2 px-3 text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
+          />
+          <input
+            type="date"
+            name="end_date"
+            id="end_date"
+            value={fk.values.end_date}
+            onChange={fk.handleChange}
+            className="bg-white bg-opacity-50 border border-gray-600 rounded-md py-2 px-3 text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
+          />
+          <input
+            type="text"
+            name="search"
+            id="search"
+            value={fk.values.search}
+            onChange={fk.handleChange}
+            placeholder="User ID"
+            className="bg-white bg-opacity-50 border border-gray-600 rounded-full py-2 px-3 text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
+          />
+          <button
+            onClick={() => {
+              setPage(1);
+              client.invalidateQueries(["get_level_admin"]);
+            }}
+            type="submit"
+            className="bg-blue-500 text-gray-900 font-bold py-2 px-4 rounded-full hover:bg-dark-color transition-colors w-full sm:w-auto text-sm"
+          >
+            Search
+          </button>
+          <button
+            onClick={() => {
+              fk.handleReset();
+              setPage(1);
+            }}
+            className="bg-gray-color text-gray-900 font-bold py-2 px-4 rounded-full hover:bg-black hover:text-white transition-colors w-full sm:w-auto text-sm"
+          >
+            Clear
+          </button>
         </div>
-    );
+      </div>
+
+
+      {/* Main Table Section */}
+    
+        <CustomTable
+          tablehead={tablehead}
+          tablerow={tablerow}
+          isLoading={isLoading}
+        />
+
+
+        {/* Pagination */}
+        <CustomToPagination
+          page={page}
+          setPage={setPage}
+          data={allData}
+        />
+    
+    </div>
+  );
 };
 
-export default WeeklyBonus;
+export default MILESTONE;

@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom";
 import logo from "../../../assets/favicon.png";
 import { apiConnectorGet } from "../../../utils/APIConnector";
 import { endpoint } from "../../../utils/APIRoutes";
+import { Analytics } from "@mui/icons-material";
 
 const Sidebar = () => {
   const [activeMenu, setActiveMenu] = useState("Dashboard");
@@ -47,40 +48,45 @@ const Sidebar = () => {
 
   const menuItems = [
     { title: "Dashboard", icon: <FaTachometerAlt />, path: "/dashboard" },
-    { title: "Profile Settings", icon: <FaUserCog />, path: "/profile" },
+    { title: "NFT List ", icon: <Analytics />, path: "/nft_purchase" },
     { title: "TopUp ", icon: <FaUserCog />, path: "/topup_data" },
-    {
-      title: "Associate Reg",
-      icon: <FaCheck />,
-      path: "/associate_registration",
-    },
-    {
-      title: "Trade Account Details",
-      icon: <FaCheck />,
-      path: "/trading_registration",
-    },
-    { title: "Invester History", icon: <FaUserAlt />, path: "/investor" },
+    // {
+    //   title: "Associate Reg",
+    //   icon: <FaCheck />,
+    //   path: "/associate_registration",
+    // },
+    // {
+    //   title: "Trade Account Details",
+    //   icon: <FaCheck />,
+    //   path: "/trading_registration",
+    // },
+    // { title: "Invester History", icon: <FaUserAlt />, path: "/investor" },
 
     {
       title: "Income",
       icon: <FaCoins />,
       subItems: [
         { title: "Level Income", path: "/income/level" },
-        { title: "Salary Income", path: "/income/direct" },
-        { title: "Reward Income", path: "/income/roi" },
+        { title: "MileStone Income", path: "/income/direct" },
+        { title: "Direct Income", path: "/income/roi" },
+        { title: "NFT Trading Income", path: "/income/nft_trad" },
+        { title: "NFT Level Income", path: "/income/nft_level" },
+        { title: "NFT Delay Income", path: "/income/nft_delay" },
+        
       ],
     },
 
     // { title: "Activation", icon: <FaCheck />, path: "/activation" },
-    {
-      title: "Network",
-      icon: <FaNetworkWired />,
-      subItems: [
-        { title: "Direct Team", path: "/referral" },
-        { title: "Downline", path: "/downline" },
-        { title: "Network Tree", path: "/team" },
-      ],
-    },
+    // {
+    //   title: "Network",
+    //   icon: <FaNetworkWired />,
+    //   subItems: [
+    //     { title: "Direct Team", path: "/referral" },
+    //     { title: "Downline", path: "/downline" },
+    //     { title: "Network Tree", path: "/team" },
+    //   ],
+    // },
+    { title: "Profile Settings", icon: <FaUserCog />, path: "/profile" },
 
     // { title: "Wallet", icon: <FaWallet />, path: "/wallet" },
     //  {
@@ -92,29 +98,29 @@ const Sidebar = () => {
     //     ],
     // },
 
-    { title: "Invester Amount", icon: <FaWallet />, path: "/fund-tranfer" },
-    { title: "Withdrawal", icon: <FaExchangeAlt />, path: "/withdrawal" },
-    {
-      title: "Withdrawal History ",
-      icon: <FaUserAlt />,
-      path: "/payout_details",
-    },
-    {
-      title: "Business Plan",
-      icon: <FaUserAlt />,
-      path: "/edgefx_uk_-4.pdf", // PDF path from public folder
-      external: true,
-      download: false, // true if you want to auto-download
-    },
-    {
-      title: "Support",
-      icon: <FaNetworkWired />,
-      subItems: [
-        // { title: "Ticket", path: "/add_ticket" },
-        { title: "Ticket", path: "/chat_ticket" },
-        // { title: "Inbox", path: "/add_ticket" },
-      ],
-    },
+    // { title: "Invester Amount", icon: <FaWallet />, path: "/fund-tranfer" },
+    // { title: "Withdrawal", icon: <FaExchangeAlt />, path: "/withdrawal" },
+    // {
+    //   title: "Withdrawal History ",
+    //   icon: <FaUserAlt />,
+    //   path: "/payout_details",
+    // },
+    // {
+    //   title: "Business Plan",
+    //   icon: <FaUserAlt />,
+    //   path: "/edgefx_uk_-4.pdf", // PDF path from public folder
+    //   external: true,
+    //   download: false, // true if you want to auto-download
+    // },
+    // {
+    //   title: "Support",
+    //   icon: <FaNetworkWired />,
+    //   subItems: [
+    //     // { title: "Ticket", path: "/add_ticket" },
+    //     { title: "Ticket", path: "/chat_ticket" },
+    //     // { title: "Inbox", path: "/add_ticket" },
+    //   ],
+    // },
 
     // { title: "Support", icon: <FaHeadset />, path: "/dashboard" },
     {
@@ -189,7 +195,6 @@ const Sidebar = () => {
             return (
               <div key={i} className="border-b border-gray-700 pb-1 mb-1">
                 {item.external ? (
-                  // For external links like PDF
                   <a
                     href={item.path}
                     target="_blank"
@@ -250,7 +255,7 @@ const Sidebar = () => {
                           key={index}
                           onClick={() => handleSubItemClick(item.title, sub)}
                           className={`px-3 py-1 rounded cursor-pointer transition ${isSubActive
-                              ? "bg-gold-color text-white"
+                              ? "bg-gold-color text-black"
                               : "hover:bg-gray-700 text-white"
                             }`}
                         >

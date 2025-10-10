@@ -6,7 +6,7 @@ import CustomToPagination from '../../../Shared/Pagination';
 import { useFormik } from 'formik';
 import CustomTable from '../../Shared/CustomTable';
 import moment from 'moment';
-const ROIBonus = () => {
+const NFT_TRAD = () => {
   const [page, setPage] = useState(1)
   const client = useQueryClient();
   const initialValues = {
@@ -24,10 +24,10 @@ const ROIBonus = () => {
 
   })
   const { data, isLoading } = useQuery(
-    ['get_roi_admin', fk.values.search, fk.values.start_date, fk.values.end_date, page],
+    ['get_trad_roi', fk.values.search, fk.values.start_date, fk.values.end_date, page],
     () =>
       apiConnectorPost(endpoint?.roi_income_api, {
-        income_type: 'REWARD',
+        income_type: 'NFT_TRAD',
         search: fk.values.search,
         start_date: fk.values.start_date,
         end_date: fk.values.end_date,
@@ -45,28 +45,28 @@ const ROIBonus = () => {
 
   const allData = data?.data?.result || [];
 
-  const tablehead = [
-      <span>S.No.</span>,
-      <span>Date</span>,
-      <span>Customer Id</span>,
-      <span>Amount ($)</span>,
-      <span>User Name</span>,
-      // <span>Mobile</span>,
-      <span>Description</span>,
-    ];
-    const tablerow = allData?.data?.map((row, index) => {
-      return [
-       <span> {(page - 1) * 10 + index + 1}</span>,
-        <span>{moment(row.ledger_created_at)?.format("DD-MM-YYYY")}</span>,
-        <span>{row.lgn_cust_id || "--"}</span>,
-        <span> {row.ledger_amount ||'$0.00'}</span>,
-        <span>{row.jnr_name}</span>,
-        // <span>{row.lgn_mobile || '--'}</span>,
-        <span>{row.ledger_des || '--'}</span>,
-  
-  
-      ];
-    });
+ const tablehead = [
+     <span>S.No.</span>,
+     <span>Date</span>,
+     <span>Customer Id</span>,
+     <span>Amount ($)</span>,
+     <span>User Name</span>,
+    //  <span>Mobile</span>,
+     <span>Description</span>,
+   ];
+   const tablerow = allData?.data?.map((row, index) => {
+     return [
+      <span> {(page - 1) * 10 + index + 1}</span>,
+       <span>{moment(row.ledger_created_at)?.format("DD-MM-YYYY")}</span>,
+       <span>{row.lgn_cust_id || "--"}</span>,
+       <span> {row.tr07_amount ||'$0.00'}</span>,
+       <span>{row.from_name}</span>,
+      //  <span>{row.lgn_mobile || '--'}</span>,
+       <span>{row.tr07_description || '--'}</span>,
+ 
+ 
+     ];
+   });
   return (
     <div className="p-2">
       <div className="bg-white bg-opacity-50 rounded-lg shadow-lg p-3 text-white mb-6">
@@ -101,7 +101,7 @@ const ROIBonus = () => {
           <button
             onClick={() => {
               setPage(1);
-              client.invalidateQueries(["get_roi_admin"]);
+              client.invalidateQueries(["get_level_admin"]);
             }}
             type="submit"
             className="bg-blue-500 text-gray-900 font-bold py-2 px-4 rounded-full hover:bg-dark-color transition-colors w-full sm:w-auto text-sm"
@@ -141,4 +141,4 @@ const ROIBonus = () => {
   );
 };
 
-export default ROIBonus;
+export default NFT_TRAD;

@@ -59,10 +59,10 @@ const Level = () => {
       <span> {(page - 1) * 10 + index + 1}</span>,
        <span>{moment(row.ledger_created_at)?.format("DD-MM-YYYY")}</span>,
        <span>{row.lgn_cust_id || "--"}</span>,
-       <span> {row.ledger_amount ||'$0.00'}</span>,
-       <span>{row.jnr_name}</span>,
+       <span> {row.tr07_amount ||'$0.00'}</span>,
+       <span>{row.from_name}</span>,
       //  <span>{row.lgn_mobile || '--'}</span>,
-       <span>{row.ledger_des || '--'}</span>,
+       <span>{row.tr07_description || '--'}</span>,
  
  
      ];

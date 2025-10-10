@@ -24,10 +24,10 @@ const Salryfn = () => {
 
   })
   const { data, isLoading } = useQuery(
-    ['get_salary', fk.values.search, fk.values.start_date, fk.values.end_date, page],
+    ['get_milestone', fk.values.search, fk.values.start_date, fk.values.end_date, page],
     () =>
       apiConnectorPost(endpoint?.roi_income_api, {
-        income_type: 'SALARY',
+        income_type: 'MILESTONE',
         search: fk.values.search,
         start_date: fk.values.start_date,
         end_date: fk.values.end_date,
@@ -72,7 +72,7 @@ const Salryfn = () => {
   return (
     <div className="p-2">
       <div className="bg-gray-800 rounded-lg shadow-lg p-3 text-white border border-gray-700 mb-6">
-        <h2 className="text-xl font-semibold mb-4 text-gray-200">Salary Income</h2>
+        <h2 className="text-xl font-semibold mb-4 text-gray-200">MileStone Income</h2>
 
         <div className="flex flex-col sm:flex-wrap md:flex-row items-center gap-3 sm:gap-4 w-full text-sm sm:text-base">
           <input

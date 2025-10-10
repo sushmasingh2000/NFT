@@ -129,7 +129,7 @@ const NFTTableManager = () => {
         <div className="p-6">
             <Loader isLoading={loading} />
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold">Animal </h1>
+                <h1 className="text-3xl font-bold">NFT </h1>
                 <button
                     onClick={() => {
                         setModalOpen(true);

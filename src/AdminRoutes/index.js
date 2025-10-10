@@ -5,6 +5,7 @@ import AddAddress from "../Adminpages/Pages/fund/AddAddress";
 import { default as BoosterBonus, default as MatchingBonus } from "../Adminpages/Pages/genealogy/BoosterBonus";
 import DirectBonus from "../Adminpages/Pages/genealogy/DirectBonus";
 import LevelBonus from "../Adminpages/Pages/genealogy/LevelBonus";
+import NFT_DELAY_COM_ROI from "../Adminpages/Pages/genealogy/MatchingBonus";
 import ROIBonus from "../Adminpages/Pages/genealogy/ROIBonus";
 import WeeklyBonus from "../Adminpages/Pages/genealogy/WeeklyBonus";
 import INRPaying from "../Adminpages/Pages/INRPayment/INRPaying";
@@ -45,31 +46,37 @@ export const adminroutes = [
     id: 2,
     path: "/nft_create",
     component: <NFTManager />,
-    navItem: "Animal ",
+    navItem: "NFT ",
+  },
+    {
+    id: 44,
+    path: "/topup",
+    component: <TopUp/>,
+    navItem: "Manual TopUp ",
   },
   {
     id: 17,
     path: "/giftBonus",
     component: <DirectBonus/>,
-    navItem: "Salary Bonus",
+    navItem: "Direct Bonus",
   },
   {
     id: 41,
     path: "/salarybonus",
-    component: <BoosterBonus/>,
-    navItem: "Booster Bonus",
+    component: <NFT_DELAY_COM_ROI/>,
+    navItem: "NFT Delay ROI Bonus",
   },
   {
     id: 42,
     path: "/weeklybonus",
     component: <WeeklyBonus/>,
-    navItem: "Weekly Recovery",
+    navItem: "MileStone Bonus ",
   },
   {
     id: 42,
     path: "/vipbonus",
     component: <ROIBonus/>,
-    navItem: "Reward Bonus",
+    navItem: "NFT Trading Bonus",
   },
   {
     id: 19,
@@ -81,7 +88,7 @@ export const adminroutes = [
     id: 19,
     path: "/matching",
     component: <MatchingBonus/>,
-    navItem: "Matching Bonus",
+    navItem: "NFT Level Bonus",
   },
   {
     id: 42,
@@ -126,12 +133,7 @@ export const adminroutes = [
     component: <AdminTicketList/>,
     navItem: "Ticket ",
   },
-  {
-    id: 44,
-    path: "/topup",
-    component: <TopUp/>,
-    navItem: "Manual Reward ",
-  },
+
     {
     id: 45,
     path: "/admin_fund",

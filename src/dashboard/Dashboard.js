@@ -7,14 +7,14 @@ import {
   FaUserFriends,
   FaUsers
 } from "react-icons/fa";
-import { apiConnectorGet } from "../utils/APIConnector";
-import { endpoint } from "../utils/APIRoutes";
+import { apiConnectorGet, apiConnectorPost } from "../utils/APIConnector";
+import { dollar, domain, endpoint, frontend } from "../utils/APIRoutes";
 import { useState } from "react";
 import copy from "copy-to-clipboard";
 import toast from "react-hot-toast";
+import Swal from "sweetalert2";
 
 const Dashboard = () => {
-  const [showPopup, setShowPopup] = useState(true);
 
   const { data } = useQuery(["get_dashboard"], () =>
     apiConnectorGet(endpoint?.dashboard_data)
@@ -26,10 +26,52 @@ const Dashboard = () => {
   );
   const user_profile = profile?.data?.result?.[0] || {};
 
-  const copyToClipboard = (value) => {
-    copy(value);
-    toast.success("Copied to clipboard!", { id: 1 });
+  const { data: usernft } = useQuery(["get_nft_by_user"], () =>
+    apiConnectorGet(endpoint?.get_nft),
+    {
+      keepPreviousData: true,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
+      onError: (err) => console.error("Error fetching level data:", err),
+    }
+
+  );
+  const user_nft = usernft?.data?.result || [];
+
+
+  const tradingfn = async (id) => {
+    const confirm = await Swal.fire({
+      title: "Are you sure?",
+      text: "Do you really want to buy this NFT?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, buy it!",
+    });
+
+    if (confirm.isConfirmed) {
+      try {
+        const reqbody = {
+          nft_id: id,
+          trad_type: "BUY",
+        };
+
+        const res = await apiConnectorPost(endpoint?.trading, reqbody);
+
+        Swal.fire({
+          icon: res?.data?.success ? "success" : "error",
+          title: res?.data?.success ? "Success" : "Error",
+          text: res?.data?.message || "Something went wrong",
+        });
+      } catch (e) {
+        console.error("Something went wrong", e);
+        Swal.fire("Error", "Something went wrong", "error");
+      }
+    }
   };
+
 
   return (
     <div className=" bg-black text-white p-6 ">
@@ -44,18 +86,21 @@ const Dashboard = () => {
               <button className="px-4 py-1 border border-white/20 rounded-md text-sm hover:bg-white/10">Upgrade</button>
             </div>
 
-            <p className="text-center text-lg font-semibold mb-6">User ID: 5601</p>
+            <p className="text-center text-lg font-semibold mb-6">User ID: {user_profile?.lgn_cust_id || "N/A"}</p>
 
             {/* User Info Grid */}
-            <div className="grid grid-cols-2 gap-x-6 gap-y-4 text-sm font-medium">
-              <InfoItem label="Current Subscription" value={dashboard?.subscription || 'Basic'} />
-              <InfoItem label="Total Limit" value={dashboard?.total_limit || 500} />
-              <InfoItem label="Total Limit Utilised" value={dashboard?.utilised_limit || 250} />
-              <InfoItem label="Limit Open Time" value={dashboard?.limit_open_time || 'N/A'} />
-              <InfoItem label="Today's Income" value={dashboard?.todays_income || '3.2899'} />
-              <InfoItem label="My Team" value={dashboard?.team_count || 10} />
-              <InfoItem label="My Direct Team" value={dashboard?.direct_team_count || 5} />
-              <InfoItem label="Time Remaining" value={dashboard?.time_remaining || '6H 34M 0S'} />
+            {/* User Profile Details */}
+            <div className="grid grid-cols-2 gap-x-6 gap-y-4 text-sm font-medium mb-4">
+              <InfoItem label="Name" value={user_profile?.lgn_name || 'N/A'} />
+              <InfoItem label="Email" value={user_profile?.lgn_email || 'N/A'} />
+              <InfoItem label="Mobile" value={user_profile?.lgn_mobile || 'N/A'} />
+              <InfoItem label="User Type" value={user_profile?.lgn_user_type || 'N/A'} />
+              <InfoItem
+                label="Wallet"
+                value={`$ ${parseFloat(user_profile?.tr03_fund_wallet || 0).toFixed(2)}`}
+              />
+
+              <InfoItem label="Registration Date" value={user_profile?.tr03_reg_date ? new Date(user_profile.tr03_reg_date).toLocaleDateString() : 'N/A'} />
             </div>
 
             <div className="flex justify-end gap-4 mt-6">
@@ -68,7 +113,7 @@ const Dashboard = () => {
         {/* Right Card */}
         <div className="w-full lg:w-1/2">
           <h2 className="text-3xl font-bold mb-4">Wallet Details</h2>
-           <div className="bg-gradient-to-br from-[#141e30] via-[#243b55] to-[#141e30] bg-opacity-60 backdrop-blur-md border border-white/10 shadow-xl rounded-xl p-6 transition duration-500 ease-in-out hover:scale-[1.01] shadow-red-300/50">
+          <div className="bg-gradient-to-br from-[#141e30] via-[#243b55] to-[#141e30] bg-opacity-60 backdrop-blur-md border border-white/10 shadow-xl rounded-xl p-6 transition duration-500 ease-in-out hover:scale-[1.01] shadow-red-300/50">
             <div className="text-center mb-6">
               <p className="text-sm">Total Income:</p>
               <p className="text-3xl font-extrabold text-green-400">
@@ -86,6 +131,45 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+      {/* NFT List Section */}
+      {user_nft?.length > 0 && (
+        <div className="mt-10">
+          <h2 className="text-3xl font-bold mb-4">My NFTs</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {user_nft?.filter(nft => nft?.m02_is_reserved === 0) 
+              ?.map((nft) => (
+                <div
+                  key={nft.m02_id}
+                  className="bg-gradient-to-br from-[#141e30] via-[#243b55] to-[#141e30] border border-white/10 p-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  <img
+                    src={domain + nft.m01_image}
+                    alt={nft.m01_name}
+                    className="w-full h-32 object-cover rounded-md mb-4"
+                  />
+                  <div className="space-y-1">
+                    <p className="text-white font-bold text-lg">{nft.m01_name}</p>
+                    <p className="text-sm text-gray-400">NFT ID: {nft.m02_dist_id}</p>
+                    <p className="text-sm text-gray-400">
+                      Current Price: {dollar}{" "}
+                      <span className="text-green-400 font-semibold">
+                        {Number(nft.m02_curr_price).toFixed(2)}
+                      </span>
+                    </p>
+                    <button
+                      className="text-sm bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 transition"
+                      onClick={() => tradingfn(nft?.m02_id)}
+                    >
+                      Buy
+                    </button>
+                  </div>
+                </div>
+              ))}
+          </div>
+
+        </div>
+      )}
+
     </div>
   );
 };

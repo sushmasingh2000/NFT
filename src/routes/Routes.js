@@ -5,12 +5,16 @@ import AssociateRegistration from "../dashboard/pages/AssociateRegistration";
 import Fund from "../dashboard/pages/Fund/Fund";
 import FundTransfer from "../dashboard/pages/Fund/Transfer";
 import Level from "../dashboard/pages/income/Level";
+import NFTDelay from "../dashboard/pages/income/NFTDELAY";
+import NFTLevel from "../dashboard/pages/income/NFTLEVEL";
+import NFTTRAD from "../dashboard/pages/income/NftTrad";
 import REWARD from "../dashboard/pages/income/REWARD";
 import Salryfn from "../dashboard/pages/income/Salary";
 import InvestorProfile from "../dashboard/pages/InvestorProfile";
 import MainLayout from "../dashboard/pages/Layout/MainLayout";
 import Downline from "../dashboard/pages/network/Downline";
 import JoinMember from "../dashboard/pages/network/JoinMember";
+import NFTPurchase from "../dashboard/pages/NftPurchase";
 import PayoutDetails from "../dashboard/pages/Payoutdetails";
 import Profile from "../dashboard/pages/Profile";
 import Team from "../dashboard/pages/TeamTree/Team";
@@ -30,11 +34,20 @@ export const routes = [
       </MainLayout>
     ),
   },
+  
   {
     path: "/topup_data",
     element: (
       <MainLayout>
         <TopupWithContWithoutPull />{" "}
+      </MainLayout>
+    ),
+  },
+  {
+    path: "/nft_purchase",
+    element: (
+      <MainLayout>
+        <NFTPurchase />{" "}
       </MainLayout>
     ),
   },
@@ -99,6 +112,30 @@ export const routes = [
     element: (
       <MainLayout>
         <Salryfn />{" "}
+      </MainLayout>
+    ),
+  },
+   {
+    path: "/income/nft_trad",
+    element: (
+      <MainLayout>
+        <NFTTRAD />{" "}
+      </MainLayout>
+    ),
+  },
+   {
+    path: "/income/nft_level",
+    element: (
+      <MainLayout>
+        <NFTLevel />{" "}
+      </MainLayout>
+    ),
+  },
+   {
+    path: "/income/nft_delay",
+    element: (
+      <MainLayout>
+        <NFTDelay />{" "}
       </MainLayout>
     ),
   },

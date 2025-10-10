@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import moment from "moment";
 import {
   FaChartLine,
@@ -15,6 +15,8 @@ import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 
 const Dashboard = () => {
+
+  const client = useQueryClient()
 
   const { data } = useQuery(["get_dashboard"], () =>
     apiConnectorGet(endpoint?.dashboard_data)
@@ -65,6 +67,7 @@ const Dashboard = () => {
           title: res?.data?.success ? "Success" : "Error",
           text: res?.data?.message || "Something went wrong",
         });
+        client.refetchQueries("get_nft_by_user");
       } catch (e) {
         console.error("Something went wrong", e);
         Swal.fire("Error", "Something went wrong", "error");

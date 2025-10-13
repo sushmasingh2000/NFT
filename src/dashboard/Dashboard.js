@@ -196,11 +196,13 @@ const Dashboard = () => {
 
 // Reusable Info Component
 const InfoItem = ({ label, value }) => (
-  <div className="flex flex-col">
-    <p className="text-[13px] text-white/80">{label}</p>
-    <p className="text-[17px] text-white font-semibold">{value}</p>
+  <div className="flex flex-col break-words">
+    <span className="text-[13px] text-white/80">{label}</span>
+    <span className="text-[17px] text-white break-words whitespace-normal">{value}</span>
   </div>
 );
+
+
 
 // Reusable Income Component
 const IncomeItem = ({ label, value }) => (

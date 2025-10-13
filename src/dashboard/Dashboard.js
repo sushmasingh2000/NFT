@@ -18,10 +18,7 @@ const Dashboard = () => {
 
   const client = useQueryClient()
 
-  const { data } = useQuery(["get_dashboard"], () =>
-    apiConnectorGet(endpoint?.dashboard_data)
-  );
-  const dashboard = data?.data?.result?.[0];
+
 
   const { data: profile } = useQuery(["get_profile"], () =>
     apiConnectorGet(endpoint?.member_profile_detail)
@@ -74,7 +71,16 @@ const Dashboard = () => {
       }
     }
   };
+  const functionTOCopy = (value) => {
+    copy(value);
+    toast.success("Copied to clipboard!", { id: 1 });
+  };
 
+  const { data: count_dashborad } = useQuery(["get_count_dashborad"], () =>
+    apiConnectorGet(endpoint?.get_member_dashboard_api)
+  );
+  const user_count_dashborad = count_dashborad?.data?.result?.[0] || [];
+  // console.log(user_count_dashborad?.DIRECT)
 
   return (
     <div className=" bg-black text-white p-6 ">
@@ -86,7 +92,7 @@ const Dashboard = () => {
           <div className="bg-gradient-to-br from-[#141e30] via-[#243b55] to-[#141e30] bg-opacity-60 backdrop-blur-md border border-white/10 shadow-xl rounded-xl p-6 transition duration-500 ease-in-out hover:scale-[1.01] shadow-teal-300/50">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-2xl font-bold">User Details</h3>
-              <button className="px-4 py-1 border border-white/20 rounded-md text-sm hover:bg-white/10">Upgrade</button>
+              {/* <button className="px-4 py-1 border border-white/20 rounded-md text-sm hover:bg-white/10">Upgrade</button> */}
             </div>
 
             <p className="text-center text-lg font-semibold mb-6">User ID: {user_profile?.lgn_cust_id || "N/A"}</p>
@@ -102,13 +108,18 @@ const Dashboard = () => {
                 label="Wallet"
                 value={`$ ${parseFloat(user_profile?.tr03_fund_wallet || 0).toFixed(2)}`}
               />
-
+              <InfoItem
+                label="Current Wallet"
+                value={`$ ${parseFloat(user_profile?.tr03_inc_wallet || 0).toFixed(2)}`}
+              />
+              
               <InfoItem label="Registration Date" value={user_profile?.tr03_reg_date ? new Date(user_profile.tr03_reg_date).toLocaleDateString() : 'N/A'} />
             </div>
 
             <div className="flex justify-end gap-4 mt-6">
-              <button className="bg-blue-600 px-4 py-2 rounded-md text-sm hover:bg-blue-500 transition">Wallet is Connected (0 USDT)</button>
-              <button className="border border-white/20 px-4 py-2 rounded-md text-sm hover:bg-white/10">Refer</button>
+              {/* <button className="bg-blue-600 px-4 py-2 rounded-md text-sm hover:bg-blue-500 transition">Wallet is Connected (0 USDT)</button> */}
+              <button className="border border-white/20 px-4 py-2 rounded-md text-sm hover:bg-white/10"
+                onClick={() => functionTOCopy(frontend + "/register?referral_id=" + user_profile?.lgn_cust_id)}>Refer</button>
             </div>
           </div>
         </div>
@@ -120,16 +131,22 @@ const Dashboard = () => {
             <div className="text-center mb-6">
               <p className="text-sm">Total Income:</p>
               <p className="text-3xl font-extrabold text-green-400">
-                {Number(dashboard?.total_income || 230.1406).toFixed(4)} <span className="text-sm text-white">USDT</span>
+                {Number(user_profile?.tr03_total_income || 0).toFixed(4)} <span className="text-sm text-white">USDT</span>
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              <IncomeItem label="SUB Direct Income" value={dashboard?.sub_direct_income || 12} />
-              <IncomeItem label="SUB Level Income" value={dashboard?.sub_level_income || 2.6} />
-              <IncomeItem label="NFT Trading Income" value={dashboard?.nft_trading_income || 199.5804} />
-              <IncomeItem label="NFT Level Income" value={dashboard?.nft_level_income || 15.9602} />
-              <IncomeItem label="NFT Return Principal" value={dashboard?.nft_return_principal || 6652.6796} />
+              <IncomeItem label="SUB Direct Income" value={user_count_dashborad?.DIRECT || 0} />
+              <IncomeItem label="SUB Level Income" value={user_count_dashborad?.LEVEL || 0} />
+              <IncomeItem label="MILESTONE Income" value={user_count_dashborad?.MILESTONE || 0} />
+              <IncomeItem label="NFT Trading Income" value={user_count_dashborad?.NFT_TRAD || 0} />
+              <IncomeItem label="NFT Sell" value={user_count_dashborad?.NFT_SELL || 0} />
+              <IncomeItem label="NFT Buy" value={user_count_dashborad?.NFT_BUY || 0} />
+              <IncomeItem label="NFT Level Income" value={user_count_dashborad?.NFT_LEVEL || 0} />
+              <IncomeItem label="NFT Delay ROI" value={user_count_dashborad?.NFT_DELAY_COM_ROI || 0} />
+              <IncomeItem label="Cashback" value={user_count_dashborad?.CASHBACK || 0} />
+              <IncomeItem label="Paying" value={user_count_dashborad?.INCOME_IN || 0} />
+              <IncomeItem label="Payout" value={user_count_dashborad?.INCOME_OUT || 0} />
             </div>
           </div>
         </div>
@@ -139,7 +156,7 @@ const Dashboard = () => {
         <div className="mt-10">
           <h2 className="text-3xl font-bold mb-4">My NFTs</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {user_nft?.filter(nft => nft?.m02_is_reserved === 0) 
+            {user_nft?.filter(nft => nft?.m02_is_reserved === 0)
               ?.map((nft) => (
                 <div
                   key={nft.m02_id}
@@ -154,7 +171,7 @@ const Dashboard = () => {
                     <p className="text-white font-bold text-lg">{nft.m01_name}</p>
                     <p className="text-sm text-gray-400">NFT ID: {nft.m02_dist_id}</p>
                     <p className="text-sm text-gray-400">
-                      Current Price: {dollar}{" "}
+                       Price: {dollar}{" "}
                       <span className="text-green-400 font-semibold">
                         {Number(nft.m02_curr_price).toFixed(2)}
                       </span>

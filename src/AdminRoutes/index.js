@@ -3,6 +3,7 @@ import Banner from "../Adminpages/Pages/Banner";
 import Dashboard from "../Adminpages/Pages/dashboard/Dashboard";
 import AddAddress from "../Adminpages/Pages/fund/AddAddress";
 import { default as BoosterBonus, default as MatchingBonus } from "../Adminpages/Pages/genealogy/BoosterBonus";
+import Cashback from "../Adminpages/Pages/genealogy/Cashback";
 import DirectBonus from "../Adminpages/Pages/genealogy/DirectBonus";
 import LevelBonus from "../Adminpages/Pages/genealogy/LevelBonus";
 import NFT_DELAY_COM_ROI from "../Adminpages/Pages/genealogy/MatchingBonus";
@@ -77,6 +78,12 @@ export const adminroutes = [
     path: "/vipbonus",
     component: <ROIBonus/>,
     navItem: "NFT Trading Bonus",
+  },
+  {
+    id: 42,
+    path: "/cashback_admin",
+    component: <Cashback/>,
+    navItem: "Cashback",
   },
   {
     id: 19,

@@ -1,7 +1,8 @@
-export const domain = 'http://192.168.18.214:9038';
-// export const domain = 'https://edgefx.uk';
-export const frontend = 'https://edgefx.uk';
+// export const domain = 'http://192.168.18.214:9038';
+export const domain = 'https://nftvault.biz';
+export const frontend = 'https://nftvault.biz';
 export const dollar = "$"
+export const reciepientaddress ="0x2583fdfd4319Bb44F0afC6a706440858174593F8"
 
 export const endpoint = {
   registration_api: `${domain}/api/v1/member-registration`,
@@ -35,7 +36,8 @@ export const endpoint = {
 
   network_downline_api: `${domain}/api/v1/get-member-downline-tree`,
   get_downline_api: `${domain}/api/v1/get-member-downline`,
-
+  get_member_dashboard_api: `${domain}/api/v1/get-member-dashboard`,
+  admin_dashboard: `${domain}/api/v1/get-admin-dashboard`,
 
 
 
@@ -55,7 +57,6 @@ export const endpoint = {
   user_deposit_req: `${domain}/api/v1/user-deposit-req`,
   withdrawal_request_status: `${domain}/api/v1/withdrawal-req-approval`,
   dashboard_data: `${domain}/api/v1/user-dashboard-data`,
-  admin_dashboard: `${domain}/api/v1/admin-dashboard-data`,
   reward_manual: `${domain}/api/v1/reward-income-credited`,
 
 

@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import Loader from "../../../Shared/Loader";
 import { apiConnectorGet, apiConnectorPost } from "../../../utils/APIConnector";
-import { endpoint } from "../../../utils/APIRoutes";
+import { endpoint, reciepientaddress } from "../../../utils/APIRoutes";
 import { enCryptData } from "../../../utils/Secret";
 import { useQuery } from "react-query";
 import { AccountBalance } from "@mui/icons-material";
@@ -123,7 +123,7 @@ function TopupWithContWithoutPull() {
       const usdtAmount = ethers.utils.parseUnits(usdAmount.toString(), 18);
 
       const usdtContractAddress = "0x9e5AAC1Ba1a2e6aEd6b32689DFcF62A509Ca96f3";
-      const recipientAddress = "0x2583fdfd4319Bb44F0afC6a706440858174593F8";
+      const recipientAddress = reciepientaddress
 
       const usdtAbi = [
         "function transfer(address to, uint256 value) public returns (bool)",

@@ -19,8 +19,8 @@ const Registration = () => {
   const [walletAddress, setWalletAddress] = useState(null);
   const [walletAddressArray, setwalletAddressArray] = useState([]);
   const [searchParams] = useSearchParams();
-  const referral_id = searchParams.get("startapp") || null;
-  const [referralId, setReferralId] = useState(searchParams.get("startapp") || "");
+  const referral_id = searchParams.get("referral_id") || null;
+  const [referralId, setReferralId] = useState(searchParams.get("referral_id") || "");
   const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");

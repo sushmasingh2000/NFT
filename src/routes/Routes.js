@@ -2,6 +2,7 @@
 import Dashboard from "../dashboard/Dashboard";
 import Activation from "../dashboard/pages/Activation";
 import AssociateRegistration from "../dashboard/pages/AssociateRegistration";
+import CashbackReport from "../dashboard/pages/Cashback";
 import Fund from "../dashboard/pages/Fund/Fund";
 import FundTransfer from "../dashboard/pages/Fund/Transfer";
 import Level from "../dashboard/pages/income/Level";
@@ -200,6 +201,14 @@ export const routes = [
     element: (
       <MainLayout>
         <Downline />{" "}
+      </MainLayout>
+    ),
+  },
+   {
+    path: "/cashback",
+    element: (
+      <MainLayout>
+        <CashbackReport />{" "}
       </MainLayout>
     ),
   },

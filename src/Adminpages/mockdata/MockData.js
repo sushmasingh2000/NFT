@@ -218,6 +218,17 @@ export const all_Data = [
 
     ],
   },
+     {
+      id: 1,
+      navLink: "/cashback_admin",
+      navItem: "Cashback",
+      navIcon: (
+        <span>
+          <LeaderboardSharp color="#15317E" fontSize="medium" />
+        </span>
+      ),
+      subcomponent: [],
+    },
 
   //   {
 

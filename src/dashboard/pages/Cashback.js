@@ -8,7 +8,7 @@ import CustomTable from '../../Shared/CustomTable';
 import moment from 'moment';
 import CustomToPagination from '../../Shared/Pagination';
 
-const PayoutDetails = () => {
+const CashbackReport = () => {
     const [page, setPage] = useState(1)
     const client = useQueryClient();
     const initialValues = {
@@ -24,15 +24,15 @@ const PayoutDetails = () => {
   
     })
     const { data, isLoading } = useQuery(
-      ['get_payout', formik.values.search, formik.values.start_date, formik.values.end_date, page],
+      ['get_cashback', formik.values.search, formik.values.start_date, formik.values.end_date, page],
       () =>
         apiConnectorPost(endpoint?.roi_income_api, {
-          income_type:"OUT",
+          income_type:"CASHBACK",
           search: formik.values.search,
           start_date: formik.values.start_date,
           end_date: formik.values.end_date,
           pageNumber: page,
-          pageSize: "10",
+          count: "10",
         }),
       {
         keepPreviousData: true,
@@ -46,31 +46,28 @@ const PayoutDetails = () => {
     const allData = data?.data?.result || [];
 
    const tablehead = [
-     <span>S.No.</span>,
-     <span>Date</span>,
-     <span>Transaction ID</span>,
-     <span>Amount ($)</span>,
-     // <span>Wallet</span>,
-     <span>Description</span>,
-   ];
-   
-   const tablerow = allData?.data?.map((row, index) => {
-     return [
-       <span>{(page - 1) * 10 + index + 1}</span>,
-       <span>{moment.utc(row.tr07_created_at).format("DD-MM-YYYY HH:mm:ss")}</span>,
-       <span>{row.tr07_trans_id}</span>,
-       <span>{Number(row.tr07_amount).toFixed(2)}</span>,
-       // <span>{row.tr07_wallet || 'N/A'}</span>,
-       <span>{row.tr07_description || 'N/A'}</span>,
-      
-     ];
-   });
+    <span>S.No.</span>,
+    <span>Date</span>,
+    <span>Transaction ID</span>,
+    <span>Amount ($)</span>,
+    <span>Description</span>,
+  ];
+
+  const tablerow = allData?.data?.map((row, index) => {
+    return [
+      <span>{(page - 1) * 10 + index + 1}</span>,
+      <span>{row?.tr07_created_at ? moment(row?.tr07_created_at).format('DD-MM-YYYY HH:mm:ss') : '--'}</span>,
+      <span>{row?.tr07_trans_id || '--'}</span>,
+      <span>{Number(row?.tr07_amount || 0).toFixed(2)}</span>,
+      <span>{row?.tr07_description || '--'}</span>,
+    ];
+  });
     return (
         <>
           
             <div className="p-2">
                 <div className="bg-gray-800 rounded-lg shadow-lg p-3 text-white border border-gray-700 mb-6">
-                    <h2 className="text-xl font-semibold mb-4 text-gray-200">Payout Report</h2>
+                    <h2 className="text-xl font-semibold mb-4 text-gray-200">Cashback Report</h2>
 
                     <div className="flex flex-col sm:flex-wrap md:flex-row items-center gap-3 sm:gap-4 w-full text-sm sm:text-base">
                         <input
@@ -142,4 +139,4 @@ const PayoutDetails = () => {
     );
 };
 
-export default PayoutDetails;
+export default CashbackReport;

@@ -101,7 +101,7 @@ const Sidebar = () => {
     },
     { title: "Profile Settings", icon: <FaUserCog />, path: "/profile" },
 
-    // { title: "Wallet", icon: <FaWallet />, path: "/wallet" },
+    { title: "Cahback", icon: <FaWallet />, path: "/cashback" },
     //  {
     //     title: "Fund",
     //     icon: <FaMoneyBillWave />,

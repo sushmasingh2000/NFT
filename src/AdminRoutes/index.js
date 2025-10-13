@@ -94,7 +94,7 @@ export const adminroutes = [
     id: 42,
     path: "/inr_Paying",
     component: <INRPaying/>,
-    navItem: "INR Paying",
+    navItem: "TopUp Report ",
   },
   {
     id: 43,

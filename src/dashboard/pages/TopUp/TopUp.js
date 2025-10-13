@@ -10,6 +10,7 @@ import { endpoint } from "../../../utils/APIRoutes";
 import { enCryptData } from "../../../utils/Secret";
 import { useQuery } from "react-query";
 import { AccountBalance } from "@mui/icons-material";
+
 const tokenABI = [
   "function approve(address spender, uint256 amount) external returns (bool)",
   "function allowance(address owner, address spender) external view returns (uint256)",
@@ -45,20 +46,26 @@ function TopupWithContWithoutPull() {
         const accounts = await window.ethereum.request({
           method: "eth_requestAccounts",
         });
+
+        // 🔄 Switch to opBNB
         await window.ethereum.request({
           method: "wallet_switchEthereumChain",
-          params: [{ chainId: "0x38" }], // Chain ID for Binance Smart Chain Mainnet
+          params: [{ chainId: "0xCC" }], // Chain ID for opBNB (204 decimal)
         });
+
         const userAccount = accounts[0];
         setWalletAddress(userAccount);
+
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const nativeBalance = await provider.getBalance(userAccount);
         setBnb(ethers.utils.formatEther(nativeBalance));
+
         const tokenContract = new ethers.Contract(
-          "0x55d398326f99059fF775485246999027B3197955",
+          "0x9e5AAC1Ba1a2e6aEd6b32689DFcF62A509Ca96f3", // opBNB USDT
           tokenABI,
           provider
         );
+
         const tokenBalance = await tokenContract.balanceOf(userAccount);
         setno_of_Tokne(ethers.utils.formatUnits(tokenBalance, 18));
       } catch (error) {
@@ -68,112 +75,106 @@ function TopupWithContWithoutPull() {
     } else {
       toast("Wallet not detected.");
     }
+
     setLoding(false);
   }
 
- async function sendTokenTransaction() {
-  if (!window.ethereum) return toast("MetaMask not detected");
-  if (!walletAddress) return toast("Please connect your wallet.");
 
-  const usdAmount = Number(selectedPackageAmount || 0);
-  if (usdAmount <= 0) {
-    Swal.fire({
-      title: "Error!",
-      text: "Please select a valid package.",
-      icon: "error",
-      confirmButtonColor: "#75edf2",
-    });
-    return;
-  }
+  async function sendTokenTransaction() {
+    if (!window.ethereum) return toast("MetaMask not detected");
+    if (!walletAddress) return toast("Please connect your wallet.");
 
-  try {
-    setLoding(true);
-
-    // ✅ Switch to BSC Mainnet
-    await window.ethereum.request({
-      method: "wallet_switchEthereumChain",
-      params: [{ chainId: "0x38" }],
-    });
-
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    const signer = provider.getSigner();
-    const userAddress = await signer.getAddress();
-
-    // 📡 Call your backend for dummy data
-    const dummyData = await PayinZpDummy();
-    if (!dummyData?.success || !dummyData?.last_id) {
-      setLoding(false);
+    const usdAmount = Number(selectedPackageAmount || 0);
+    if (usdAmount <= 0) {
       Swal.fire({
         title: "Error!",
-        text: dummyData?.message || "Server error",
+        text: "Please select a valid package.",
         icon: "error",
         confirmButtonColor: "#75edf2",
       });
       return;
     }
 
-    const last_id = Number(dummyData.last_id);
+    try {
+      setLoding(true);
 
-    const usdtAmount = ethers.utils.parseUnits(usdAmount.toString(), 18);
+      await window.ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: "0xCC" }],
+      });
 
-    const usdtContractAddress = "0x55d398326f99059fF775485246999027B3197955";
-    const recipientAddress = "0x2583fdfd4319Bb44F0afC6a706440858174593F8";
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const userAddress = await signer.getAddress();
 
-    const usdtAbi = [
-      "function transfer(address to, uint256 value) public returns (bool)",
-      "function balanceOf(address owner) view returns (uint256)",
-      "function allowance(address owner, address spender) view returns (uint256)",
-      "function approve(address spender, uint256 value) public returns (bool)"
-    ];
+      const dummyData = await PayinZpDummy();
+      if (!dummyData?.success || !dummyData?.last_id) {
+        setLoding(false);
+        Swal.fire({
+          title: "Error!",
+          text: dummyData?.message || "Server error",
+          icon: "error",
+          confirmButtonColor: "#75edf2",
+        });
+        return;
+      }
 
-    const usdtContract = new ethers.Contract(usdtContractAddress, usdtAbi, signer);
+      const last_id = Number(dummyData.last_id);
+      const usdtAmount = ethers.utils.parseUnits(usdAmount.toString(), 18);
 
-    // 🧾 Check USDT balance
-    const userBalance = await usdtContract.balanceOf(userAddress);
-    if (userBalance.lt(usdtAmount)) {
+      const usdtContractAddress = "0x9e5AAC1Ba1a2e6aEd6b32689DFcF62A509Ca96f3";
+      const recipientAddress = "0x2583fdfd4319Bb44F0afC6a706440858174593F8";
+
+      const usdtAbi = [
+        "function transfer(address to, uint256 value) public returns (bool)",
+        "function balanceOf(address owner) view returns (uint256)",
+        "function allowance(address owner, address spender) view returns (uint256)",
+        "function approve(address spender, uint256 value) public returns (bool)"
+      ];
+
+      const usdtContract = new ethers.Contract(usdtContractAddress, usdtAbi, signer);
+
+      const userBalance = await usdtContract.balanceOf(userAddress);
+      if (userBalance.lt(usdtAmount)) {
+        setLoding(false);
+        Swal.fire({
+          title: "Error!",
+          text: "⚠️ Insufficient USDT balance to make this payment.",
+          icon: "error",
+          confirmButtonColor: "#75edf2",
+        });
+        return;
+      }
+
+      const tx = await usdtContract.transfer(recipientAddress, usdtAmount);
+      const receipt = await tx.wait();
+
+      setTransactionHash(tx.hash);
+      setReceiptStatus(receipt.status === 1 ? "Success" : "Failure");
+
+      await PayinZp(tx.hash, receipt.status === 1 ? 2 : 3, last_id);
+
+      if (receipt.status === 1) {
+        Swal.fire({
+          title: "Success!",
+          text: "🎉 Payment successful and your account has been topped up.",
+          icon: "success",
+          confirmButtonColor: "#75edf2",
+        });
+      } else {
+        toast("Transaction failed!");
+      }
+    } catch (error) {
+      console.error(error);
+      if (error?.data?.message) toast(error.data.message);
+      else if (error?.reason) toast(error.reason);
+      else toast("Transaction failed.");
+    } finally {
       setLoding(false);
-      Swal.fire({
-        title: "Error!",
-        text: "⚠️ Insufficient USDT balance to make this payment.",
-        icon: "error",
-        confirmButtonColor: "#75edf2",
-      });
-      return;
     }
-
-    // 🚀 Send USDT transfer
-    const tx = await usdtContract.transfer(recipientAddress, usdtAmount);
-    const receipt = await tx.wait();
-
-    setTransactionHash(tx.hash);
-    setReceiptStatus(receipt.status === 1 ? "Success" : "Failure");
-
-    await PayinZp(tx.hash, receipt.status === 1 ? 2 : 3, last_id);
-    // await PayinZp("xxxx",  2, last_id , fk);
-
-    if (receipt.status === 1) {
-      Swal.fire({
-        title: "Success!",
-        text: "🎉 Payment successful and your account has been topped up.",
-        icon: "success",
-        confirmButtonColor: "#75edf2",
-      });
-    } else {
-      toast("Transaction failed!");
-    }
-  } catch (error) {
-    console.error(error);
-    if (error?.data?.message) toast(error.data.message);
-    else if (error?.reason) toast(error.reason);
-    else toast("Transaction failed.");
-  } finally {
-    setLoding(false);
   }
-}
 
-
-
-  async function PayinZp( tr_hash, status, id) {
+  async function PayinZp(tr_hash, status, id) {
     setLoding(true);
 
     const reqbody = {
@@ -216,7 +217,7 @@ function TopupWithContWithoutPull() {
       pkg_id: fk.values.pkg_id,
       deposit_type: "Mlm",
     };
-   console.log(reqbody)
+    console.log(reqbody)
     try {
       const res = await apiConnectorPost(
         endpoint?.dummy_activation_request,

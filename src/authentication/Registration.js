@@ -144,10 +144,10 @@ const Registration = () => {
           icon: "success",
           confirmButtonColor: "#75edf2",
         }).then((result) => {
-          // if (result.isConfirmed) {
-          //   navigate("/dashboard");
-          //   window.location.reload();
-          // }
+          if (result.isConfirmed) {
+            navigate("/dashboard");
+            window.location.reload();
+          }
         });
       } else {
         Swal.fire({

@@ -1,29 +1,38 @@
-import { CircularProgress, Dialog, Slide } from '@mui/material';
-import React from 'react';
+import { Dialog, Slide } from "@mui/material";
+import React from "react";
+
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-const Loader = ({isLoading}) => {
-  return (
-   <Dialog
-        open={isLoading}
-        TransitionComponent={Transition}
-        keepMounted
-        // onClose={handleClose}
-        aria-describedby="alert-dialog-slide-description"
-        PaperProps={{
-          style: {
-            backgroundColor: "transparent",
-            backgroundImage:
-                  "linear-gradient(225deg, rgba(0, 170, 216, 1) 0%, rgba(20, 20, 20, 1) 61%)",
-            boxShadow: "none",
-          },
-          className: `!h-[4rem] !w-[4rem] !flex !justify-center !items-center `,
-        }}
-      >
-        <CircularProgress className="!text-white !z-50" />
-      </Dialog>
-  )
-}
 
-export default Loader
+const Loader = ({ isLoading }) => {
+  return (
+    <Dialog
+      open={isLoading}
+      TransitionComponent={Transition}
+      keepMounted
+      PaperProps={{
+        style: {
+          backgroundColor: "black",
+          boxShadow: "none",
+          borderRadius: "1px",
+        },
+        className: `!p-4 !flex !justify-center !items-center`,
+      }}
+      BackdropProps={{
+        style: {
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          backdropFilter: "blur(2px)",
+        },
+      }}
+    >
+      <div className="flex space-x-2">
+        <span className="loader-dot animate-pulse-fast"></span>
+        <span className="loader-dot animate-pulse-slow"></span>
+        <span className="loader-dot animate-pulse-fast"></span>
+      </div>
+    </Dialog>
+  );
+};
+
+export default Loader;

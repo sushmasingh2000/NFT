@@ -112,7 +112,7 @@ const Fund = () => {
           <p className="">Name : {dataa?.full_name}</p>
           <p>UserId : {dataa?.username}</p>
           <p>Mobile No : {dataa?.mobile}</p>
-          <p>Amount : ₹{Number(dataa?.tr15_amt)?.toFixed(2)}</p>
+          <p>Amount : ${Number(dataa?.tr15_amt)?.toFixed(2)}</p>
           <p>Req. Date : {moment(dataa?.tr15_date)?.format("DD-MM-YYYY HH:mm:ss")}</p>
           <p>Suc. Date : {moment(dataa?.success_date)?.format("DD-MM-YYYY HH:mm:ss")}</p>
         </div>

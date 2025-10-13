@@ -9,40 +9,40 @@ import moment from 'moment';
 import CustomToPagination from '../../Shared/Pagination';
 
 const PayoutDetails = () => {
-    const client = useQueryClient();
     const [page, setPage] = useState(1)
-    const initialValuesssss = {
-        search: '',
-        page : "",
-        count: 10,
-        start_date: '',
-        end_date: '',
+    const client = useQueryClient();
+    const initialValues = {
+      search: '',
+      page: '',
+      start_date: '',
+      end_date: '',
     };
-
+  
     const formik = useFormik({
-        initialValues: initialValuesssss,
-        enableReinitialize: true,
-
+      initialValues: initialValues,
+      enableReinitialize: true,
+  
     })
     const { data, isLoading } = useQuery(
-        ['get_withdrawal', formik.values.search, formik.values.start_date, formik.values.end_date, page],
-        () =>
-            apiConnectorPost(endpoint?.withdrawal_list, {
-                search: formik.values.search,
-                start_date: formik.values.start_date,
-                end_date: formik.values.end_date,
-                page: page,
-                count: 10,
-            }),
-        {
-            keepPreviousData: true,
-            refetchOnMount: false,
-            refetchOnReconnect: false,
-            refetchOnWindowFocus: false,
-            onError: (err) => console.error("Error fetching direct data:", err),
-        }
+      ['get_payout', formik.values.search, formik.values.start_date, formik.values.end_date, page],
+      () =>
+        apiConnectorPost(endpoint?.roi_income_api, {
+          income_type:"OUT",
+          search: formik.values.search,
+          start_date: formik.values.start_date,
+          end_date: formik.values.end_date,
+          pageNumber: page,
+          pageSize: "10",
+        }),
+      {
+        keepPreviousData: true,
+        refetchOnMount: false,
+        refetchOnReconnect: false,
+        refetchOnWindowFocus: false,
+        onError: (err) => console.error("Error fetching direct data:", err),
+      }
     );
-
+  
     const allData = data?.data?.result || [];
 
     const tablehead = [
@@ -71,7 +71,7 @@ const PayoutDetails = () => {
           
             <div className="p-2">
                 <div className="bg-gray-800 rounded-lg shadow-lg p-3 text-white border border-gray-700 mb-6">
-                    <h2 className="text-xl font-semibold mb-4 text-gray-200">Withdrawal History</h2>
+                    <h2 className="text-xl font-semibold mb-4 text-gray-200">Payout Report</h2>
 
                     <div className="flex flex-col sm:flex-wrap md:flex-row items-center gap-3 sm:gap-4 w-full text-sm sm:text-base">
                         <input

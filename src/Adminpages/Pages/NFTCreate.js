@@ -117,7 +117,7 @@ const NFTTableManager = () => {
             <span>{nft?.m01_name}</span>,
             <span>{nft?.m02_dist_id}</span>,
             <span>{nft?.m02_init_price}</span>,
-            <span>₹{nft?.m02_curr_price}</span>,
+            <span>${nft?.m02_curr_price}</span>,
             <span><Switch
                 checked={nft.m02_curr_status === 1}
                 onChange={() => handleStatusToggle(nft.m02_id)}
@@ -137,7 +137,7 @@ const NFTTableManager = () => {
                     }}
                     className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
                 >
-                    + Add Animal
+                    + Add NFT
                 </button>
             </div>
 

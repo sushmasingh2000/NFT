@@ -20,7 +20,7 @@ export const all_Data = [
   //   ),
   //   subcomponent: [],
   // },
- 
+
   {
     id: 2,
     navLink: "/admindashboard",
@@ -32,7 +32,7 @@ export const all_Data = [
     ),
     subcomponent: [],
   },
-   {
+  {
     id: 2,
     navLink: "/banner",
     navItem: "NFT Image",
@@ -43,7 +43,7 @@ export const all_Data = [
     ),
     subcomponent: [],
   },
-    {
+  {
     id: 14,
     navLink: "/nft_create",
     navItem: "NFT  ",
@@ -54,17 +54,7 @@ export const all_Data = [
     ),
     subcomponent: [],
   },
-    {
-    id: 14,
-    navLink: "/topup",
-    navItem: "TopUp ",
-    navIcon: (
-      <span>
-        <SelfImprovement color="#15317E" fontSize="medium" />
-      </span>
-    ),
-    subcomponent: [],
-  },
+ 
   {
     id: 14,
     navLink: "/user_detail",
@@ -76,51 +66,84 @@ export const all_Data = [
     ),
     subcomponent: [],
   },
-    {
-        id: 6.3,
-        navLink: "/trader_detail",
-        navItem: "NFT Details",
-        navIcon: (
-          <span>
-            <SelfImprovement color="#15317E" fontSize="medium" />
-          </span>
-        ),
-      },
-//   {
-//     id: 14,
-//     navLink: "/trader_detail",
-//     navItem: "Invester ",
-//     navIcon: (
-//       <span>
-//         <AddToPhotosIcon color="#15317E" fontSize="medium" />
-//       </span>
-//     ),
-//     subcomponent: [
-//      
-//        {
-//         id: 6.3,
-//         navLink: "/trader_sucess",
-//         navItem: "Verified Investor",
-//         navIcon: (
-//           <span>
-//             <SelfImprovement color="#15317E" fontSize="medium" />
-//           </span>
-//         ),
-//       },
-      
-//       {
-//         id: 6.3,
-//         navLink: "/trader_reject",
-//         navItem: "Reject Investor",
-//         navIcon: (
-//           <span>
-//             <SelfImprovement color="#15317E" fontSize="medium" />
-//           </span>
-//         ),
-//       },
-//     ],
-//   },
-    {
+  {
+    id: 6.3,
+    navLink: "/trader_detail",
+    navItem: "NFT Details",
+    navIcon: (
+      <span>
+        <SelfImprovement color="#15317E" fontSize="medium" />
+      </span>
+    ),
+  },
+  //   {
+  //     id: 14,
+  //     navLink: "/trader_detail",
+  //     navItem: "Invester ",
+  //     navIcon: (
+  //       <span>
+  //         <AddToPhotosIcon color="#15317E" fontSize="medium" />
+  //       </span>
+  //     ),
+  //     subcomponent: [
+  //      
+  //        {
+  //         id: 6.3,
+  //         navLink: "/trader_sucess",
+  //         navItem: "Verified Investor",
+  //         navIcon: (
+  //           <span>
+  //             <SelfImprovement color="#15317E" fontSize="medium" />
+  //           </span>
+  //         ),
+  //       },
+
+  //       {
+  //         id: 6.3,
+  //         navLink: "/trader_reject",
+  //         navItem: "Reject Investor",
+  //         navIcon: (
+  //           <span>
+  //             <SelfImprovement color="#15317E" fontSize="medium" />
+  //           </span>
+  //         ),
+  //       },
+  //     ],
+  //   },
+   {
+    id: 14,
+    navLink: "/topup",
+    navItem: "TopUp ",
+    navIcon: (
+      <span>
+        <SelfImprovement color="#15317E" fontSize="medium" />
+      </span>
+    ),
+    subcomponent: [],
+  },
+  {
+    id: 11,
+    navLink: "/inr_Paying",
+    navItem: "TopUp Report",
+    navIcon: (
+      <span>
+        <Games color="#15317E" fontSize="medium" />
+      </span>
+    ),
+    subcomponent: [],
+  },
+  {
+    id: 11,
+    navLink: "/inr_Payout",
+    navItem: "Payout Report",
+    navIcon: (
+      <span>
+        <Games color="#15317E" fontSize="medium" />
+      </span>
+    ),
+    subcomponent: [],
+  },
+  {
     id: 6,
     navLink: "/levelBonus",
     navItem: "Income",
@@ -141,7 +164,7 @@ export const all_Data = [
           </span>
         ),
       },
-     {
+      {
         id: 8.5,
         navLink: "/giftBonus",
         navItem: "Direct Bonus",
@@ -151,7 +174,7 @@ export const all_Data = [
           </span>
         ),
       },
-      
+
       {
         id: 8.6,
         navLink: "/vipbonus",
@@ -162,7 +185,7 @@ export const all_Data = [
           </span>
         ),
       },
-       {
+      {
         id: 8.6,
         navLink: "/matching",
         navItem: "NFT Level Bonus",
@@ -172,7 +195,7 @@ export const all_Data = [
           </span>
         ),
       },
-       {
+      {
         id: 8.6,
         navLink: "/weeklybonus",
         navItem: "MileStone Bonus",
@@ -182,7 +205,7 @@ export const all_Data = [
           </span>
         ),
       },
-       {
+      {
         id: 8.6,
         navLink: "/salarybonus",
         navItem: "NFT Delay ROI Bonus",
@@ -192,52 +215,33 @@ export const all_Data = [
           </span>
         ),
       },
-    
+
     ],
   },
 
-//   {
-//     id: 11,
-//     navLink: "/inr_Payout",
-//     navItem: "Payout",
-//     navIcon: (
-//       <span>
-//         <Games color="#15317E" fontSize="medium" />
-//       </span>
-//     ),
-//     subcomponent: [],
-//   },
-   {
-    id: 11,
-    navLink: "/inr_Paying",
-    navItem: "Fund Request",
-    navIcon: (
-      <span>
-        <Games color="#15317E" fontSize="medium" />
-      </span>
-    ),
-    subcomponent: [],
-  },
-//  {
-//     id: 1,
-//     navLink: "/contact",
-//     navItem: "Contact",
-//     navIcon: (
-//       <span>
-//         <LeaderboardSharp color="#15317E" fontSize="medium" />
-//       </span>
-//     ),
-//     subcomponent: [],
-//   },
-//   {
-//     id: 1,
-//     navLink: "/ticket_list",
-//     navItem: "Ticket List",
-//     navIcon: (
-//       <span>
-//         <LeaderboardSharp color="#15317E" fontSize="medium" />
-//       </span>
-//     ),
-//     subcomponent: [],
-//   },
+  //   {
+
+
+  //  {
+  //     id: 1,
+  //     navLink: "/contact",
+  //     navItem: "Contact",
+  //     navIcon: (
+  //       <span>
+  //         <LeaderboardSharp color="#15317E" fontSize="medium" />
+  //       </span>
+  //     ),
+  //     subcomponent: [],
+  //   },
+  //   {
+  //     id: 1,
+  //     navLink: "/ticket_list",
+  //     navItem: "Ticket List",
+  //     navIcon: (
+  //       <span>
+  //         <LeaderboardSharp color="#15317E" fontSize="medium" />
+  //       </span>
+  //     ),
+  //     subcomponent: [],
+  //   },
 ];

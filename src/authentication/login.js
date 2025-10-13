@@ -65,11 +65,11 @@ const Login = () => {
   const loginFn = async (reqBody) => {
     setLoading(true);
     const reqBodyy = {
-      
+
       mobile: String("N/A"),
       email: String("N/A"),
-      wallet_address:String(walletAddress)?.toLocaleLowerCase() ,
-      type:"user",
+      wallet_address: String(walletAddress)?.toLocaleLowerCase(),
+      type: "user",
       password: String("N/A"),
     };
     // const reqBodyy = {
@@ -164,7 +164,7 @@ const Login = () => {
       <Loader isLoading={loading} />
       <div className="flex justify-center items-center min-h-screen login-section">
         <div className="bg-glassy bg-black border border-gold-color p-6 rounded-2xl shadow-lg w-full max-w-md">
-        <div className="flex justify-center  cursor-pointer  mb-5">
+          <div className="flex justify-center  cursor-pointer  mb-5">
             <img src={logo} alt="" className="w-[180px]" />
           </div>
 
@@ -217,7 +217,7 @@ const Login = () => {
               Submit{" "}
             </button>
           </div>
-          <p className="text-white text-xs text-right my-2 " onClick={()=>navigate('/register')}>You don't have an Account <span className="underline cursor-pointer">SignUp</span></p>
+          <p className="text-white text-xs text-right my-2 " onClick={() => navigate('/register')}>You don't have an Account <span className="underline cursor-pointer">SignUp</span></p>
         </div>
       </div>
     </>

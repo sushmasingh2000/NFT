@@ -48,26 +48,33 @@ const JoinMember = () => {
 
   const tablehead = [
     <span>S.No.</span>,
-    <span>Login Id</span>,
+    <span>Cust ID</span>,
     <span>User Name</span>,
-    <span>Amount </span>,
-    <span>Group Type</span>,
-    <span>Status</span>,
-    <span> Date</span>,
-
-
+    <span>Topup Wallet</span>,
+    <span>Total Income</span>,
+    <span>Registration Date</span>,
+    <span>Topup Date</span>,
   ];
+
   const tablerow = allData?.data?.map((row, index) => {
-    return [
-       <span> {(page - 1) * 10 + index + 1}</span>,
-      <span>{row.lgn_cust_id}</span>,
-      <span>{row.jnr_name || '--'}</span>,
-      <span> {Number(row.td_wallet_amount || 0)?.toFixed(2) || 0}</span>,
-      <span>{row.td_group_type}</span>,
-      <span>{row.td_verification_status}</span>,
-      <span>{row.td_created_at ? moment(row.td_created_at)?.format("DD-MM-YYYY") : "--"}</span>,
-    ];
-  });
+   return [
+     <span>{(page - 1) * 10 + index + 1}</span>,
+     <span>{row.lgn_cust_id}</span>,
+     <span>{row.lgn_name || "--"}</span>,
+     <span>{Number(row.tr03_topup_wallet || 0).toFixed(2)}</span>,
+     <span>{Number(row.tr03_total_income || 0).toFixed(2)}</span>,
+     <span>
+       {row.tr03_reg_date
+         ? moment(row.tr03_reg_date).format("DD-MM-YYYY")
+         : "--"}
+     </span>,
+     <span>
+       {row.tr03_topup_date
+         ? moment(row.tr03_topup_date).format("DD-MM-YYYY")
+         : "--"}
+     </span>,
+   ];
+ });
   return (
     <div className="p-2">
       <div className="bg-gray-800 rounded-lg shadow-lg p-3 text-white border border-gray-700 mb-6">

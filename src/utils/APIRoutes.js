@@ -33,6 +33,8 @@ export const endpoint = {
   member_detail: `${domain}/api/v1/member-details`,
   roi_income_api: `${domain}/api/v1/get-income-details`,
 
+  network_downline_api: `${domain}/api/v1/get-member-downline-tree`,
+  get_downline_api: `${domain}/api/v1/get-member-downline`,
 
 
 
@@ -47,9 +49,6 @@ export const endpoint = {
   //old
   trader_registration_api: `${domain}/api/v1/trader-registration`,
   trader_profile_api: `${domain}/api/v1/trader-profile-details`,
-
-  get_downline_api: `${domain}/api/v1/get-downline-team`,
-  network_downline_api: `${domain}/api/v1/tree-data`,
   add_user_withdrawal: `${domain}/api/v1/user-withdrawal-req`,
   withdrawal_list: `${domain}/api/v1/withdrawal-report`,
   add_wallet_address: `${domain}/api/v1/update-wallet-address`,

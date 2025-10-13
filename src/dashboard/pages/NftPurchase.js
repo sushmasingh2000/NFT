@@ -44,7 +44,8 @@ const NFTPurchase = () => {
 
     const tablehead = [
         <span>S.No.</span>,
-        <span>Date</span>,
+        <span>Date/Time</span>,
+        <span>NFT ID</span>,
         <span>Transaction ID</span>,
         <span>NFT Name</span>,
         <span>Amount ($)</span>,
@@ -56,6 +57,7 @@ const NFTPurchase = () => {
         return [
             <span>{(page - 1) * 10 + index + 1}</span>,
             <span>{moment(row.tr10_buy_date).format("DD-MM-YYYY HH:mm:ss")}</span>,
+            <span>{row.m02_dist_id}</span>,
             <span>{row.tr10_trans_id}</span>,
             <span>{row.m01_name}</span>,
             <span>{parseFloat(row.tr10_buy_price).toFixed(2)}</span>,

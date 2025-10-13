@@ -11,7 +11,7 @@ import { Lock } from '@mui/icons-material';
 import toast from 'react-hot-toast';
 import SweetAlert from "sweetalert2";
 
-const Withdrawal = () => {
+const INRPayout = () => {
   const client = useQueryClient();
   const [page, setPage] = useState(1)
   const initialValuesssss = {
@@ -27,15 +27,16 @@ const Withdrawal = () => {
     enableReinitialize: true,
 
   })
-  const { data, isLoading } = useQuery(
-    ['get_withdrawal_Admin', fk.values.search, fk.values.start_date, fk.values.end_date, page],
+const { data, isLoading } = useQuery(
+    ['get_actiavtion_admin_payout', fk.values.search, fk.values.start_date, fk.values.end_date, page],
     () =>
-      apiConnectorPost(endpoint?.withdrawal_list, {
+      apiConnectorPost(endpoint?.roi_income_api, {
+        income_type:"OUT",
         search: fk.values.search,
         start_date: fk.values.start_date,
         end_date: fk.values.end_date,
         page: page,
-        count: 10,
+        count: "10",
       }),
     {
       keepPreviousData: true,
@@ -47,129 +48,40 @@ const Withdrawal = () => {
   );
 
   const allData = data?.data?.result || [];
-  const changeStatusApprovedFunction = async (id) => {
-    try {
-      const res = await apiConnectorPost(
-        endpoint?.withdrawal_request_status, {
-        t_id: id,
-        step: 2
-      }
-      );
-      client.refetchQueries("get_withdrawal_Admin")
-      toast(res?.data?.message);
-      console.log(res);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-  const handleSubmit = (id) => {
-    SweetAlert.fire({
-      title: "Are you sure?",
-      text: "You want to Approve this Amount!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Confirm",
-      cancelButtonText: "Cancel",
-      customClass: {
-        confirmButton: "custom-confirm",
-        cancelButton: "custom-cancel",
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        changeStatusApprovedFunction(id);
-      }
-    });
-  };
-  const changeStatusRejectFunction = async (id) => {
-    try {
-      const res = await apiConnectorPost(endpoint?.withdrawal_request_status, {
-        t_id: id,
-        step: 3,
-      });
-      client.refetchQueries("get_withdrawal_Admin")
-      toast(res?.data?.message);
-      console.log(res);
-    } catch (e) {
-      console.log(e);
-    }
-  };
 
-  const handleRejectSubmit = (id) => {
-    SweetAlert.fire({
-      title: "Are you sure?",
-      text: "You want to Reject this Amount!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Confirm",
-      cancelButtonText: "Cancel",
-      customClass: {
-        confirmButton: "custom-confirm",
-        cancelButton: "custom-cancel",
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        changeStatusRejectFunction(id);
-      }
-    });
-  };
-  const tablehead = [
-    <span>S.No.</span>,
-    <span>User Id</span>,
-    <span>Name</span>,
-    <span>Amount ($)</span>,
-    <span>Wallet Address</span>,
-    <span>Transaction Id</span>,
-    <span>Status</span>,
-    <span>Date/Time</span>,
-    <span>Action</span>
+
+ const tablehead = [
+  <span>S.No.</span>,
+  <span>Date</span>,
+  <span>Transaction ID</span>,
+  <span>User</span>,
+  <span>Email</span>,
+  <span>Amount ($)</span>,
+  // <span>Wallet</span>,
+  // <span>Description</span>,
+];
+
+const tablerow = allData?.data?.map((row, index) => {
+  return [
+    <span>{(page - 1) * 10 + index + 1}</span>,
+    <span>{moment.utc(row.tr07_created_at).format("DD-MM-YYYY HH:mm:ss")}</span>,
+    <span>{row.tr07_trans_id}</span>,
+    <span>{row.lgn_name || 'N/A'}</span>,
+    <span>{row.lgn_email || 'N/A'}</span>,
+    <span>{Number(row.tr07_amount).toFixed(2)}</span>,
+    // <span>{row.tr07_wallet || 'N/A'}</span>,
+    // <span>{row.tr07_description || 'N/A'}</span>,
+   
   ];
-
-
-  
-  const tablerow = allData?.data?.map((row, index) => {
-    return [
-     <span> {(page - 1) * 10 + index + 1}</span>,
-      <span>{row?.lgn_cust_id}</span>,
-      <span>{row?.jnr_name}</span>,
-      <span> {row?.wdrl_amont || 0}</span>,
-      <span>{row?.wdrl_to}</span>,
-      <span>{row?.wdrl_transacton_id}</span>,
-      <span>{row?.wdrl_status || 'N/A'}</span>,
-      <span>{row?.wdrl_created_at ? moment?.utc(row?.wdrl_created_at)?.format("DD-MM-YYYY HH:mm:ss") : "--"}</span>,
-
-     <span className='flex justify-center gap-1'> <span>
-        {row?.wdrl_status === "Pending" ? (
-          <button
-            className="!bg-[#198754] !text-white p-2 rounded"
-            onClick={() => handleSubmit(row?.wdrl_id)}
-          >
-            Approve
-          </button>
-        ) : (
-          <Lock />
-        )}
-      </span>
-        <span>
-        {row?.wdrl_status === "Pending" ? (
-          <button
-            className="!bg-red-500 !text-white p-2 rounded"
-
-            onClick={() => handleRejectSubmit(row?.wdrl_id)}
-          >
-            Reject
-          </button>
-        ) : (
-          <Lock />
-        )}
-      </span></span>
-    ];
-  })
+});
 
   return (
     <>
 
       <div className="p-2">
         <div className="bg-white bg-opacity-50 rounded-lg shadow-lg p-3 text-white mb-6">
+
+
           <div className="flex flex-col sm:flex-wrap md:flex-row items-center gap-3 sm:gap-4 w-full text-sm sm:text-base">
             <input
               type="date"
@@ -238,4 +150,4 @@ const Withdrawal = () => {
   );
 };
 
-export default Withdrawal;
+export default INRPayout;

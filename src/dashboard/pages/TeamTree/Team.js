@@ -39,34 +39,63 @@ const Team = () => {
   const flatData = data?.data?.result || [];
 
   const buildTreeFromFlatData = (flatData) => {
-    const map = {};
-    let root = null;
+  const map = {};
+  let root = null;
 
-    flatData.forEach((item) => {
-      const formattedNode = {
-        ...item,
-        name: item.jnr_name,
-        joining_date: item.td_created_at,
-        topup_date: item.td_verification_date,
-        children: [],
-      };
+  flatData.forEach((item) => {
+    map[item.lgn_cust_id] = {
+      ...item,
+      name: item.lgn_name,
+      joining_date: item.tr03_reg_date,
+      topup_date: item.tr03_topup_date,
+      children: [],
+    };
+  });
 
-      map[item.lgn_jnr_id] = formattedNode;
-    });
+  flatData.forEach((item) => {
+    const node = map[item.lgn_cust_id];
+    const parent = map[item.from_cust]; 
 
-    flatData.forEach((item) => {
-      const node = map[item.lgn_jnr_id];
-      const parent = map[item.lgn_spon_id];
+    if (parent) {
+      parent.children.push(node);
+    } else {
+      root = node;
+    }
+  });
 
-      if (parent) {
-        parent.children.push(node);
-      } else {
-        root = node;
-      }
-    });
+  return root;
+};
 
-    return root;
-  };
+
+  // const buildTreeFromFlatData = (flatData) => {
+  //   const map = {};
+  //   let root = null;
+
+  //   flatData.forEach((item) => {
+  //     const formattedNode = {
+  //       ...item,
+  //       name: item.jnr_name,
+  //       joining_date: item.td_created_at,
+  //       topup_date: item.td_verification_date,
+  //       children: [],
+  //     };
+
+  //     map[item.lgn_jnr_id] = formattedNode;
+  //   });
+
+  //   flatData.forEach((item) => {
+  //     const node = map[item.lgn_jnr_id];
+  //     const parent = map[item.lgn_spon_id];
+
+  //     if (parent) {
+  //       parent.children.push(node);
+  //     } else {
+  //       root = node;
+  //     }
+  //   });
+
+  //   return root;
+  // };
 
   const orgChart = useMemo(() => {
     return buildTreeFromFlatData(flatData);

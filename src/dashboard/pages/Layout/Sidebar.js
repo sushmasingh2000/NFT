@@ -49,8 +49,20 @@ const Sidebar = () => {
   const menuItems = [
     { title: "Dashboard", icon: <FaTachometerAlt />, path: "/dashboard" },
     { title: "NFT List ", icon: <Analytics />, path: "/nft_purchase" },
-    { title: "TopUp ", icon: <FaUserCog />, path: "/topup_data" },
-    { title: "Activation", icon: <FaCheck />, path: "/activation" },
+    {
+      title: "Activation",
+      icon: <FaCheck />,
+      subItems: [
+        { title: "Activation ", path: "/topup_data" },
+        { title: "Activation Report", path: "/activation" },
+      ],
+    },
+    {
+      title: "Payout Report ",
+      icon: <FaWallet />,
+      path: "/payout_details",
+    },
+
 
     // {
     //   title: "Associate Reg",
@@ -74,19 +86,19 @@ const Sidebar = () => {
         { title: "NFT Trading Income", path: "/income/nft_trad" },
         { title: "NFT Level Income", path: "/income/nft_level" },
         { title: "NFT Delay Income", path: "/income/nft_delay" },
-        
+
       ],
     },
 
-    // {
-    //   title: "Network",
-    //   icon: <FaNetworkWired />,
-    //   subItems: [
-    //     { title: "Direct Team", path: "/referral" },
-    //     { title: "Downline", path: "/downline" },
-    //     { title: "Network Tree", path: "/team" },
-    //   ],
-    // },
+    {
+      title: "Network",
+      icon: <FaNetworkWired />,
+      subItems: [
+        { title: "Direct Team", path: "/referral" },
+        { title: "Downline", path: "/downline" },
+        { title: "Network Tree", path: "/team" },
+      ],
+    },
     { title: "Profile Settings", icon: <FaUserCog />, path: "/profile" },
 
     // { title: "Wallet", icon: <FaWallet />, path: "/wallet" },
@@ -101,11 +113,7 @@ const Sidebar = () => {
 
     // { title: "Invester Amount", icon: <FaWallet />, path: "/fund-tranfer" },
     // { title: "Withdrawal", icon: <FaExchangeAlt />, path: "/withdrawal" },
-    // {
-    //   title: "Withdrawal History ",
-    //   icon: <FaUserAlt />,
-    //   path: "/payout_details",
-    // },
+
     // {
     //   title: "Business Plan",
     //   icon: <FaUserAlt />,
@@ -169,7 +177,7 @@ const Sidebar = () => {
         {/* Mobile Sidebar Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-700 lg:hidden">
           <div className="flex items-center space-x-2 text-xl font-bold">
-           <img src={logo} alt=""/>
+            <img src={logo} alt="" />
           </div>
           <button
             onClick={() => setShowSidebar(false)}
@@ -181,7 +189,7 @@ const Sidebar = () => {
 
         {/* Desktop Sidebar Header */}
         <div className="hidden lg:flex text-xl font-bold p-4 border-b border-gray-700 items-center justify-center space-x-2">
-          <img src={logo} alt=""/>
+          <img src={logo} alt="" />
 
         </div>
 
@@ -202,8 +210,8 @@ const Sidebar = () => {
                     rel="noopener noreferrer"
                     download={item.download}
                     className={`flex items-center justify-between p-2 rounded cursor-pointer transition font-medium ${isMenuActive
-                        ? "bg-gold-color text-black"
-                        : "hover:bg-gray-800 text-white"
+                      ? "bg-gold-color text-black"
+                      : "hover:bg-gray-800 text-white"
                       }`}
                   >
                     <div className="flex gap-2 items-center space-x-2 pl-3">
@@ -227,8 +235,8 @@ const Sidebar = () => {
                       }
                     }}
                     className={`flex items-center justify-between p-2 rounded cursor-pointer transition font-medium ${isMenuActive
-                        ? "bg-gold-color text-black"
-                        : "hover:bg-gray-800 text-white"
+                      ? "bg-gold-color text-black"
+                      : "hover:bg-gray-800 text-white"
                       }`}
                   >
                     <div className="flex gap-2 items-center space-x-2 pl-3">
@@ -256,8 +264,8 @@ const Sidebar = () => {
                           key={index}
                           onClick={() => handleSubItemClick(item.title, sub)}
                           className={`px-3 py-1 rounded cursor-pointer transition ${isSubActive
-                              ? "bg-gold-color text-black"
-                              : "hover:bg-gray-700 text-white"
+                            ? "bg-gold-color text-black"
+                            : "hover:bg-gray-700 text-white"
                             }`}
                         >
                           {sub.title}

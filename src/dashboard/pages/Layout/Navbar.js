@@ -8,7 +8,7 @@ import { endpoint } from '../../../utils/APIRoutes';
 
 const Navbar = () => {
      const { data:profile } = useQuery(
-    ["get_profile"],
+    ["get_profile_"],
     () => apiConnectorGet(endpoint?.trader_profile_api),
     {
       refetchOnMount: false,

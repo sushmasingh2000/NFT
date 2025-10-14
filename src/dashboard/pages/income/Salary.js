@@ -1,37 +1,44 @@
-import React, { useState } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
-import { apiConnectorPost } from '../../../utils/APIConnector';
-import { endpoint } from '../../../utils/APIRoutes';
-import CustomTable from '../../../Shared/CustomTable';
-import CustomToPagination from '../../../Shared/Pagination';
-import { useFormik } from 'formik';
-import moment from 'moment';
+import React, { useState } from "react";
+import { useQuery, useQueryClient } from "react-query";
+import { apiConnectorPost } from "../../../utils/APIConnector";
+import { endpoint } from "../../../utils/APIRoutes";
+import CustomTable from "../../../Shared/CustomTable";
+import CustomToPagination from "../../../Shared/Pagination";
+import { useFormik } from "formik";
+import moment from "moment";
 
 const Salryfn = () => {
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(1);
   const client = useQueryClient();
   const initialValues = {
     income_type: "",
-    search: '',
+    search: "",
     page: "",
-    start_date: '',
-    end_date: '',
+    start_date: "",
+    end_date: "",
   };
 
   const fk = useFormik({
     initialValues: initialValues,
     enableReinitialize: true,
-
-  })
+  });
   const { data, isLoading } = useQuery(
-    ['get_milestone', fk.values.search, fk.values.start_date, fk.values.end_date, page],
+    [
+      "get_milestone",
+      fk.values.search,
+      fk.values.start_date,
+      fk.values.end_date,
+      page,
+    ],
     () =>
       apiConnectorPost(endpoint?.roi_income_api, {
-        income_type: 'MILESTONE',
+        income_type: "MILESTONE",
         search: fk.values.search,
         start_date: fk.values.start_date,
         end_date: fk.values.end_date,
         page: page,
+        wallet_type: "INCOME",
+
         count: 10,
       }),
     {
@@ -45,7 +52,7 @@ const Salryfn = () => {
 
   const allData = data?.data?.result || [];
 
- const tablehead = [
+  const tablehead = [
     <span>S.No.</span>,
     <span>Date</span>,
     // <span>Customer Id</span>,
@@ -57,22 +64,22 @@ const Salryfn = () => {
   ];
   const tablerow = allData?.data?.map((row, index) => {
     return [
-     <span> {(page - 1) * 10 + index + 1}</span>,
+      <span> {(page - 1) * 10 + index + 1}</span>,
       <span>{moment(row.ledger_created_at)?.format("DD-MM-YYYY")}</span>,
       // <span>{row.lgn_cust_id || "--"}</span>,
-      <span> {Number(row.ledger_amount || 0)?.toFixed(2) || '$0.00'}</span>,
-      <span>{Number(row.jnr_topup_wallet)?.toFixed(2) || '--'}</span>,
+      <span> {Number(row.ledger_amount || 0)?.toFixed(2) || "$0.00"}</span>,
+      <span>{Number(row.jnr_topup_wallet)?.toFixed(2) || "--"}</span>,
       // <span>{row.jnr_name}</span>,
       // <span>{row.lgn_mobile || '--'}</span>,
-      <span>{row.ledger_des || '--'}</span>,
-
-
+      <span>{row.ledger_des || "--"}</span>,
     ];
   });
   return (
     <div className="p-2">
       <div className="bg-gray-800 rounded-lg shadow-lg p-3 text-white border border-gray-700 mb-6">
-        <h2 className="text-xl font-semibold mb-4 text-gray-200">MileStone Reward</h2>
+        <h2 className="text-xl font-semibold mb-4 text-gray-200">
+          MileStone Reward
+        </h2>
 
         <div className="flex flex-col sm:flex-wrap md:flex-row items-center gap-3 sm:gap-4 w-full text-sm sm:text-base">
           <input
@@ -122,7 +129,6 @@ const Salryfn = () => {
         </div>
       </div>
 
-
       {/* Main Table Section */}
       <div className="bg-gray-800 rounded-lg shadow-lg p-3 text-white border border-gray-700">
         <CustomTable
@@ -131,13 +137,8 @@ const Salryfn = () => {
           isLoading={isLoading}
         />
 
-
         {/* Pagination */}
-        <CustomToPagination
-          page={page}
-          setPage={setPage}
-          data={allData}
-        />
+        <CustomToPagination page={page} setPage={setPage} data={allData} />
       </div>
     </div>
   );

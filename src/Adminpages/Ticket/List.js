@@ -1,21 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { TextField, Button } from "@mui/material";
-import { useQuery } from "react-query";
+import CloseIcon from "@mui/icons-material/Close";
+import { Button, Dialog, DialogContent, DialogTitle, IconButton } from "@mui/material";
 import moment from "moment";
-import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import { useState } from "react";
+import { useQuery } from "react-query";
 import { apiConnectorGet } from "../../utils/APIConnector";
 import { endpoint } from "../../utils/APIRoutes";
-import AdminTicketChat from "./TicketChat";
-import Loader from "../../Shared/Loader";
 import CustomTable from "../Shared/CustomTable";
-import {
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
-    IconButton,
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
+import AdminTicketChat from "./TicketChat";
 
 
 const AdminTicketList = () => {

@@ -42,7 +42,6 @@ const App = () => {
           ))
         ) : (
           <Route path="*" element={<Login />} />
-
         )}
         {/* Protected Routes */}
         {

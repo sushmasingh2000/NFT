@@ -1,37 +1,43 @@
-import React, { useState } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
-import { apiConnectorPost } from '../../utils/APIConnector';
-import { endpoint } from '../../utils/APIRoutes';
-import CustomTable from '../../Shared/CustomTable';
-import CustomToPagination from '../../Shared/Pagination';
-import { useFormik } from 'formik';
-import moment from 'moment';
+import React, { useState } from "react";
+import { useQuery, useQueryClient } from "react-query";
+import { apiConnectorPost } from "../../utils/APIConnector";
+import { endpoint } from "../../utils/APIRoutes";
+import CustomTable from "../../Shared/CustomTable";
+import CustomToPagination from "../../Shared/Pagination";
+import { useFormik } from "formik";
+import moment from "moment";
 
 const Activation = () => {
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(1);
   const client = useQueryClient();
   const initialValues = {
-    search: '',
+    search: "",
     pageSize: 10,
-    start_date: '',
-    end_date: '',
+    start_date: "",
+    end_date: "",
   };
 
   const fk = useFormik({
     initialValues: initialValues,
     enableReinitialize: true,
-
-  })
+  });
   const { data, isLoading } = useQuery(
-    ['get_actiavtion', fk.values.search, fk.values.start_date, fk.values.end_date, page],
+    [
+      "get_actiavtion",
+      fk.values.search,
+      fk.values.start_date,
+      fk.values.end_date,
+      page,
+    ],
     () =>
       apiConnectorPost(endpoint?.roi_income_api, {
-        income_type:"IN",
+        income_type: "IN",
         search: fk.values.search,
         start_date: fk.values.start_date,
         end_date: fk.values.end_date,
         pageNumber: page,
         pageSize: "10",
+        wallet_type:"FUND"
       }),
     {
       keepPreviousData: true,
@@ -44,31 +50,34 @@ const Activation = () => {
 
   const allData = data?.data?.result || [];
 
-const tablehead = [
-  <span>S.No.</span>,
-  <span>Date</span>,
-  <span>Transaction ID</span>,
-  <span>Amount ($)</span>,
-  // <span>Wallet</span>,
-  <span>Description</span>,
-];
-
-const tablerow = allData?.data?.map((row, index) => {
-  return [
-    <span>{(page - 1) * 10 + index + 1}</span>,
-    <span>{moment.utc(row.tr07_created_at).format("DD-MM-YYYY HH:mm:ss")}</span>,
-    <span>{row.tr07_trans_id}</span>,
-    <span>{Number(row.tr07_amount).toFixed(2)}</span>,
-    // <span>{row.tr07_wallet || 'N/A'}</span>,
-    <span>{row.tr07_description || 'N/A'}</span>,
-   
+  const tablehead = [
+    <span>S.No.</span>,
+    <span>Date</span>,
+    <span>Transaction ID</span>,
+    <span>Amount ($)</span>,
+    // <span>Wallet</span>,
+    <span>Description</span>,
   ];
-});
+
+  const tablerow = allData?.data?.map((row, index) => {
+    return [
+      <span>{(page - 1) * 10 + index + 1}</span>,
+      <span>
+        {moment.utc(row.tr07_created_at).format("DD-MM-YYYY HH:mm:ss")}
+      </span>,
+      <span>{row.tr07_trans_id}</span>,
+      <span>{Number(row.tr07_amount).toFixed(2)}</span>,
+      // <span>{row.tr07_wallet || 'N/A'}</span>,
+      <span>{row.tr07_description || "N/A"}</span>,
+    ];
+  });
 
   return (
     <div className="p-2">
       <div className="bg-gray-800 rounded-lg shadow-lg p-3 text-white border border-gray-700 mb-6">
-        <h2 className="text-xl font-semibold mb-4 text-gray-200">Activation Report</h2>
+        <h2 className="text-xl font-semibold mb-4 text-gray-200">
+          Activation Report
+        </h2>
 
         <div className="flex flex-col sm:flex-wrap md:flex-row items-center gap-3 sm:gap-4 w-full text-sm sm:text-base">
           <input
@@ -118,7 +127,6 @@ const tablerow = allData?.data?.map((row, index) => {
         </div>
       </div>
 
-
       {/* Main Table Section */}
       <div className="bg-gray-800 rounded-lg shadow-lg p-3 text-white border border-gray-700">
         <CustomTable
@@ -127,13 +135,8 @@ const tablerow = allData?.data?.map((row, index) => {
           isLoading={isLoading}
         />
 
-
         {/* Pagination */}
-        <CustomToPagination
-          page={page}
-          setPage={setPage}
-          data={allData}
-        />
+        <CustomToPagination page={page} setPage={setPage} data={allData} />
       </div>
     </div>
   );

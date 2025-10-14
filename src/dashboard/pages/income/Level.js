@@ -32,6 +32,7 @@ const Level = () => {
         start_date: fk.values.start_date,
         end_date: fk.values.end_date,
         page: page,
+        wallet_type:"INCOME",
         count: 10,
       }),
     {

@@ -24,6 +24,7 @@ const Profile = () => {
     );
     const user_profile = profile?.data?.result?.[0] || {}; // Changed to empty object for safer access
 
+     console.log(profile)
     // Formik for Wallet Address
     const fkWallet = useFormik({ // Renamed from fk to fkWallet
         initialValues: {

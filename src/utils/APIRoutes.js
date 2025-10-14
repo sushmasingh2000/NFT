@@ -1,5 +1,5 @@
-// export const domain = 'http://192.168.18.214:9005';
-export const domain = 'https://nftvault.biz';
+export const domain = 'http://192.168.248.149:9005';
+// export const domain = 'https://nftvault.biz';
 export const frontend = 'https://nftvault.biz';
 export const dollar = "$"
 export const reciepientaddress ="0x2583fdfd4319Bb44F0afC6a706440858174593F8"
@@ -33,6 +33,7 @@ export const endpoint = {
   activation_request: `${domain}/api/v1/activation-request`,
   dummy_activation_request: `${domain}/api/v1/activation-dummy-request`,
   activation_request: `${domain}/api/v1/activation-request`,
+  
   dummy_activation_request_nft: `${domain}/api/v1/activation-dummy-request-nft`,
   activation_request_nft: `${domain}/api/v1/activation-request-nft`,
 

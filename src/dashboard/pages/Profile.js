@@ -110,7 +110,7 @@ const Profile = () => {
         setLoding(true);
         try {
             const res = await apiConnectorPost(endpoint?.update_user_profile, reqbody);
-            toast.success(res?.data?.message);
+            toast(res?.data?.message);
             if (res?.data?.success) {
                 setShowProfileModal(false);
                 refetchProfile();

@@ -75,8 +75,8 @@ const Team = () => {
   //     const formattedNode = {
   //       ...item,
   //       name: item.jnr_name,
-  //       joining_date: item.td_created_at,
-  //       topup_date: item.td_verification_date,
+  //       joining_date: item.tr03_reg_date,
+  //       topup_date: item.tr03_topup_date,
   //       children: [],
   //     };
 
@@ -113,7 +113,7 @@ const Team = () => {
 
   const renderCustomNode = ({ nodeDatum, toggleNode }) => {
     const nodeColor = "#FFFFFF";
-    const IconComponent = !nodeDatum.topup_date ? (
+    const IconComponent = !nodeDatum.tr03_topup_date ? (
       <FaUser className="!text-red-600 !text-3xl" />
     ) : (
       <FaUser className="!text-green-600 !text-3xl" />
@@ -246,16 +246,16 @@ const Team = () => {
               Joining Date
             </p>
             <p className="p-1 text-xs text-center border border-gray-700">
-              {selectedNode?.td_created_at
-                ? moment(selectedNode?.td_created_at)?.format("DD-MM-YYYY")
+              {selectedNode?.tr03_reg_date
+                ? moment(selectedNode?.tr03_reg_date)?.format("DD-MM-YYYY")
                 : "--"}
             </p>
             <p className="p-1 text-center text-xs font-semibold border border-gray-700">
               Topup Date
             </p>
             <p className="p-1 text-xs font-semibold text-center border border-gray-700">
-              {selectedNode?.td_verification_date
-                ? moment(selectedNode?.td_verification_date)?.format(
+              {selectedNode?.tr03_topup_date
+                ? moment(selectedNode?.tr03_topup_date)?.format(
                     "DD-MM-YYYY"
                   )
                 : "--"}
@@ -264,25 +264,25 @@ const Team = () => {
               Direct Team
             </p>
             <p className="px-4 py-2 text-xs  text-center border border-gray-700">
-              {selectedNode?.jnr_direct_team || "--"}
+              {selectedNode?.tr03_dir_mem || "--"}
             </p>
             <p className="px-4 py-2 text-center text-xs font-semibold border border-gray-700">
               Direct TopUp Mem.
             </p>
             <p className="px-4 py-2 text-xs  text-center border border-gray-700">
-              {selectedNode?.jnr_direct_topup_mem || "--"}
+              {selectedNode?.tr03_dir_topup_mem || "--"}
             </p>
             <p className="px-4 py-2 text-center text-xs font-semibold border border-gray-700">
               Direct Buss.
             </p>
             <p className="px-4 py-2 text-xs  text-center border border-gray-700">
-              {Number(selectedNode?.jnr_direct_business || 0)?.toFixed(2)}
+              {Number(selectedNode?.tr03_dir_buss || 0)?.toFixed(2)}
             </p>
             <p className="p-1 text-center text-xs font-semibold border border-gray-700">
               Team Buss.
             </p>
             <p className="p-1 text-xs text-center border border-gray-700">
-              {Number(selectedNode?.jnr_total_team_buss || 0)?.toFixed(2)}
+              {Number(selectedNode?.tr03_team_buss || 0)?.toFixed(2)}
             </p>
           </div>
         </MenuItem>

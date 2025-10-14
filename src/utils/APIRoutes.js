@@ -50,7 +50,6 @@ export const endpoint = {
 
   //old
   trader_registration_api: `${domain}/api/v1/trader-registration`,
-  trader_profile_api: `${domain}/api/v1/trader-profile-details`,
   add_user_withdrawal: `${domain}/api/v1/user-withdrawal-req`,
   withdrawal_list: `${domain}/api/v1/withdrawal-report`,
   add_wallet_address: `${domain}/api/v1/update-wallet-address`,

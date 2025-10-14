@@ -17,11 +17,14 @@ import Swal from "sweetalert2";
 const Dashboard = () => {
 
   const client = useQueryClient()
-
-
-
-  const { data: profile } = useQuery(["get_profile"], () =>
-    apiConnectorGet(endpoint?.member_profile_detail)
+  const { data: profile } = useQuery(["get_profile_user"], () =>
+    apiConnectorGet(endpoint?.member_profile_detail),{
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
+      retry :false
+    }
+    
   );
   const user_profile = profile?.data?.result?.[0] || {};
 
@@ -77,10 +80,15 @@ const Dashboard = () => {
   };
 
   const { data: count_dashborad } = useQuery(["get_count_dashborad"], () =>
-    apiConnectorGet(endpoint?.get_member_dashboard_api)
+    apiConnectorGet(endpoint?.get_member_dashboard_api),{
+       refetchOnMount: false,
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
+      retry :false
+    }
   );
   const user_count_dashborad = count_dashborad?.data?.result?.[0] || [];
-  // console.log(user_count_dashborad?.DIRECT)
+
 
   return (
     <div className=" bg-black text-white p-6 ">
@@ -88,8 +96,8 @@ const Dashboard = () => {
 
         {/* Left Card */}
         <div className="w-full lg:w-1/2">
-          <h2 className="text-3xl font-bold mb-4">Buy NFT</h2>
-          <div className="bg-gradient-to-br from-[#141e30] via-[#243b55] to-[#141e30] bg-opacity-60 backdrop-blur-md border border-white/10 shadow-xl rounded-xl p-6 transition duration-500 ease-in-out hover:scale-[1.01] shadow-teal-300/50">
+          <h2 className="hidden lg:block text-3xl text-black font-bold mb-4">Buy NFT</h2>
+          <div className="bg-custom-bg bg-opacity-60 backdrop-blur-md border border-white/10 shadow-xl rounded-xl p-6 transition duration-500 ease-in-out hover:scale-[1.01] ">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-2xl font-bold">User Details</h3>
               {/* <button className="px-4 py-1 border border-white/20 rounded-md text-sm hover:bg-white/10">Upgrade</button> */}
@@ -112,7 +120,7 @@ const Dashboard = () => {
                 label="Current Wallet"
                 value={`$ ${parseFloat(user_profile?.tr03_inc_wallet || 0).toFixed(2)}`}
               />
-              
+
               <InfoItem label="Registration Date" value={user_profile?.tr03_reg_date ? new Date(user_profile.tr03_reg_date).toLocaleDateString() : 'N/A'} />
             </div>
 
@@ -127,7 +135,7 @@ const Dashboard = () => {
         {/* Right Card */}
         <div className="w-full lg:w-1/2">
           <h2 className="text-3xl font-bold mb-4">Wallet Details</h2>
-          <div className="bg-gradient-to-br from-[#141e30] via-[#243b55] to-[#141e30] bg-opacity-60 backdrop-blur-md border border-white/10 shadow-xl rounded-xl p-6 transition duration-500 ease-in-out hover:scale-[1.01] shadow-red-300/50">
+          <div className=" bg-custom-bg bg-opacity-60 backdrop-blur-md border border-white/10 shadow-xl rounded-xl p-6 transition duration-500 ease-in-out hover:scale-[1.01]">
             <div className="text-center mb-6">
               <p className="text-sm">Total Income:</p>
               <p className="text-3xl font-extrabold text-green-400">
@@ -135,18 +143,18 @@ const Dashboard = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-2 gap-6">
               <IncomeItem label="SUB Direct Income" value={user_count_dashborad?.DIRECT || 0} />
               <IncomeItem label="SUB Level Income" value={user_count_dashborad?.LEVEL || 0} />
               <IncomeItem label="MILESTONE Income" value={user_count_dashborad?.MILESTONE || 0} />
               <IncomeItem label="NFT Trading Income" value={user_count_dashborad?.NFT_TRAD || 0} />
-              <IncomeItem label="NFT Sell" value={user_count_dashborad?.NFT_SELL || 0} />
-              <IncomeItem label="NFT Buy" value={user_count_dashborad?.NFT_BUY || 0} />
+              {/* <IncomeItem label="NFT Sell" value={user_count_dashborad?.NFT_SELL || 0} />
+              <IncomeItem label="NFT Buy" value={user_count_dashborad?.NFT_BUY || 0} /> */}
               <IncomeItem label="NFT Level Income" value={user_count_dashborad?.NFT_LEVEL || 0} />
-              <IncomeItem label="NFT Delay ROI" value={user_count_dashborad?.NFT_DELAY_COM_ROI || 0} />
-              <IncomeItem label="Cashback" value={user_count_dashborad?.CASHBACK || 0} />
+              <IncomeItem label=" Delay Compensation" value={user_count_dashborad?.NFT_DELAY_COM_ROI || 0} />
+              {/* <IncomeItem label="Cashback" value={user_count_dashborad?.CASHBACK || 0} />
               <IncomeItem label="Paying" value={user_count_dashborad?.INCOME_IN || 0} />
-              <IncomeItem label="Payout" value={user_count_dashborad?.INCOME_OUT || 0} />
+              <IncomeItem label="Payout" value={user_count_dashborad?.INCOME_OUT || 0} /> */}
             </div>
           </div>
         </div>
@@ -154,36 +162,37 @@ const Dashboard = () => {
       {/* NFT List Section */}
       {user_nft?.length > 0 && (
         <div className="mt-10">
-          <h2 className="text-3xl font-bold mb-4">My NFTs</h2>
+          <h2 className="text-3xl font-bold mb-4"> NFT Market Place</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {user_nft?.filter(nft => nft?.m02_is_reserved === 0)
               ?.map((nft) => (
                 <div
                   key={nft.m02_id}
-                  className="bg-gradient-to-br from-[#141e30] via-[#243b55] to-[#141e30] border border-white/10 p-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                  className="bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] text-white p-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
                 >
-                  <img
-                    src={domain + nft.m01_image}
-                    alt={nft.m01_name}
-                    className="w-full h-32 object-cover rounded-md mb-4"
-                  />
-                  <div className="space-y-1">
-                    <p className="text-white font-bold text-lg">{nft.m01_name}</p>
-                    <p className="text-sm text-gray-400">NFT ID: {nft.m02_dist_id}</p>
-                    <p className="text-sm text-gray-400">
-                       Price: {dollar}{" "}
-                      <span className="text-green-400 font-semibold">
-                        {Number(nft.m02_curr_price).toFixed(2)}
-                      </span>
-                    </p>
-                    <button
-                      className="text-sm bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700 transition"
-                      onClick={() => tradingfn(nft?.m02_id)}
-                    >
-                      Buy
-                    </button>
+                  <div className="rounded-lg overflow-hidden mb-4 border border-green-400">
+                    <img
+                      src={domain + nft.m01_image}
+                      alt={nft.m01_name}
+                      className="w-full h-64 object-cover"
+                    />
                   </div>
+                  <p className="text-lg text-gray-300 mb-2">Buy NFT</p>
+                  <div className="flex justify-between">
+                    <div className="flex flex-col">
+                      <p className="text-sm text-gray-300">Current Bid</p>
+                      <p className="text-lg font-bold mb-4 text-white">
+                        {Number(nft.m02_curr_price).toFixed(4)} USDT
+                      </p> </div>
+
+                    <button
+                      onClick={() => tradingfn(nft?.m02_id)}
+                      className="bg-orange-500 hover:bg-orange-600 text-white font-semibold h-fit p-2 rounded transition w-fit"
+                    >
+                      Place Bid
+                    </button></div>
                 </div>
+
               ))}
           </div>
 
@@ -209,8 +218,8 @@ const IncomeItem = ({ label, value }) => (
   <div className="flex items-start gap-3">
     <FaChartLine className="text-green-400 mt-1" />
     <div>
-      <p className="text-[14px]">{label}</p>
-      <p className="text-[18px] text-green-400 font-semibold">{Number(value).toFixed(2)} <span className="text-xs text-gray-300">USDT</span></p>
+      <p className="text-[10px] ">{label}</p>
+      <p className="text-[14px] text-green-400 font-semibold">{Number(value).toFixed(2)} <span className="text-xs text-gray-300">USDT</span></p>
     </div>
   </div>
 );

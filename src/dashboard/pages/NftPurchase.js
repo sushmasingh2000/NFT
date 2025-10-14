@@ -69,7 +69,7 @@ const NFTPurchase = () => {
     return (
         <div className="p-2">
             <div className="bg-gray-800 rounded-lg shadow-lg p-3 text-white border border-gray-700 mb-6">
-                <h2 className="text-xl font-semibold mb-4 text-gray-200">NFT List</h2>
+                <h2 className="text-xl font-semibold mb-4 text-gray-200">History</h2>
 
                 <div className="flex flex-col sm:flex-wrap md:flex-row items-center gap-3 sm:gap-4 w-full text-sm sm:text-base">
                     <input
@@ -88,7 +88,7 @@ const NFTPurchase = () => {
                         onChange={fk.handleChange}
                         className="bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
                     />
-                    <input
+                    {/* <input
                         type="text"
                         name="search"
                         id="search"
@@ -96,7 +96,7 @@ const NFTPurchase = () => {
                         onChange={fk.handleChange}
                         placeholder="User ID"
                         className="bg-gray-700 border border-gray-600 rounded-full py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
-                    />
+                    /> */}
 
                     <select
                         name="trade_type"

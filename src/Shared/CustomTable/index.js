@@ -8,8 +8,8 @@ const CustomTable = ({
   isLoading,
 }) => {
   return (
-    <div className={`w-full overflow-x-auto example ${className || ""}`}>
-      <table className="min-w-full table-auto divide-y divide-gray-700 text-sm">
+      <div className="rounded-xl overflow-hidden border border-green-400 border-opacity-50">
+      <table className="min-w-full table-auto divide-y divide-gray-700 text-sm !rounded-full">
         <thead className="bg-gray-700">
           <tr>
             {Array.isArray(tablehead) &&
@@ -17,7 +17,7 @@ const CustomTable = ({
                 <th
                   key={index}
                   scope="col"
-                  className="border border-white px-4 py-2 text-left text-xs font-semibold text-gray-300 uppercase whitespace-nowrap"
+                  className=" border border-green-400 px-4 py-2 border-opacity-50 text-left text-xs font-semibold text-gray-300 uppercase whitespace-nowrap"
                 >
                   {column}
                 </th>
@@ -33,7 +33,7 @@ const CustomTable = ({
                   tablehead.map((_, cellIndex) => (
                     <td
                       key={cellIndex}
-                      className="border border-white px-4 py-3 whitespace-nowrap text-gray-200"
+                      className="border border-green-400  border-opacity-50 px-4 py-3 whitespace-nowrap text-gray-200"
                     >
                       <Skeleton animation="wave" height={20} />
                     </td>
@@ -59,7 +59,7 @@ const CustomTable = ({
                   row.map((cell, cellIndex) => (
                     <td
                       key={cellIndex}
-                      className="border border-white px-4 py-3 whitespace-nowrap text-sm text-gray-200"
+                      className="border border-green-400  border-opacity-50 px-4 py-3 whitespace-nowrap text-sm text-gray-200"
                     >
                       {cell}
                     </td>

@@ -48,7 +48,7 @@ const Sidebar = () => {
 
   const menuItems = [
     { title: "Dashboard", icon: <FaTachometerAlt />, path: "/dashboard" },
-    { title: "NFT List ", icon: <Analytics />, path: "/nft_purchase" },
+    { title: "History ", icon: <Analytics />, path: "/nft_purchase" },
     {
       title: "Activation",
       icon: <FaCheck />,
@@ -80,28 +80,27 @@ const Sidebar = () => {
       title: "Income",
       icon: <FaCoins />,
       subItems: [
-        { title: "Level Income", path: "/income/level" },
-        { title: "MileStone Income", path: "/income/direct" },
         { title: "Direct Income", path: "/income/roi" },
+        { title: "Package Level Income", path: "/income/level" },
         { title: "NFT Trading Income", path: "/income/nft_trad" },
         { title: "NFT Level Income", path: "/income/nft_level" },
-        { title: "NFT Delay Income", path: "/income/nft_delay" },
-
+        { title: " Delay Compensation", path: "/income/nft_delay" },
+        { title: "MileStone Reward", path: "/income/direct" },
       ],
     },
 
     {
-      title: "Network",
+      title: "Community",
       icon: <FaNetworkWired />,
       subItems: [
-        { title: "Direct Team", path: "/referral" },
-        { title: "Downline", path: "/downline" },
-        { title: "Network Tree", path: "/team" },
+        // { title: "Direct Team", path: "/referral" },
+        { title: "Level View", path: "/downline" },
+        { title: "Tree View", path: "/team" },
       ],
     },
     { title: "Profile Settings", icon: <FaUserCog />, path: "/profile" },
 
-    { title: "Cahback", icon: <FaWallet />, path: "/cashback" },
+    // { title: "Cahback", icon: <FaWallet />, path: "/cashback" },
     //  {
     //     title: "Fund",
     //     icon: <FaMoneyBillWave />,
@@ -136,29 +135,17 @@ const Sidebar = () => {
     },
   ];
 
-  const { data: profile } = useQuery(
-    ["get_profile"],
-    () => apiConnectorGet(endpoint?.member_profile_detail),
-    {
-      refetchOnMount: false,
-      refetchOnReconnect: false,
-      refetchOnWindowFocus: false,
-    }
-  );
-  const user_profile = profile?.data?.result || 0;
-
   return (
     <>
       {/* Mobile Top Header */}
       <div className="block lg:hidden">
-        <div className=" bg-[#0d1a2d] text-white px-4 py-3 flex justify-between items-center shadow">
+        <div className=" bg-custom-bg text-white px-4 py-3 flex justify-between items-center shadow">
           <button className="text-2xl" onClick={() => setShowSidebar(true)}>
             ☰
           </button>
-          <h1 className="text-xl font-semibold">Dashboard</h1>
+          {/* <h1 className="text-xl font-semibold">Dashboard</h1> */}
           <div className="flex items-center space-x-2 font-medium">
-            <FaUserFriends />
-            <span>{user_profile?.Associate_Name}</span>
+           <img src={logo} alt="" className="h-10 filter brightness-200"/>
           </div>
         </div>
       </div>

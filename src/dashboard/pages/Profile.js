@@ -125,9 +125,8 @@ const Profile = () => {
 
     return (
         <>
-            <div className="  rounded-xl lg:mt-8 text-gray-100 p-6">
+            <div className="rounded-xl lg:mt-8 text-gray-100 p-6">
                 <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-
                     <div className="bg-gray-800 p-3 rounded-lg shadow-lg">
                         <div className="flex flex-col items-center mb-6">
                             <img src={logo} alt="Coin Icon" className="w-16  mb-3" />
@@ -144,14 +143,14 @@ const Profile = () => {
                                 <span>Name:</span>
                                 <span className="text-gray-100">{user_profile?.lgn_name || "--"}</span>
                             </div>
-                            <div className="flex justify-between py-1 border-b border-gray-700">
+                            {/* <div className="flex justify-between py-1 border-b border-gray-700">
                                 <span>Email Id:</span>
                                 <span className="text-gray-100">{user_profile?.lgn_email || "--"}</span>
                             </div>
                             <div className="flex justify-between py-1 border-b border-gray-700">
                                 <span>Mobile Number:</span>
                                 <span className="text-gray-100">{user_profile?.lgn_mobile || "--"}</span>
-                            </div>
+                            </div> */}
 
                             <div className="flex justify-between py-1 border-b border-gray-700">
                                 <span>Cust ID:</span>
@@ -325,7 +324,7 @@ const Profile = () => {
                                     onChange={fkProfile.handleChange}
                                 />
                             </div>
-                            <div className="mb-4">
+                            {/* <div className="mb-4">
                                 <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
                                     Email <span className="text-red-500">*</span>
                                 </label>
@@ -361,8 +360,8 @@ const Profile = () => {
                                         value={fkProfile.values.mobile}
                                         onChange={fkProfile.handleChange}
                                     />
-                                </div>
-                            </div>
+                                </div> */}
+                            {/* </div> */}
 
                             <div className="flex justify-end space-x-4">
                                 <button

@@ -8,8 +8,8 @@ const CustomToPagination = ({ setPage, page, data }) => {
   const currentPage = data?.currPage || 1;
 
   return (
-    <div className="bg-gray-200 w-full flex flex-col sm:flex-row items-center justify-between sm:justify-end gap-2 sm:gap-4  rounded mt-4">
-      <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-sm sm:text-base text-black">
+    <div className="bg-gray-200 border-2 border-green-400 w-full flex flex-col sm:flex-row items-center justify-between sm:justify-end gap-2 sm:gap-4  rounded-xl mt-4">
+      <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 pt-1 text-xs sm:text-base text-black">
         <span className="font-semibold text-dark-color ">
           Total Pages: <span className="text-black">{totalPages}</span>
         </span>

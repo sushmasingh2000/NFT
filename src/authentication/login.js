@@ -163,15 +163,15 @@ const Login = () => {
     <>
       <Loader isLoading={loading} />
       <div className="flex justify-center items-center min-h-screen login-section">
-        <div className="bg-glassy bg-black border border-gold-color p-6 rounded-2xl shadow-lg w-full max-w-md">
+     <div className="bg-custom-bg border border-black p-6 rounded-2xl shadow-lg w-full max-w-md">
           <div className="flex justify-center  cursor-pointer  mb-5">
-            <img src={logo} alt="" className="w-[180px]" />
+            <img src={logo} alt="" className="w-[180px] filter brightness-200" />
           </div>
 
           <div className="space-y-4">
             {/* Wallet Address */}
             <div>
-              <label className="block text-text-color mb-1">
+              <label className="block text-black mb-1">
                 Wallet Address
                 <Refresh
                   onClick={requestAccount}
@@ -212,7 +212,7 @@ const Login = () => {
             <button
               onClick={loginFn}
               type="submit"
-              className="w-full bg-dark-color text-text-color font-medium py-2 rounded-lg hover:opacity-90 transition"
+              className="w-full bg-black text-text-color font-medium py-2 rounded-lg hover:opacity-90 transition"
             >
               Submit{" "}
             </button>

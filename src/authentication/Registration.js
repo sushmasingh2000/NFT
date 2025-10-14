@@ -190,13 +190,13 @@ const Registration = () => {
     <>
       <Loader isLoading={loading} />
       <div className="flex justify-center items-center min-h-screen login-section">
-        <div className="bg-glassy bg-black border border-gold-color p-6 rounded-2xl shadow-lg w-full max-w-md">
+        <div className="bg-glassy bg-custom-bg border border-black p-6 rounded-2xl shadow-lg w-full max-w-md">
           <div className="flex justify-center  cursor-pointer  mb-5">
-            <img src={logo} alt="" className="w-[180px]" />
+            <img src={logo} alt="" className="w-[180px] filter brightness-200" />
           </div>
           {/* Wallet Address */}
           <div className="mb-2">
-            <label className="block text-text-color mb-1">
+            <label className="block text-black mb-1">
               Wallet Address
               <Refresh
                 onClick={requestAccount}
@@ -225,49 +225,49 @@ const Registration = () => {
 
             {/* Username */}
             <div>
-              <label className="block text-text-color mb-1">Username</label>
+              <label className="block text-black mb-1">Username</label>
               <input
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Enter Username"
-                className="w-full p-2 rounded-lg border border-gold-color bg-transparent text-white placeholder:text-text-color focus:outline-none focus:ring-2 focus:ring-gold-color"
+                className="w-full p-2 rounded-lg border border-gold-color bg-transparent text-white placeholder:text-black focus:outline-none focus:ring-2 focus:ring-gold-color"
               />
             </div>
 
             {/* Email */}
             <div>
-              <label className="block text-text-color mb-1">Email</label>
+              <label className="block text-black mb-1">Email</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter Email"
-                className="w-full p-2 rounded-lg border border-gold-color bg-transparent text-white placeholder:text-text-color focus:outline-none focus:ring-2 focus:ring-gold-color"
+                className="w-full p-2 rounded-lg border border-gold-color bg-transparent text-white placeholder:text-black focus:outline-none focus:ring-2 focus:ring-gold-color"
               />
             </div>
 
             {/* Mobile */}
             <div>
-              <label className="block text-text-color mb-1">Mobile</label>
+              <label className="block text-black mb-1">Mobile</label>
               <input
                 type="text"
                 value={mobile}
                 onChange={(e) => setMobile(e.target.value)}
                 placeholder="Enter Mobile Number"
-                className="w-full p-2 rounded-lg border border-gold-color bg-transparent text-white placeholder:text-text-color focus:outline-none focus:ring-2 focus:ring-gold-color"
+                className="w-full p-2 rounded-lg border border-gold-color bg-transparent text-white placeholder:text-black focus:outline-none focus:ring-2 focus:ring-gold-color"
               />
             </div>
 
             {/* Referral ID */}
             <div>
-              <label className="block text-text-color mb-1">Referral ID</label>
+              <label className="block text-black mb-1">Referral ID</label>
               <input
                 value={referralId}
                 onChange={(e) => setReferralId(e.target.value)}
                 type="text"
                 placeholder="Enter Referral ID"
-                className="w-full p-2 rounded-lg border border-gold-color bg-transparent text-white placeholder:text-text-color focus:outline-none focus:ring-2 focus:ring-gold-color"
+                className="w-full p-2 rounded-lg border border-gold-color bg-transparent text-white placeholder:text-black focus:outline-none focus:ring-2 focus:ring-gold-color"
               />
               {
                 referralId && (
@@ -284,7 +284,7 @@ const Registration = () => {
           <button
             onClick={loginFn}
             type="submit"
-            className="w-full bg-dark-color my-5 text-text-color font-medium py-2 rounded-lg hover:opacity-90 transition"
+            className="w-full bg-black my-5 text-white font-medium py-2 rounded-lg hover:opacity-90 transition"
           >
             Join Now
           </button>

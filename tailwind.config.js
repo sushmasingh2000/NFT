@@ -18,6 +18,7 @@ module.exports = {
       backgroundImage: {
         "custom-gradient":
           "radial-gradient(circle, rgb(50 125 224) 0%, rgb(0, 0, 20) 50%)",
+          "custom-bg": 'linear-gradient(to right, #0f92d0, #1aac7b)',
       },
     },
     animation: {

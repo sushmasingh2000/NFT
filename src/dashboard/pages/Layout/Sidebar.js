@@ -114,13 +114,7 @@ const Sidebar = () => {
     // { title: "Invester Amount", icon: <FaWallet />, path: "/fund-tranfer" },
     // { title: "Withdrawal", icon: <FaExchangeAlt />, path: "/withdrawal" },
 
-    // {
-    //   title: "Business Plan",
-    //   icon: <FaUserAlt />,
-    //   path: "/edgefx_uk_-4.pdf", // PDF path from public folder
-    //   external: true,
-    //   download: false, // true if you want to auto-download
-    // },
+   
     // {
     //   title: "Support",
     //   icon: <FaNetworkWired />,

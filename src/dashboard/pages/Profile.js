@@ -125,36 +125,35 @@ const Profile = () => {
 
     return (
         <>
-            <div className="rounded-xl lg:mt-8 text-gray-100 p-6">
+            <div className="rounded-xl lg:mt-8 text-white p-6">
                 <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="bg-gray-800 p-3 rounded-lg shadow-lg">
+                    <div className="bg-custom-bg  p-3 rounded-lg shadow-lg">
                         <div className="flex flex-col items-center mb-6">
-                            <img src={logo} alt="Coin Icon" className="w-16  mb-3" />
+                            <img src={logo} alt="Coin Icon" className="w-32  mb-3 filter brightness-200" />
                             <h2 className="text-lg font-semibold text-white">General Account Information</h2>
                         </div>
-
-                        <div className="space-y-3 text-sm text-gray-300">
-                            <div className="flex justify-between py-1 border-b border-gray-700">
+                        <div className="space-y-3 text-sm text-white">
+                            <div className="flex justify-between py-1 border-b border-green-700">
                                 <span>Registration Date:</span>
-                                <span className="text-gray-100">{moment(user_profile?.lgn_created_at)?.format("DD-MM-YYYY") || "--"}</span>
+                                <span className="text-white">{moment(user_profile?.lgn_created_at)?.format("DD-MM-YYYY") || "--"}</span>
                             </div>
 
-                            <div className="flex justify-between py-1 border-b border-gray-700">
+                            <div className="flex justify-between py-1 border-b border-green-700">
                                 <span>Name:</span>
-                                <span className="text-gray-100">{user_profile?.lgn_name || "--"}</span>
+                                <span className="text-white">{user_profile?.lgn_name || "--"}</span>
                             </div>
                             {/* <div className="flex justify-between py-1 border-b border-gray-700">
                                 <span>Email Id:</span>
-                                <span className="text-gray-100">{user_profile?.lgn_email || "--"}</span>
+                                <span className="text-white">{user_profile?.lgn_email || "--"}</span>
                             </div>
                             <div className="flex justify-between py-1 border-b border-gray-700">
                                 <span>Mobile Number:</span>
-                                <span className="text-gray-100">{user_profile?.lgn_mobile || "--"}</span>
+                                <span className="text-white">{user_profile?.lgn_mobile || "--"}</span>
                             </div> */}
 
-                            <div className="flex justify-between py-1 border-b border-gray-700">
+                            <div className="flex justify-between py-1 border-b border-green-700">
                                 <span>Cust ID:</span>
-                                <span className="text-gray-100">{user_profile?.lgn_cust_id || "--"}</span>
+                                <span className="text-white">{user_profile?.lgn_cust_id || "--"}</span>
                             </div>
                             <div className="flex justify-between py-1">
                                 <span>Account Status:</span>
@@ -167,19 +166,19 @@ const Profile = () => {
                         </div>
                     </div>
 
-                    <div className="bg-gray-800 h-fit p-3 rounded-lg shadow-lg">
+                    <div className="bg-custom-bg h-fit p-3 rounded-lg shadow-lg">
                         <div className="flex flex-col items-center mb-6">
-                            <img src={logo} alt="Coin Icon" className="w-16  mb-3" />
-                            <h2 className="text-lg font-semibold text-white">Password &  Address</h2>
-                            <p className="text-gray-400 text-sm">Manage account settings securely</p>
+                            <img src={logo} alt="Coin Icon" className="w-32  mb-3 filter brightness-200" />
+                            <h2 className="text-lg font-semibold text-white">Update &  Address</h2>
+                            {/* <p className="text-gray-400 text-sm">Manage account settings securely</p> */}
                         </div>
 
                         {["Update Profile",
                             //  "Update Password",
                             //   "Update Wallet Address"
                         ].map((label, index) => (
-                            <div key={index} className={`flex justify-between items-center py-2 ${index < 2 ? "border-b border-gray-700" : ""}`}>
-                                <span className="text-gray-300">{label}:</span>
+                            <div key={index} className={`flex justify-between items-center mb-2 py-2 ${index < 2 ? "border-b border-green-700" : ""}`}>
+                                <span className="text-white">{label}:</span>
                                 <button
                                     className="bg-gold-color hover:bg-green-600 text-gray-900 font-semibold py-1.5 px-4 rounded text-xs"
                                     onClick={() => {
@@ -192,7 +191,7 @@ const Profile = () => {
                                 </button>
                             </div>
                         ))}
-                        <div className="flex flex-col justify-center  text-gray-300 ">
+                        <div className="flex flex-col justify-center  text-white ">
                             <p>Wallet Address </p>
                             <p className="break-words text-sm">  {user_profile?.lgn_wallet_add}</p>
                         </div>
@@ -295,7 +294,7 @@ const Profile = () => {
             {/* Update Profile Modal (New) */}
             {showProfileModal && (
                 <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-                    <div className="bg-gray-900 p-6 rounded-lg shadow-lg w-full max-w-md mx-auto relative text-gray-100"> {/* Adjusted background and width */}
+                    <div className="bg-gray-900 p-6 rounded-lg shadow-lg w-full max-w-md mx-auto relative text-white"> {/* Adjusted background and width */}
                         <div className="flex justify-between items-center mb-4">
                             <h3 className="text-xl font-semibold text-white">Update Profile</h3>
                             <button
@@ -312,7 +311,7 @@ const Profile = () => {
                         </div>
                         <form onSubmit={fkProfile.handleSubmit}>
                             <div className="mb-4">
-                                <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">
+                                <label htmlFor="name" className="block text-sm font-medium text-white mb-1">
                                     Name <span className="text-red-500">*</span>
                                 </label>
                                 <input
@@ -325,7 +324,7 @@ const Profile = () => {
                                 />
                             </div>
                             {/* <div className="mb-4">
-                                <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
+                                <label htmlFor="email" className="block text-sm font-medium text-white mb-1">
                                     Email <span className="text-red-500">*</span>
                                 </label>
                                 <input
@@ -339,7 +338,7 @@ const Profile = () => {
                             </div>
                             <div className="grid grid-cols-2 gap-4 mb-4">
                                 <div>
-                                    <label htmlFor="country" className="block text-sm font-medium text-gray-300 mb-1">
+                                    <label htmlFor="country" className="block text-sm font-medium text-white mb-1">
                                         Country <span className="text-red-500">*</span>
                                     </label>
                                     <input
@@ -349,7 +348,7 @@ const Profile = () => {
                                     />
                                 </div>
                                 <div>
-                                    <label htmlFor="mobile" className="block text-sm font-medium text-gray-300 mb-1">
+                                    <label htmlFor="mobile" className="block text-sm font-medium text-white mb-1">
                                         Mobile <span className="text-red-500">*</span>
                                     </label>
                                     <input

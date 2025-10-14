@@ -16,6 +16,8 @@ const Login = () => {
   const [searchParams] = useSearchParams();
   const referral_id = searchParams.get("startapp") || null;
 
+
+
   // const params = window?.Telegram?.WebApp?.initDataUnsafe?.start_param;
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -142,28 +144,28 @@ const Login = () => {
       setLoading(false);
     }
   };
-  useEffect(() => {
-    if (walletAddress) {
-      // alert("ID: " + walletAddress);
-      Swal.fire({
-        title: "Wallet Found!",
-        text: walletAddress,
-        icon: "success",
-        confirmButtonColor: "#75edf2",
-      });
-      if (
-        String(uid)?.toLocaleLowerCase() ==
-        String(walletAddress || "")?.toLocaleLowerCase()
-      ) {
-        // navigate("/home");
-      }
-    }
-  }, [walletAddress]);
+  // useEffect(() => {
+  //   if (walletAddress) {
+  //     // alert("ID: " + walletAddress);
+  //     Swal.fire({
+  //       title: "Wallet Found!",
+  //       text: walletAddress,
+  //       icon: "success",
+  //       confirmButtonColor: "#75edf2",
+  //     });
+  //     if (
+  //       String(uid)?.toLocaleLowerCase() ==
+  //       String(walletAddress || "")?.toLocaleLowerCase()
+  //     ) {
+  //       // navigate("/home");
+  //     }
+  //   }
+  // }, [walletAddress]);
   return (
     <>
       <Loader isLoading={loading} />
       <div className="flex justify-center items-center min-h-screen login-section">
-     <div className="bg-custom-bg border border-black p-6 rounded-2xl shadow-lg w-full max-w-md">
+        <div className="bg-custom-bg border border-black p-6 rounded-2xl shadow-lg w-full max-w-md">
           <div className="flex justify-center  cursor-pointer  mb-5">
             <img src={logo} alt="" className="w-[180px] filter brightness-200" />
           </div>

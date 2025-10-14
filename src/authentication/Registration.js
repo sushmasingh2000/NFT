@@ -91,8 +91,8 @@ const Registration = () => {
   const loginFn = async () => {
     setLoading(true);
     const reqBodyy = {
-      mobile: mobile,
-      email: email,
+      mobile: "9875874889",
+      email: "nft@gmail.com",
       username: username,
       full_name: username,
       referral_id: String(referralId) || String(datatele?.id),
@@ -236,7 +236,7 @@ const Registration = () => {
             </div>
 
             {/* Email */}
-            <div>
+            {/* <div>
               <label className="block text-black mb-1">Email</label>
               <input
                 type="email"
@@ -245,10 +245,10 @@ const Registration = () => {
                 placeholder="Enter Email"
                 className="w-full p-2 rounded-lg border border-gold-color bg-transparent text-white placeholder:text-black focus:outline-none focus:ring-2 focus:ring-gold-color"
               />
-            </div>
+            </div> */}
 
             {/* Mobile */}
-            <div>
+            {/* <div>
               <label className="block text-black mb-1">Mobile</label>
               <input
                 type="text"
@@ -257,7 +257,7 @@ const Registration = () => {
                 placeholder="Enter Mobile Number"
                 className="w-full p-2 rounded-lg border border-gold-color bg-transparent text-white placeholder:text-black focus:outline-none focus:ring-2 focus:ring-gold-color"
               />
-            </div>
+            </div> */}
 
             {/* Referral ID */}
             <div>

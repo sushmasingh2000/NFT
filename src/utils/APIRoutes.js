@@ -1,5 +1,5 @@
-// export const domain = 'http://192.168.18.214:9038';
-export const domain = 'https://nftvault.biz';
+export const domain = 'http://192.168.18.214:9005';
+// export const domain = 'https://nftvault.biz';
 export const frontend = 'https://nftvault.biz';
 export const dollar = "$"
 export const reciepientaddress ="0x2583fdfd4319Bb44F0afC6a706440858174593F8"
@@ -7,6 +7,8 @@ export const reciepientaddress ="0x2583fdfd4319Bb44F0afC6a706440858174593F8"
 export const endpoint = {
   registration_api: `${domain}/api/v1/member-registration`,
   login_api: `${domain}/api/v1/member-login`,
+  admin_login_api: `${domain}/api/v1/admin-login`,
+  
   customer_api: `${domain}/api/v1/member-name-by-cust-id`,
 
   //img
@@ -30,6 +32,11 @@ export const endpoint = {
   member_topup_admin: `${domain}/api/v1/member-topup-by-admin`,
   activation_request: `${domain}/api/v1/activation-request`,
   dummy_activation_request: `${domain}/api/v1/activation-dummy-request`,
+  activation_request: `${domain}/api/v1/activation-request`,
+  dummy_activation_request_nft: `${domain}/api/v1/activation-dummy-request-nft`,
+  activation_request_nft: `${domain}/api/v1/activation-request-nft`,
+
+
   member_profile_detail: `${domain}/api/v1/member-profile-details`,
   member_detail: `${domain}/api/v1/member-details`,
   roi_income_api: `${domain}/api/v1/get-income-details`,

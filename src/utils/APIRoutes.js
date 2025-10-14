@@ -58,6 +58,8 @@ export const endpoint = {
   withdrawal_request_status: `${domain}/api/v1/withdrawal-req-approval`,
   dashboard_data: `${domain}/api/v1/user-dashboard-data`,
   reward_manual: `${domain}/api/v1/reward-income-credited`,
+  admin_update_user_profile: `${domain}/api/v1/change-member-profile`,
+  update_user_profile: `${domain}/api/v1/change-member-profile-by-user`,
 
 
 
@@ -77,7 +79,6 @@ export const endpoint = {
   direct_referral_user: `${domain}/api/v1/user-direct-referral-details`,
   team_downline_user: `${domain}/api/v1/user-team-downline-details`,
   team_downline_user_filterwise: `${domain}/api/v1/user-team-downline-details-filterwise`,
-  update_user_profile: `${domain}/api/v1/user-update-profile`,
   forgot_email: `${domain}/api/v1/password-on-mail`,
 
   // admin api 

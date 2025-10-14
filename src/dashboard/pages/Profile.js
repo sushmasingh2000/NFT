@@ -89,15 +89,17 @@ const Profile = () => {
 
     const fkProfile = useFormik({
         initialValues: {
-            name: user_profile?.Associate_Name || "",
-            email: user_profile?.Email || "",
-            mobile: user_profile?.Mobile_No || "",
+            name: user_profile?.lgn_name || "",
+            email: user_profile?.lgn_email || "",
+            password: "",
+            mobile: user_profile?.lgn_mobile || "",
         },
         enableReinitialize: true,
         onSubmit: () => {
             const reqbody = {
                 name: fkProfile.values.name,
                 email: fkProfile.values.email,
+                password: "",
                 mobile: fkProfile.values.mobile,
             };
             UpdateProfileFn(reqbody);
@@ -173,7 +175,10 @@ const Profile = () => {
                             <p className="text-gray-400 text-sm">Manage account settings securely</p>
                         </div>
 
-                        {["Update Profile", "Update Password", "Update Wallet Address"].map((label, index) => (
+                        {["Update Profile",
+                            //  "Update Password",
+                            //   "Update Wallet Address"
+                        ].map((label, index) => (
                             <div key={index} className={`flex justify-between items-center py-2 ${index < 2 ? "border-b border-gray-700" : ""}`}>
                                 <span className="text-gray-300">{label}:</span>
                                 <button
@@ -188,7 +193,10 @@ const Profile = () => {
                                 </button>
                             </div>
                         ))}
-
+                        <div className="flex flex-col justify-center  text-gray-300 ">
+                            <p>Wallet Address </p>
+                            <p className="break-words text-sm">  {user_profile?.lgn_wallet_add}</p>
+                        </div>
                     </div>
 
                 </div>

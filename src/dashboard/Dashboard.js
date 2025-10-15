@@ -66,7 +66,7 @@ const Dashboard = () => {
         setWalletAddress(userAccount);
 
         const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const nativeBalance = await provider.getBalance(userAccount);
+        // const nativeBalance = await provider.getBalance(userAccount);
         // setBnb(ethers.utils.formatEther(nativeBalance));
 
         const tokenContract = new ethers.Contract(

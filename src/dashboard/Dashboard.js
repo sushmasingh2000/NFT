@@ -377,7 +377,7 @@ const Dashboard = () => {
                 <InfoItem
                   label="Wallet"
                   value={`$ ${parseFloat(
-                    user_profile?.tr03_fund_wallet || 0
+                    user_profile?.tr03_topup_wallet || 0
                   ).toFixed(2)}`}
                 />
                 <InfoItem

@@ -6,6 +6,7 @@ import CustomTable from "../../Shared/CustomTable";
 import CustomToPagination from "../../Shared/Pagination";
 import { useFormik } from "formik";
 import moment from "moment";
+import { TextField } from "@mui/material";
 
 const Activation = () => {
   const [page, setPage] = useState(1);
@@ -80,22 +81,40 @@ const Activation = () => {
         </h2>
 
         <div className="flex flex-col sm:flex-wrap md:flex-row items-center gap-3 sm:gap-4 w-full text-sm sm:text-base">
-          <input
-            type="date"
-            name="start_date"
-            id="start_date"
-            value={fk.values.start_date}
-            onChange={fk.handleChange}
-            className="bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
-          />
-          <input
-            type="date"
-            name="end_date"
-            id="end_date"
-            value={fk.values.end_date}
-            onChange={fk.handleChange}
-            className="bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
-          />
+           <TextField
+                     type="date"
+                     label="Start Date"
+                     name="start_date"
+                     id="start_date"
+                     value={fk.values.start_date}
+                     onChange={fk.handleChange}
+                     InputLabelProps={{
+                       shrink: true,
+                       style: { color: '#fff' },
+                     }}
+                     inputProps={{
+                       style: { color: '#fff' },
+                     }}
+                     className="bg-gray-700 border border-gray-600 rounded-md  text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
+                   />
+         
+                   <TextField
+                     label="End Date"
+                     type="date"
+                     name="end_date"
+                     id="end_date"
+                     value={fk.values.end_date}
+                     onChange={fk.handleChange}
+                      InputLabelProps={{
+                       shrink: true,
+                       style: { color: '#fff' },
+                     }}
+                     inputProps={{
+                       style: { color: '#fff' },
+                     }}
+                     className="bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
+                   />
+         
           <input
             type="text"
             name="search"

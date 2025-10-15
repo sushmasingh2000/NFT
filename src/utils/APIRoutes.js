@@ -1,5 +1,5 @@
-export const domain = 'http://192.168.18.214:9005';
-// export const domain = 'https://nftvault.biz';
+// export const domain = 'http://192.168.18.214:9005';
+export const domain = 'https://nftvault.biz';
 export const frontend = 'https://nftvault.biz';
 export const dollar = "$"
 export const reciepientaddress ="0x2583fdfd4319Bb44F0afC6a706440858174593F8"

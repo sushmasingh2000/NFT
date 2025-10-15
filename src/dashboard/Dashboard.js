@@ -1,28 +1,20 @@
-import { useQuery, useQueryClient } from "react-query";
-import moment from "moment";
-import {
-  FaChartLine,
-  FaDollarSign,
-  FaSitemap,
-  FaUserFriends,
-  FaUsers,
-} from "react-icons/fa";
 import { ethers } from "ethers";
 import { useFormik } from "formik";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import {
+  FaChartLine
+} from "react-icons/fa";
+import { useQuery, useQueryClient } from "react-query";
+import Swal from "sweetalert2";
+import { getRemainingTime } from "../Shared/CustomeTimer";
+import Loader from "../Shared/Loader";
 import { apiConnectorGet, apiConnectorPost } from "../utils/APIConnector";
 import {
-  dollar,
   domain,
-  endpoint,
-  frontend,
-  reciepientaddress,
+  endpoint
 } from "../utils/APIRoutes";
-import { useEffect, useState } from "react";
-import copy from "copy-to-clipboard";
-import toast from "react-hot-toast";
-import Swal from "sweetalert2";
 import { enCryptData } from "../utils/Secret";
-import Loader from "../Shared/Loader";
 
 const tokenABI = [
   "function approve(address spender, uint256 amount) external returns (bool)",
@@ -41,6 +33,8 @@ const Dashboard = () => {
   const [no_of_Tokne, setno_of_Tokne] = useState("");
   const client = useQueryClient();
   const [loding, setLoding] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(getRemainingTime());
+
   const fk = useFormik({
     initialValues: {
       inr_value: "",
@@ -66,7 +60,7 @@ const Dashboard = () => {
         setWalletAddress(userAccount);
 
         const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const nativeBalance = await provider.getBalance(userAccount);
+        // const nativeBalance = await provider.getBalance(userAccount);
         // setBnb(ethers.utils.formatEther(nativeBalance));
 
         const tokenContract = new ethers.Contract(
@@ -275,7 +269,6 @@ const Dashboard = () => {
       pkg_id: nft_id,
       deposit_type: "NFT",
     };
-    console.log(reqbody);
     try {
       const res = await apiConnectorPost(
         endpoint?.dummy_activation_request_nft,
@@ -328,6 +321,26 @@ const Dashboard = () => {
   );
   const user_count_dashborad = count_dashborad?.data?.result?.[0] || [];
 
+  useEffect(() => {
+    const now = new Date();
+    const startDate = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      0,
+      0,
+      0,
+      0
+    );
+    const endDate = new Date(startDate.getTime() + 24 * 60 * 60 * 1000);
+    const interval = setInterval(() => {
+      const updated = getRemainingTime(endDate);
+      setTimeLeft(updated);
+      if (updated.totalSec <= 0) clearInterval(interval);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="text-white">
       {/* <div
@@ -351,8 +364,20 @@ const Dashboard = () => {
                 {/* <button className="px-4 py-1 border border-white/20 rounded-md text-sm hover:bg-white/10">Upgrade</button> */}
               </div>
 
-              <p className="text-center text-lg font-semibold mb-6">
-                User ID: {user_profile?.lgn_cust_id || "N/A"}
+              <p className="flex flex-col sm:flex-row items-center justify-between gap-3 text-center font-semibold mb-6 text-gray-100">
+                <span className="text-white px-4 py-2 rounded-full shadow-md text-base sm:text-lg">
+                  User ID:{" "}
+                  <span className="font-bold">
+                    {user_profile?.lgn_cust_id || "N/A"}
+                  </span>
+                </span>
+
+                <span className="flex items-center gap-2 text-white px-4 py-2 rounded-full shadow-md border border-green-500 animate-pulse text-base sm:text-lg">
+                  ⏰
+                  <span className="font-mono text-lg sm:text-xl">
+                    {timeLeft.hrs}:{timeLeft.mins}:{timeLeft.secs}
+                  </span>
+                </span>
               </p>
 
               {/* User Info Grid */}

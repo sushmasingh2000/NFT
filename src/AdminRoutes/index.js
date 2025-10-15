@@ -12,6 +12,7 @@ import WeeklyBonus from "../Adminpages/Pages/genealogy/WeeklyBonus";
 import INRPaying from "../Adminpages/Pages/INRPayment/INRPaying";
 import INRPayout from "../Adminpages/Pages/INRPayment/INRPayout";
 import Master from "../Adminpages/Pages/Master";
+import NFTAssign from "../Adminpages/Pages/NFTAssign";
 import NFTManager from "../Adminpages/Pages/NFTCreate";
 import ContactDetail from "../Adminpages/Pages/Team/Contactlist";
 import TraderRejct from "../Adminpages/Pages/Team/subinvestor/InvestorReject";
@@ -48,6 +49,12 @@ export const adminroutes = [
     path: "/nft_create",
     component: <NFTManager />,
     navItem: "NFT ",
+  },
+  {
+    id: 2,
+    path: "/nft_assign",
+    component: <NFTAssign />,
+    navItem: "NFT Assign ",
   },
     {
     id: 44,

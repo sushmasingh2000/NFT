@@ -21,7 +21,7 @@ const TraderList = () => {
             search: '',
             start_date: '',
             end_date: '',
-            trade_type: 'BUY', // default
+            trade_type: 'ALL', // default
         },
         enableReinitialize: true,
     });
@@ -50,32 +50,48 @@ const TraderList = () => {
 
     const tablehead = [
         <span>S.No.</span>,
-         <span>User ID</span>,
+        <span>User ID</span>,
+        <span>NFT ID</span>,
         <span>Name</span>,
-        <span>Email</span>,
-        <span>Mobile</span>,
+        // <span>Email</span>,
+        // <span>Mobile</span>,
         <span>NFT Name</span>,
         <span>Amount ($)</span>,
         <span>Transaction ID</span>,
+        <span>Hash</span>,
         <span>Status</span>,
         <span>Date</span>,
     ];
 
 
     const tablerow = allData?.data?.map((row, index) => {
-        const isSell = fk.values.trade_type === 'SELL' || fk.values.trade_type === 'SOLD';
-
         return [
             <span>{(page - 1) * 10 + index + 1}</span>,
-             <span>{row.lgn_cust_id}</span>,
+            <span>{row.lgn_cust_id}</span>,
+            <span>{row.m02_dist_id}</span>,
             <span>{row.lgn_name}</span>,
-            <span>{row.lgn_email}</span>,
-            <span>{row.lgn_mobile}</span>,
+            // <span>{row.lgn_email}</span>,
+            // <span>{row.lgn_mobile}</span>,
             <span>{row.m01_name}</span>,
             <span>{parseFloat(row.tr10_buy_price).toFixed(2)}</span>,
             <span>{row.tr10_trans_id}</span>,
-            <span className={`${isSell ? (row.tr10_sell_status ? "text-green-900" : "text-yellow-900") : "text-blue-900"}`}>
-                {isSell ? (row.tr10_sell_status ? "SOLD" : "Pending") : "BUY"}
+            <span
+                onClick={() =>
+                    (document.location.href = `https://opbnbscan.com/tx/${row.tr08_trans_hash}`)
+                }
+                className="!text-blue-500 cursor-pointer"
+            >
+                View in opBNB
+            </span>,
+            <span
+                className={`${row.tr10_sell_req === "Pending" ? "text-green-800" : "text-rose-800"
+                    }`}
+            >
+                {!row.tr10_sell_req
+                    ? "----"
+                    : row.tr10_sell_req === "Pending"
+                        ? "SELL"
+                        : "SOLD"}
             </span>,
             <span>{moment(row.tr10_buy_date).format("DD-MM-YYYY HH:mm:ss")}</span>,
 
@@ -114,20 +130,7 @@ const TraderList = () => {
                         className="bg-white bg-opacity-50 border border-gray-600 rounded-full py-2 px-3 text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
                     />
 
-                    <select
-                        name="trade_type"
-                        value={fk.values.trade_type}
-                        onChange={(e) => {
-                            fk.handleChange(e);
-                            setPage(1);
-                        }}
-                        className="bg-white bg-opacity-50 border border-gray-600 rounded py-2 px-3 text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
 
-                    >
-                        <option value="BUY">Buy</option>
-                        <option value="SELL">Sell</option>
-                        <option value="SOLD">Sold</option>
-                    </select>
                     <button
                         onClick={() => {
                             setPage(1);

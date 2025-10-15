@@ -19,8 +19,13 @@ export const endpoint = {
 
   //nft
   create_nft: `${domain}/api/v1/craete-nft`,
+  get_nft_Admin: `${domain}/api/v1/get-nft-admin`,
   get_nft: `${domain}/api/v1/get-nft`,
   update_status_nft: `${domain}/api/v1/update-status-nft`,
+  get_nft_dropdown: `${domain}/api/v1/get-nft-dropdown`,
+  assign_nft_by_admin: `${domain}/api/v1/nft-assign-by-admin`,
+
+  
 
   get_nft_by_user: `${domain}/api/v1/get-nft-by-user`,
   trading: `${domain}/api/v1/trading`,

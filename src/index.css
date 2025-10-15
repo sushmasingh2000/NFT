@@ -129,14 +129,4 @@ code {
   animation: pulseSlow 1.2s infinite ease-in-out;
 }
 
-/* Force text color in date inputs */
-input[type="date"] {
-  color: white;
-}
-
-/* For WebKit browsers (iOS Safari, Chrome Android) */
-input[type="date"]::-webkit-datetime-edit {
-  color: white;
-}
-
 /* /// */

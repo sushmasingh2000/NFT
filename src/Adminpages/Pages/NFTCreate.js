@@ -7,25 +7,52 @@ import Loader from "../../Shared/Loader";
 import { useQuery, useQueryClient } from "react-query";
 import { Switch } from "@mui/material";
 import CustomTable from "../Shared/CustomTable";
+import { useFormik } from "formik";
+import CustomToPagination from "../../Shared/Pagination";
 
 const NFTTableManager = () => {
     const [loading, setLoading] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
     const [selectedNFT, setSelectedNFT] = useState(null);
+    const [page, setPage] = useState(1)
+
     const [formData, setFormData] = useState({
         cat_id: "",
         price: "",
         nos: "",
     });
     const client = useQueryClient();
-    // Fetch NFTs
-    const { data, isLoading } = useQuery(
-        ['get_nft'],
-        () => apiConnectorGet(endpoint.get_nft),
+
+    const initialValues = {
+        income_Type: "",
+        search: '',
+        count: 10,
+        page: "",
+        start_date: '',
+        end_date: '',
+    };
+
+    const fk = useFormik({
+        initialValues: initialValues,
+        enableReinitialize: true,
+
+    })
+    const { data } = useQuery(
+        ['get_nft_admin', fk.values.search, fk.values.start_date, fk.values.end_date, page],
+        () =>
+            apiConnectorPost(endpoint?.get_nft_Admin, {
+                search: fk.values.search,
+                start_date: fk.values.start_date,
+                end_date: fk.values.end_date,
+                page: page,
+                count: 10,
+            }),
         {
-            refetchOnMount: true,
+            keepPreviousData: true,
+            refetchOnMount: false,
             refetchOnReconnect: false,
             refetchOnWindowFocus: false,
+            onError: (err) => console.error("Error fetching level data:", err),
         }
     );
     const NFTs = data?.data?.result || [];
@@ -40,16 +67,15 @@ const NFTTableManager = () => {
     };
 
     const handleSubmit = async () => {
-        const { cat_id, price, nos } = formData;
-        if (!cat_id || !price || !nos) {
+        const {  price, nos } = formData;
+        if ( !price || !nos) {
             toast.error("All fields are required.");
             return;
         }
-
         setLoading(true);
         try {
             const res = await apiConnectorPost(endpoint.create_nft, {
-                cat_id,
+                cat_id : 1,
                 price,
                 nos,
             });
@@ -68,16 +94,16 @@ const NFTTableManager = () => {
     };
 
 
-    const { data: cat } = useQuery(
-        ['get_nft_image'],
-        () => apiConnectorGet(endpoint.get_nft_image),
-        {
-            refetchOnMount: true,
-            refetchOnReconnect: false,
-            refetchOnWindowFocus: false,
-        }
-    );
-    const categories = cat?.data?.result || [];
+    // const { data: cat } = useQuery(
+    //     ['get_nft_image'],
+    //     () => apiConnectorGet(endpoint.get_nft_image),
+    //     {
+    //         refetchOnMount: true,
+    //         refetchOnReconnect: false,
+    //         refetchOnWindowFocus: false,
+    //     }
+    // );
+    // const categories = cat?.data?.result || [];
 
     const handleStatusToggle = async (nftId) => {
         try {
@@ -101,12 +127,12 @@ const NFTTableManager = () => {
         <span>S.No.</span>,
         <span>Image</span>,
         <span>Category Name</span>,
-        <span>Dist ID</span>,
+        <span>NFT ID</span>,
         <span>Initial Price</span>,
         <span>Current Price</span>,
         <span>Status</span>,
     ];
-    const tablerow = NFTs?.map((nft, index) => {
+    const tablerow = NFTs?.data?.map((nft, index) => {
         return [
             <span>{index + 1}</span>,
             <span> <img
@@ -129,6 +155,7 @@ const NFTTableManager = () => {
         <div className="p-6">
             <Loader isLoading={loading} />
             <div className="flex justify-between items-center mb-6">
+
                 <h1 className="text-3xl font-bold">NFT </h1>
                 <button
                     onClick={() => {
@@ -140,7 +167,52 @@ const NFTTableManager = () => {
                     + Add NFT
                 </button>
             </div>
-
+            <div className="flex flex-col sm:flex-wrap md:flex-row items-center gap-3 sm:gap-4 w-full text-sm sm:text-base">
+                <input
+                    type="date"
+                    name="start_date"
+                    id="start_date"
+                    value={fk.values.start_date}
+                    onChange={fk.handleChange}
+                    className="bg-white bg-opacity-50 border border-black rounded-md py-2 px-3 text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
+                />
+                <input
+                    type="date"
+                    name="end_date"
+                    id="end_date"
+                    value={fk.values.end_date}
+                    onChange={fk.handleChange}
+                    className="bg-white bg-opacity-50 border border-black rounded-md py-2 px-3 text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
+                />
+                <input
+                    type="text"
+                    name="search"
+                    id="search"
+                    value={fk.values.search}
+                    onChange={fk.handleChange}
+                    placeholder="User ID"
+                    className="bg-white bg-opacity-50 border border-black rounded-full py-2 px-3 text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
+                />
+                <button
+                    onClick={() => {
+                        setPage(1);
+                        client.invalidateQueries(["get_nft_admin"]);
+                    }}
+                    type="submit"
+                    className="bg-blue-500 text-gray-900 font-bold py-2 px-4 rounded-full hover:bg-dark-color transition-colors w-full sm:w-auto text-sm"
+                >
+                    Search
+                </button>
+                <button
+                    onClick={() => {
+                        fk.handleReset();
+                        setPage(1);
+                    }}
+                    className="bg-gray-color text-gray-900 font-bold py-2 px-4 rounded-full hover:bg-black hover:text-white transition-colors w-full sm:w-auto text-sm"
+                >
+                    Clear
+                </button>
+            </div>
             {/* Table */}
             <div className="shadow rounded-lg overflow-hidden mt-6">
                 <CustomTable
@@ -159,7 +231,7 @@ const NFTTableManager = () => {
                             {selectedNFT ? "Edit NFT" : "Add NFT"}
                         </h2>
 
-                        <select
+                        {/* <select
                             value={formData.cat_id}
                             onChange={(e) =>
                                 setFormData({ ...formData, cat_id: e.target.value })
@@ -172,7 +244,7 @@ const NFTTableManager = () => {
                                     {cat.m01_name}
                                 </option>
                             ))}
-                        </select>
+                        </select> */}
 
 
                         <input
@@ -221,6 +293,7 @@ const NFTTableManager = () => {
                     </div>
                 </div>
             )}
+            <CustomToPagination data={NFTs} page={page} setPage={setPage} />
         </div>
     );
 };

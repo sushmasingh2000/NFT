@@ -39,14 +39,6 @@ const tokenABI = [
 const Dashboard = () => {
   const [walletAddress, setWalletAddress] = useState("");
   const [no_of_Tokne, setno_of_Tokne] = useState("");
-  const [transactionHash, setTransactionHash] = useState("");
-  const [receiptStatus, setReceiptStatus] = useState("");
-  const [selectedNftId, setSelectedNftId] = useState(null);
-  const [selectedNftAmount, setSelectedNftAmount] = useState(null);
-  const [shouldInitiateBuy, setShouldInitiateBuy] = useState(false);
-  const [pendingNftId, setPendingNftId] = useState(null);
-  const [pendingNftAmount, setPendingNftAmount] = useState(null);
-  const [bnb, setBnb] = useState("");
   const client = useQueryClient();
   const [loding, setLoding] = useState(false);
   const fk = useFormik({
@@ -75,7 +67,7 @@ const Dashboard = () => {
 
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const nativeBalance = await provider.getBalance(userAccount);
-        setBnb(ethers.utils.formatEther(nativeBalance));
+        // setBnb(ethers.utils.formatEther(nativeBalance));
 
         const tokenContract = new ethers.Contract(
           "0x9e5AAC1Ba1a2e6aEd6b32689DFcF62A509Ca96f3", // opBNB USDT
@@ -204,9 +196,6 @@ const Dashboard = () => {
 
       const tx = await usdtContract.transfer(recipientAddress, usdtAmount);
       const receipt = await tx.wait();
-
-      setTransactionHash(tx.hash);
-      setReceiptStatus(receipt.status === 1 ? "Success" : "Failure");
 
       await PayinZp(
         tx.hash,

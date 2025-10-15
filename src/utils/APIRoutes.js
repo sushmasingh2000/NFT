@@ -1,4 +1,4 @@
-export const domain = 'http://192.168.248.149:9005';
+export const domain = 'http://192.168.18.214:9005';
 // export const domain = 'https://nftvault.biz';
 export const frontend = 'https://nftvault.biz';
 export const dollar = "$"

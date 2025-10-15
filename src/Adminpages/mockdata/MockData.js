@@ -46,7 +46,18 @@ export const all_Data = [
   {
     id: 14,
     navLink: "/nft_create",
-    navItem: "NFT  ",
+    navItem: "NFT Add ",
+    navIcon: (
+      <span>
+        <AddToPhotosIcon color="#15317E" fontSize="medium" />
+      </span>
+    ),
+    subcomponent: [],
+  },
+   {
+    id: 14,
+    navLink: "/nft_assign",
+    navItem: "NFT Assign ",
     navIcon: (
       <span>
         <AddToPhotosIcon color="#15317E" fontSize="medium" />

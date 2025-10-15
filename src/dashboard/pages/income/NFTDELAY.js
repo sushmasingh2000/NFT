@@ -6,6 +6,7 @@ import CustomTable from '../../../Shared/CustomTable';
 import CustomToPagination from '../../../Shared/Pagination';
 import { useFormik } from 'formik';
 import moment from 'moment';
+import { TextField } from '@mui/material';
 
 const NFTDelay = () => {
   const [page, setPage] = useState(1)
@@ -50,20 +51,20 @@ const NFTDelay = () => {
   const tablehead = [
     <span>S.No.</span>,
     <span>Date</span>,
-    <span>Customer Id</span>,
+    // <span>User Id</span>,
+    // <span>User Name</span>,
     <span>Amount ($)</span>,
-    <span>User Name</span>,
-    <span>TopUp Wallet</span>,
+    // <span>TopUp Wallet</span>,
     <span>Description</span>,
   ];
   const tablerow = allData?.data?.map((row, index) => {
     return [
      <span> {(page - 1) * 10 + index + 1}</span>,
       <span>{moment(row.ledger_created_at)?.format("DD-MM-YYYY")}</span>,
-      <span>{row?.from_cust_id || "--"}</span>,
+      // <span>{row?.from_cust_id || "--"}</span>,
+      // <span>{row.from_name}</span>,
       <span> {Number(row.ledger_amount || 0)?.toFixed(2) || '$0.00'}</span>,
-      <span>{row.from_name}</span>,
-      <span>{Number(row.jnr_topup_wallet)?.toFixed(2) || '--'}</span>,
+      // <span>{Number(row.jnr_topup_wallet)?.toFixed(2) || '--'}</span>,
       <span>{row.ledger_des || '--'}</span>,
     ];
   });
@@ -73,22 +74,40 @@ const NFTDelay = () => {
         <h2 className="text-xl font-semibold mb-4 text-gray-200"> Delay Compensation</h2>
 
         <div className="flex flex-col sm:flex-wrap md:flex-row items-center gap-3 sm:gap-4 w-full text-sm sm:text-base">
-          <input
+           <TextField
             type="date"
+            label="Start Date"
             name="start_date"
             id="start_date"
             value={fk.values.start_date}
             onChange={fk.handleChange}
-            className="bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
+            InputLabelProps={{
+              shrink: true,
+              style: { color: '#fff' },
+            }}
+            inputProps={{
+              style: { color: '#fff' },
+            }}
+            className="bg-gray-700 border border-gray-600 rounded-md  text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
           />
-          <input
+
+          <TextField
+            label="End Date"
             type="date"
             name="end_date"
             id="end_date"
             value={fk.values.end_date}
             onChange={fk.handleChange}
+             InputLabelProps={{
+              shrink: true,
+              style: { color: '#fff' },
+            }}
+            inputProps={{
+              style: { color: '#fff' },
+            }}
             className="bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
           />
+
           <input
             type="text"
             name="search"

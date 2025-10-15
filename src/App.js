@@ -23,7 +23,7 @@ const App = () => {
         <Route path="/register" element={<Registration />} />
         <Route path="/forgot" element={<ForgotPassword />} />
         {/* //admin */}
-        <Route path="/adminlogin" element={<LogIn />} />
+        <Route path="/10dmhkv45bne87kq6jw" element={<LogIn />} />
 
         {user ? (
           adminroutes.map((route, i) => (

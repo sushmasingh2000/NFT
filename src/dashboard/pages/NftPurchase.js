@@ -6,6 +6,7 @@ import CustomTable from "../../Shared/CustomTable";
 import CustomToPagination from "../../Shared/Pagination";
 import { useFormik } from "formik";
 import moment from "moment";
+import { TextField } from "@mui/material";
 
 const NFTPurchase = () => {
   const [page, setPage] = useState(1);
@@ -77,15 +78,14 @@ const NFTPurchase = () => {
       <span>{row.m01_name}</span>,
       <span>{parseFloat(row.tr10_buy_price).toFixed(2)}</span>,
       <span
-        className={`${
-          row.tr10_sell_req === "Pending" ? "text-green-400" : "text-rose-500"
-        }`}
+        className={`${row.tr10_sell_req === "Pending" ? "text-green-400" : "text-rose-500"
+          }`}
       >
         {!row.tr10_sell_req
           ? "----"
           : row.tr10_sell_req === "Pending"
-          ? "SELL"
-          : "SOLD"}
+            ? "SELL"
+            : "SOLD"}
       </span>,
     ];
   });
@@ -95,46 +95,41 @@ const NFTPurchase = () => {
         <h2 className="text-xl font-semibold mb-4 text-gray-200">History</h2>
 
         <div className="flex flex-col sm:flex-wrap md:flex-row items-center gap-3 sm:gap-4 w-full text-sm sm:text-base">
-          <input
+
+          <TextField
             type="date"
+            label="Start Date"
             name="start_date"
             id="start_date"
             value={fk.values.start_date}
             onChange={fk.handleChange}
-            className="bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
+            InputLabelProps={{
+              shrink: true,
+              style: { color: '#fff' },
+            }}
+            inputProps={{
+              style: { color: '#fff' },
+            }}
+            className="bg-gray-700 border border-gray-600 rounded-md  text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
           />
-          <input
+
+          <TextField
+            label="End Date"
             type="date"
             name="end_date"
             id="end_date"
             value={fk.values.end_date}
             onChange={fk.handleChange}
+             InputLabelProps={{
+              shrink: true,
+              style: { color: '#fff' },
+            }}
+            inputProps={{
+              style: { color: '#fff' },
+            }}
             className="bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
           />
-          {/* <input
-                        type="text"
-                        name="search"
-                        id="search"
-                        value={fk.values.search}
-                        onChange={fk.handleChange}
-                        placeholder="User ID"
-                        className="bg-gray-700 border border-gray-600 rounded-full py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
-                    /> */}
 
-          {/* <select
-            name="trade_type"
-            value={fk.values.trade_type}
-            onChange={(e) => {
-              fk.handleChange(e);
-              setPage(1);
-            }}
-            className="bg-gray-700 border border-gray-600 rounded-full py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
-          >
-            <option value="BUY">Buy</option>
-            <option value="BUY">Buy</option>
-            <option value="SELL">Sell</option>
-            <option value="SOLD">Sold</option>
-          </select> */}
           <button
             onClick={() => {
               setPage(1);

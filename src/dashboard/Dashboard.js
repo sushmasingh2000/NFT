@@ -297,8 +297,8 @@ const Dashboard = () => {
     {
       refetchOnMount: false,
       refetchOnReconnect: false,
-      refetchOnWindowFocus: false,
-      retry: false,
+      refetchOnWindowFocus: true,
+      retry: true,
     }
   );
   const user_profile = profile?.data?.result?.[0] || {};

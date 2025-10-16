@@ -55,7 +55,7 @@ const NFTTRAD = () => {
     // <span>User Name</span>,
     <span>Amount ($)</span>,
     // <span>TopUp Wallet</span>,
-    <span>Description</span>,
+    // <span>Description</span>,
   ];
   const tablerow = allData?.data?.map((row, index) => {
     return [
@@ -65,7 +65,7 @@ const NFTTRAD = () => {
       // <span>{row.from_name}</span>,
       <span> {Number(row.ledger_amount || 0)?.toFixed(2) || '$0.00'}</span>,
       // <span>{Number(row.jnr_topup_wallet)?.toFixed(2) || '--'}</span>,
-      <span>{row.ledger_des || '--'}</span>,
+      // <span>{row.ledger_des || '--'}</span>,
     ];
   });
   return (

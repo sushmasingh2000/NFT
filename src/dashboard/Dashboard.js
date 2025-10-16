@@ -387,7 +387,7 @@ const Dashboard = () => {
                   label="Name"
                   value={user_profile?.lgn_name || "N/A"}
                 />
-                <InfoItem
+                {/* <InfoItem
                   label="Email"
                   value={user_profile?.lgn_email || "N/A"}
                 />
@@ -398,7 +398,7 @@ const Dashboard = () => {
                 <InfoItem
                   label="User Type"
                   value={user_profile?.lgn_user_type || "N/A"}
-                />
+                /> */}
                 <InfoItem
                   label="Wallet"
                   value={`$ ${parseFloat(

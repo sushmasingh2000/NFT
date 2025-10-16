@@ -174,9 +174,8 @@ const Profile = () => {
                             {/* <p className="text-gray-400 text-sm">Manage account settings securely</p> */}
                         </div>
 
-                        {["Update Profile",
-                            //  "Update Password",
-                            //   "Update Wallet Address"
+                        {/* {["Update Profile",
+                           
                         ].map((label, index) => (
                             <div key={index} className={`flex justify-between items-center mb-2 py-2 ${index < 2 ? "border-b border-green-700" : ""}`}>
                                 <span className="text-white">{label}:</span>
@@ -191,7 +190,7 @@ const Profile = () => {
                                     Edit
                                 </button>
                             </div>
-                        ))}
+                        ))} */}
                         <div className="flex flex-col justify-center  text-white ">
                             <p>Wallet Address </p>
                             <p className="break-words text-sm">  {user_profile?.lgn_wallet_add}</p>

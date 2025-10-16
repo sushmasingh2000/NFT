@@ -73,7 +73,7 @@ const Level = () => {
         <h2 className="text-xl font-semibold mb-4 text-gray-200">Package Level Income</h2>
 
         <div className="flex flex-col sm:flex-wrap md:flex-row items-center gap-3 sm:gap-4 w-full text-sm sm:text-base">
-           <TextField
+           {/* <TextField
             type="date"
             label="Start Date"
             name="start_date"
@@ -105,7 +105,7 @@ const Level = () => {
               style: { color: '#fff' },
             }}
             className="bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
-          />
+          /> */}
 
           <input
             type="text"
@@ -113,7 +113,7 @@ const Level = () => {
             id="search"
             value={fk.values.search}
             onChange={fk.handleChange}
-            placeholder="User ID"
+            placeholder="Search By User"
             className="bg-gray-700 border border-gray-600 rounded-full py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
           />
           <button

@@ -98,7 +98,7 @@ const Sidebar = () => {
         { title: "Tree View", path: "/team" },
       ],
     },
-    { title: "Profile Settings", icon: <FaUserCog />, path: "/profile" },
+    { title: "Profile", icon: <FaUserCog />, path: "/profile" },
 
     // { title: "Cahback", icon: <FaWallet />, path: "/cashback" },
     //  {

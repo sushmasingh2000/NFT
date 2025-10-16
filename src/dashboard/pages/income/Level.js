@@ -17,6 +17,7 @@ const Level = () => {
     page: "",
     start_date: '',
     end_date: '',
+    level_id : "1"
   };
 
   const fk = useFormik({
@@ -25,7 +26,7 @@ const Level = () => {
 
   })
   const { data, isLoading } = useQuery(
-    ['get_level', fk.values.search, fk.values.start_date, fk.values.end_date, page],
+    ['get_level', fk.values.search, fk.values.start_date, fk.values.end_date, page , fk.values.level_id],
     () =>
       apiConnectorPost(endpoint?.roi_income_api, {
         income_type: 'LEVEL',
@@ -33,8 +34,9 @@ const Level = () => {
         start_date: fk.values.start_date,
         end_date: fk.values.end_date,
         page: page,
-        wallet_type:"INCOME",
+        wallet_type: "INCOME",
         count: 10,
+        level: fk.values.level_id,
       }),
     {
       keepPreviousData: true,
@@ -58,7 +60,7 @@ const Level = () => {
   ];
   const tablerow = allData?.data?.map((row, index) => {
     return [
-     <span> {(page - 1) * 10 + index + 1}</span>,
+      <span> {(page - 1) * 10 + index + 1}</span>,
       <span>{moment(row.ledger_created_at)?.format("DD-MM-YYYY")}</span>,
       <span>{row?.from_cust_id || "--"}</span>,
       <span>{row.from_name}</span>,
@@ -73,7 +75,7 @@ const Level = () => {
         <h2 className="text-xl font-semibold mb-4 text-gray-200">Package Level Income</h2>
 
         <div className="flex flex-col sm:flex-wrap md:flex-row items-center gap-3 sm:gap-4 w-full text-sm sm:text-base">
-           {/* <TextField
+          {/* <TextField
             type="date"
             label="Start Date"
             name="start_date"
@@ -106,6 +108,19 @@ const Level = () => {
             }}
             className="bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
           /> */}
+          <select
+            name="level_id"
+            id="level_id"
+            value={fk.values.level_id}
+            onChange={fk.handleChange}
+            className="bg-gray-700 border w-full border-gray-600 py-2 px-6 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:w-auto text-sm"
+          >
+            {Array.from({ length: 20 }, (_, i) => (
+              <option key={i + 1} value={i + 1}>
+                Level {i + 1}
+              </option>
+            ))}
+          </select>
 
           <input
             type="text"

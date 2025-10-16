@@ -53,36 +53,36 @@ const Downline = () => {
   // const checked = allData?.data?.filter((i) => i?.Level_id !== 0 && allData)
 
   const tablehead = [
-  <span>S.No.</span>,
-  <span>Cust ID</span>,
-  <span>User Name</span>,
-  <span>Topup Wallet</span>,
-  <span>Total Income</span>,
-  <span> Level</span>,
-  <span>Registration Date</span>,
-  <span>Topup Date</span>,
-];
-
- const tablerow = allData?.data?.map((row, index) => {
-  return [
-    <span>{(page - 1) * 10 + index + 1}</span>,
-    <span>{row.lgn_cust_id}</span>,
-    <span>{row.lgn_name || "--"}</span>,
-    <span>{Number(row.tr03_topup_wallet || 0).toFixed(2)}</span>,
-    <span>{Number(row.tr03_total_income || 0).toFixed(2)}</span>,
-    <span>Level {row.level_id}</span>,
-    <span>
-      {row.tr03_reg_date
-        ? moment(row.tr03_reg_date).format("DD-MM-YYYY")
-        : "--"}
-    </span>,
-    <span>
-      {row.tr03_topup_date
-        ? moment(row.tr03_topup_date).format("DD-MM-YYYY")
-        : "--"}
-    </span>,
+    <span>S.No.</span>,
+    <span>Cust ID</span>,
+    <span>User Name</span>,
+    <span>Topup Wallet</span>,
+    <span>Total Income</span>,
+    <span> Level</span>,
+    <span>Registration Date</span>,
+    <span>Topup Date</span>,
   ];
-});
+
+  const tablerow = allData?.data?.map((row, index) => {
+    return [
+      <span>{(page - 1) * 10 + index + 1}</span>,
+      <span>{row.lgn_cust_id}</span>,
+      <span>{row.lgn_name || "--"}</span>,
+      <span>{Number(row.tr03_topup_wallet || 0).toFixed(2)}</span>,
+      <span>{Number(row.tr03_total_income || 0).toFixed(2)}</span>,
+      <span>Level {row.level_id}</span>,
+      <span>
+        {row.tr03_reg_date
+          ? moment(row.tr03_reg_date).format("DD-MM-YYYY")
+          : "--"}
+      </span>,
+      <span>
+        {row.tr03_topup_date
+          ? moment(row.tr03_topup_date).format("DD-MM-YYYY")
+          : "--"}
+      </span>,
+    ];
+  });
 
   return (
     <div className="p-2">
@@ -90,49 +90,20 @@ const Downline = () => {
         <h2 className="text-xl font-semibold mb-4 text-gray-200">Level View</h2>
 
         <div className="flex flex-col sm:flex-wrap md:flex-row items-center gap-3 sm:gap-4 w-full text-sm sm:text-base">
-          {/* <input
-                        type="date"
-                        name="start_date"
-                        id="start_date"
-                        value={fk.values.start_date}
-                        onChange={fk.handleChange}
-                        className="bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
-                    />
-                    <input
-                        type="date"
-                        name="end_date"
-                        id="end_date"
-                        value={fk.values.end_date}
-                        onChange={fk.handleChange}
-                        className="bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
-                    />
-                    <input
-                        type="text"
-                        name="search"
-                        id="search"
-                        value={fk.values.search}
-                        onChange={fk.handleChange}
-                        placeholder="User ID"
-                        className="bg-gray-700 border border-gray-600 rounded-full py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
-                    /> */}
+
           <select
-                        name="level_id"
-                        id="level_id"
-                        value={fk.values.level_id}
-                        onChange={fk.handleChange}
-                        className="bg-gray-700 border w-full  border-gray-600  py-2 px-6 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:w-auto text-sm"
-                    >
-                        <option value="1">Level 1</option>
-                        <option value="2">Level 2</option>
-                        <option value="3">Level 3</option>
-                        <option value="4">Level 4</option>
-                        <option value="5">Level 5</option>
-                        <option value="6">Level 6</option>
-                        <option value="7">Level 7</option>
-                        <option value="8">Level 8</option>
-                        <option value="9">Level 9</option>
-                        <option value="10">Level 10</option>
-                    </select>
+            name="level_id"
+            id="level_id"
+            value={fk.values.level_id}
+            onChange={fk.handleChange}
+            className="bg-gray-700 border w-full border-gray-600 py-2 px-6 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:w-auto text-sm"
+          >
+            {Array.from({ length: 20 }, (_, i) => (
+              <option key={i + 1} value={i + 1}>
+                Level {i + 1}
+              </option>
+            ))}
+          </select>
 
           {/* <button
                         onClick={() => {

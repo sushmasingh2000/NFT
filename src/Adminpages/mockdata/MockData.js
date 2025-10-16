@@ -9,17 +9,7 @@ import AddToPhotosIcon from "@mui/icons-material/AddToPhotos";
 import CardGiftcardIcon from "@mui/icons-material/CardGiftcard";
 import DashboardCustomizeIcon from "@mui/icons-material/DashboardCustomize";
 export const all_Data = [
-  // {
-  //   id: 1,
-  //   navLink: "/master",
-  //   navItem: "Master",
-  //   navIcon: (
-  //     <span>
-  //       <LeaderboardSharp color="#15317E" fontSize="medium" />
-  //     </span>
-  //   ),
-  //   subcomponent: [],
-  // },
+ 
 
   {
     id: 2,
@@ -28,6 +18,17 @@ export const all_Data = [
     navIcon: (
       <span>
         <DashboardCustomizeIcon color="#15317E" fontSize="medium" />
+      </span>
+    ),
+    subcomponent: [],
+  },
+   {
+    id: 1,
+    navLink: "/master",
+    navItem: "Master",
+    navIcon: (
+      <span>
+        <LeaderboardSharp color="#15317E" fontSize="medium" />
       </span>
     ),
     subcomponent: [],

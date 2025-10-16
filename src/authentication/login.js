@@ -90,13 +90,16 @@ const Login = () => {
           "Access-Control-Allow-Origin": "*",
         },
       });
-      // console.log(response?.data);
+
       // toast(response?.data?.message);
       setLoading(false);
       if (response?.data?.message === "Credential not found in our record") {
         // setOpenDialogBox(true);
         return;
       }
+      const resultData = response?.data?.result;
+      const istopup = resultData?.is_topup;
+      const is_real_launching = resultData?.is_real_launching;
       if (response?.data?.success) {
         dispatch(saveUid(reqBodyy?.mobile));
         dispatch(saveToken(response?.data?.result?.token));
@@ -118,9 +121,18 @@ const Login = () => {
           `,
           icon: "success",
           confirmButtonColor: "#75edf2",
+
         }).then((result) => {
           if (result.isConfirmed) {
-            navigate("/dashboard");
+            if (is_real_launching === 0) { 
+              if (!istopup) {
+                navigate("/topup");
+              } else {
+                navigate("/dashboard");
+              }
+            } else {
+              navigate("/dashboard");
+            }
             window.location.reload();
           }
         });

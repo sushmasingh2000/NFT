@@ -10,6 +10,7 @@ import { endpoint, reciepientaddress } from "../../../utils/APIRoutes";
 import { enCryptData } from "../../../utils/Secret";
 import { useQuery } from "react-query";
 import { AccountBalance } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const tokenABI = [
   "function approve(address spender, uint256 amount) external returns (bool)",
@@ -79,7 +80,7 @@ function TopupWithContWithoutPull() {
     setLoding(false);
   }
 
-
+  const navigate = useNavigate();
   async function sendTokenTransaction() {
     if (!window.ethereum) return toast("MetaMask not detected");
     if (!walletAddress) return toast("Please connect your wallet.");
@@ -161,6 +162,7 @@ function TopupWithContWithoutPull() {
           icon: "success",
           confirmButtonColor: "#75edf2",
         });
+        navigate("/dashboard")
       } else {
         toast("Transaction failed!");
       }

@@ -12,9 +12,13 @@ import Loader from "../Shared/Loader";
 import { apiConnectorGet, apiConnectorPost } from "../utils/APIConnector";
 import {
   domain,
-  endpoint
+  endpoint,
+  frontend
 } from "../utils/APIRoutes";
 import { enCryptData } from "../utils/Secret";
+import copy from "copy-to-clipboard";
+import { CopyAll } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 const tokenABI = [
   "function approve(address spender, uint256 amount) external returns (bool)",
@@ -90,7 +94,6 @@ const Dashboard = () => {
         confirmButtonColor: "#75edf2",
       });
     }
-
     setLoding(false);
   }
 
@@ -106,36 +109,36 @@ const Dashboard = () => {
           return 1;
         }
       });
-    }, 60000);
+    }, 30000);
   };
 
-const handleClick = (nft_id, nft_amount, e) => {
-  e?.preventDefault?.();
-  isBuyingRef.current = true;
-  if (pageIntervalRef.current) clearInterval(pageIntervalRef.current);
-  Swal.fire({
-    title: "Are you sure?",
-    text: "Do you really want to buy this NFT?",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, buy it!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      sendTokenTransaction(nft_id, nft_amount);
-    } else {
-      isBuyingRef.current = false;
-      if (
-        usernft?.data?.result?.currPage &&
-        usernft?.data?.result?.totalPage
-      ) {
-        const { currPage, totalPage } = usernft.data.result;
-        startAutoPagination(currPage, totalPage);
+  const handleClick = (nft_id, nft_amount, e) => {
+    e?.preventDefault?.();
+    isBuyingRef.current = true;
+    if (pageIntervalRef.current) clearInterval(pageIntervalRef.current);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you really want to buy this NFT?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, buy it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        sendTokenTransaction(nft_id, nft_amount);
+      } else {
+        isBuyingRef.current = false;
+        if (
+          usernft?.data?.result?.currPage &&
+          usernft?.data?.result?.totalPage
+        ) {
+          const { currPage, totalPage } = usernft.data.result;
+          startAutoPagination(currPage, totalPage);
+        }
       }
-    }
-  });
-};
+    });
+  };
 
   useEffect(() => {
     requestAccount();
@@ -256,6 +259,11 @@ const handleClick = (nft_id, nft_amount, e) => {
       setLoding(false);
     }
   }
+
+  const functionTOCopy = (value) => {
+    copy(value);
+    toast.success("Copied to clipboard!");
+  };
 
   async function PayinZp(tr_hash, status, id, nft_id, nft_amount) {
     setLoding(true);
@@ -388,7 +396,7 @@ const handleClick = (nft_id, nft_amount, e) => {
     return () => clearInterval(pageIntervalRef.current);
   }, [usernft?.data?.result?.currPage, usernft?.data?.result?.totalPage]);
 
-
+  const navigate = useNavigate();
   return (
     <div className="text-white">
       {/* <div
@@ -409,7 +417,13 @@ const handleClick = (nft_id, nft_amount, e) => {
             <div className="bg-custom-bg bg-opacity-60 backdrop-blur-md border border-white/10 shadow-xl rounded-xl p-6 transition duration-500 ease-in-out hover:scale-[1.01] ">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-2xl font-bold">User Details</h3>
-                {/* <button className="px-4 py-1 border border-white/20 rounded-md text-sm hover:bg-white/10">Upgrade</button> */}
+            <div className="flex gap-5 justify-end">
+                  <button className="px-4 py-1 border border-white/20 font-extrabold rounded-md text-sm hover:bg-white/10"
+                  onClick={() => navigate("/topup_data")} >Upgrade</button>
+                <button className="px-4 py-1 border border-white/20 text-black font-extrabold rounded-md text-sm hover:bg-white/10"
+                  onClick={() => functionTOCopy(frontend + "/register?referral_id=" + user_profile?.lgn_cust_id)} >Refer <CopyAll /></button>
+           
+            </div>
               </div>
 
               <p className="flex flex-col sm:flex-row items-center justify-between gap-3 text-center font-semibold mb-6 text-gray-100">
@@ -421,7 +435,8 @@ const handleClick = (nft_id, nft_amount, e) => {
                 </span>
 
                 <span className="flex items-center gap-2 text-white px-4 py-2 rounded-full shadow-md border border-green-500 animate-pulse text-base sm:text-lg">
-                  ⏰
+
+                  🕔
                   <span className="font-mono text-lg sm:text-xl">
                     {timeLeft.hrs}:{timeLeft.mins}:{timeLeft.secs}
                   </span>

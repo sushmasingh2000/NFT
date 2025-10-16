@@ -1,7 +1,7 @@
 import { Button, Switch, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { apiConnectorGet, apiConnectorPost } from '../../utils/APIConnector';
 import { endpoint } from '../../utils/APIRoutes';
 import Loader from '../../Shared/Loader';
@@ -9,6 +9,7 @@ import Loader from '../../Shared/Loader';
 const Master = () => {
     const [configData, setConfigData] = useState([]);
     const [loading, setloading] = useState(false);
+    const client = useQueryClient("master_data")
 
     const { data, isLoading } = useQuery(
         ['master_data'],
@@ -25,79 +26,25 @@ const Master = () => {
         setConfigData(fetchedData);
     }, [fetchedData])
 
-
-    const handleStatusChange = async (index, type = 'payout') => {
-        const config = configData[index];
-        const currentStatus = config.config_status;
-        const newStatus = currentStatus === 'Active' ? 'Inactive' : 'Active';
-
-        try {
-            setloading(true)
-            const response = await apiConnectorPost(endpoint.change_general_status, {
-                u_id: config.config_id,
-                status_type: type,
-                new_status: newStatus,
-            });
-            setloading(false);
-            if (response?.data?.success) {
-                toast(response?.data?.message, { id: 1 });
-                const updatedData = [...configData];
-                updatedData[index].config_status = newStatus;
-                setConfigData(updatedData);
-            } else {
-                toast(response?.data?.message, { id: 1 });
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            toast('Something went wrong.', { id: 1 });
-        }
-        setloading(false)
-    };
-
     const handleValueUpdate = async (index) => {
         const config = configData[index];
         let status_type = "";
 
-        if (config.config_title === "LEVEL_PERCENTAGE") {
-            status_type = "level_percentage";
-        } else if (config.config_title === "TOTAL_PROFIT") {
-            status_type = "total_profit";
-        } else if (config.config_title === "POPUP_IMAGE") {
-            status_type = "popup_image";
-        }
-        else if (config.config_title === "POPUP_IMAGE_STATUS") {
-            status_type = "popup_image_status";
-        }
-        else if (config.config_title === "GROUP_TYPE") {
-            status_type = "group_type";
-        }
-        else if (config.config_title === "NEWS_UPDATEs") {
-            status_type = "news";
+        if (config.config_title === "IS_REAL_LAUNCHING") {
+            status_type = "launching";
         }
 
         const formData = new FormData();
-        formData.append("u_id", config.config_id);
-        formData.append("status_type", status_type);
-
-        if (status_type === "popup_image") {
-            if (!config.config_file) {
-                toast("Please select an image to upload.", { id: 1 });
-                return;
-            }
-            formData.append("file", config.config_file);
-        } else {
-            formData.append("value", config.config_value);
-        }
-
+        formData.append("u_id", config.m00_id);
+        formData.append("status_type", "launching");
         try {
             setloading(true)
-            const response = await apiConnectorPost(endpoint.change_general_status, formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-            });
+            const response = await apiConnectorPost(endpoint.change_general_status, formData);
             setloading(false)
             if (response?.data?.success) {
                 toast(response?.data?.message, { id: 1 });
             }
+            client.refetchQueries("master_data")
         } catch (error) {
             console.error("Error:", error);
             toast("Something went wrong.", { id: 1 });
@@ -106,15 +53,6 @@ const Master = () => {
     };
 
 
-    const handleInputChange = (index, value, isFile = false) => {
-        const updatedData = [...configData];
-        if (isFile) {
-            updatedData[index].config_file = value;
-        } else {
-            updatedData[index].config_value = value;
-        }
-        setConfigData(updatedData);
-    };
 
 
     return (
@@ -126,20 +64,20 @@ const Master = () => {
                     <tr className="bg-gray-100 text-black">
                         <th className="border px-4 py-2">S.No.</th>
                         <th className="border px-4 py-2">Title</th>
-                        <th className="border px-4 py-2">Status / Value</th>
+                        {/* <th className="border px-4 py-2">Status / Value</th> */}
                         <th className="border px-4 py-2">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {configData.map((config, index) => {
-                        const title = config.config_title;
+                        const title = config.m00_title;
 
                         return (
                             <tr key={config.config_id}>
                                 <td className="border px-4 py-2">{index + 1}</td>
                                 <td className="border px-4 py-2">
                                     {
-                                        title === 'LEVEL_PERCENTAGE' ? "Level Percentage" :
+                                        title === 'IS_REAL_LAUNCHING' ? "Real Launching " :
                                             title === 'LEVEL_CLOSING' ? "Level Closing" :
                                                 title === 'WITHDRAWAL' ? "Payout" :
                                                     title === 'TOTAL_PROFIT' ? "Total Profit" :
@@ -150,7 +88,7 @@ const Master = () => {
                                                                         title
                                     }
                                 </td>
-
+                                {/* 
                                 <td className="border px-4 py-2">
                                     {title === "LEVEL_PERCENTAGE" || title === "TOTAL_PROFIT" ? (
                                         <TextField
@@ -188,42 +126,24 @@ const Master = () => {
                                     ) : (
                                         config.config_status
                                     )}
-                                </td>
+                                </td> */}
 
 
 
                                 <td className="border px-4 py-2">
-                                    {title === "LEVEL_PERCENTAGE" ||
-                                        title === "TOTAL_PROFIT" ||
-                                        title === "GROUP_TYPE" ||
-                                        title === "POPUP_IMAGE" ||
-                                        title === "NEWS_UPDATEs" ? (  // 👈 Add here
-                                        <Button
-                                            variant="contained"
-                                            size="small"
-                                            onClick={() => handleValueUpdate(index)}
-                                        >
-                                            Update
-                                        </Button>
+
+                                    <Switch
+                                        checked={config.m00_status === 1}
+                                        onChange={() =>
+                                            handleValueUpdate(
+                                                index,
+                                                config.m00_title === "IS_REAL_LAUNCHING"
+                                            )
+                                        }
+                                        color="primary"
+                                    />
 
 
-                                    ) : (
-                                        <Switch
-                                            checked={config.config_status === "Active"}
-                                            onChange={() =>
-                                                handleStatusChange(
-                                                    index,
-                                                    title === "LEVEL_CLOSING"
-                                                        ? "level_closing"
-                                                        : title === "POPUP_IMAGE_STATUS"
-                                                            ? "popup_image_status"
-                                                            : "payout"
-                                                )
-                                            }
-                                            color="primary"
-                                        />
-
-                                    )}
                                 </td>
 
 

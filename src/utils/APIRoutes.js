@@ -1,14 +1,14 @@
-// export const domain = 'http://192.168.18.214:9005';
-export const domain = 'https://nftvault.biz';
+export const domain = 'http://192.168.18.214:9005';
+// export const domain = 'https://nftvault.biz';
 export const frontend = 'https://nftvault.biz';
 export const dollar = "$"
-export const reciepientaddress ="0x2583fdfd4319Bb44F0afC6a706440858174593F8"
+export const reciepientaddress = "0x2583fdfd4319Bb44F0afC6a706440858174593F8"
 
 export const endpoint = {
   registration_api: `${domain}/api/v1/member-registration`,
   login_api: `${domain}/api/v1/member-login`,
   admin_login_api: `${domain}/api/v1/admin-login`,
-  
+
   customer_api: `${domain}/api/v1/member-name-by-cust-id`,
 
   //img
@@ -25,7 +25,7 @@ export const endpoint = {
   get_nft_dropdown: `${domain}/api/v1/get-nft-dropdown`,
   assign_nft_by_admin: `${domain}/api/v1/nft-assign-by-admin`,
 
-  
+
 
   get_nft_by_user: `${domain}/api/v1/get-nft-by-user`,
   trading: `${domain}/api/v1/trading`,
@@ -38,7 +38,7 @@ export const endpoint = {
   activation_request: `${domain}/api/v1/activation-request`,
   dummy_activation_request: `${domain}/api/v1/activation-dummy-request`,
   activation_request: `${domain}/api/v1/activation-request`,
-  
+
   dummy_activation_request_nft: `${domain}/api/v1/activation-dummy-request-nft`,
   activation_request_nft: `${domain}/api/v1/activation-request-nft`,
 
@@ -51,6 +51,9 @@ export const endpoint = {
   get_downline_api: `${domain}/api/v1/get-member-downline`,
   get_member_dashboard_api: `${domain}/api/v1/get-member-dashboard`,
   admin_dashboard: `${domain}/api/v1/get-admin-dashboard`,
+  master_data: `${domain}/api/v1/get-master-data`,
+  change_general_status: `${domain}/api/v1/udpate-master-data`,
+
 
 
   //old
@@ -89,8 +92,6 @@ export const endpoint = {
   member_list_details: `${domain}/api/v1/member-list-details`,
   trader_list_details: `${domain}/api/v1/trader-list-details`,
   change_verification: `${domain}/api/v1/change-verification-status`,
-  change_general_status: `${domain}/api/v1/change-general-status`,
-  master_data: `${domain}/api/v1/master-data`,
 
 
   status_nft_image: `${domain}/api/v1/update-image-galary-status`,

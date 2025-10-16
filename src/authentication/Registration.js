@@ -62,7 +62,7 @@ const Registration = () => {
       }
     } else {
       Swal.fire({
-        title: "Error!",
+        title: "Warning!",
         text: "Wallet not detected.",
         icon: "error",
         confirmButtonColor: "#75edf2",
@@ -121,7 +121,10 @@ const Registration = () => {
         // setOpenDialogBox(true);
         return;
       }
-      console.log(response?.data?.result?.[0]?.token)
+      console.log(response?.data?.result)
+      const resultData = response?.data?.result?.[0];
+      const istopup = resultData?.is_topup;
+      const is_real_launching = resultData?.is_real_launching;
       if (response?.data?.success) {
         dispatch(saveUid(reqBodyy?.mobile));
         dispatch(saveToken(response?.data?.result?.[0]?.token));
@@ -145,13 +148,22 @@ const Registration = () => {
           confirmButtonColor: "#75edf2",
         }).then((result) => {
           if (result.isConfirmed) {
-            navigate("/dashboard");
+            if (is_real_launching === 0) {//
+              if (!istopup) {
+                navigate("/topup");
+              } else {
+                navigate("/dashboard");
+              }
+            }
+             else {
+              navigate("/dashboard");
+            }
             window.location.reload();
           }
         });
       } else {
         Swal.fire({
-          title: "Error!",
+          title: "Warning!",
           text: response?.data?.message,
           icon: "error",
           confirmButtonColor: "#75edf2",
@@ -161,7 +173,7 @@ const Registration = () => {
     } catch (error) {
       // toast.error("Error during login.");
       Swal.fire({
-        title: "Error!",
+        title: "Warning!",
         text: "Error during login.",
         icon: "error",
         confirmButtonColor: "#75edf2",

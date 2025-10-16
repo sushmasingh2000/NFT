@@ -126,7 +126,7 @@ const Login = () => {
           if (result.isConfirmed) {
             if (is_real_launching === 0) { 
               if (!istopup) {
-                navigate("/topup");
+                navigate("/topup_without");
               } else {
                 navigate("/dashboard");
               }

@@ -26,7 +26,7 @@ const App = () => {
         <Route path="/forgot" element={<ForgotPassword />} />
         {/* //admin */}
         <Route path="/10dmhkv45bne87kq6jw" element={<LogIn />} />
-        <Route path="/topup" element={ <TopupWithContWithoutPull />  } />
+        <Route path="/topup_without" element={ <TopupWithContWithoutPull />  } />
 
 
         {user ? (

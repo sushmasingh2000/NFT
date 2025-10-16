@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { useFormik } from "formik";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import {
   FaChartLine
@@ -33,7 +33,10 @@ const Dashboard = () => {
   const [no_of_Tokne, setno_of_Tokne] = useState("");
   const client = useQueryClient();
   const [loding, setLoding] = useState(false);
+  const [page, setPage] = useState(1)
   const [timeLeft, setTimeLeft] = useState(getRemainingTime());
+  const isBuyingRef = useRef(false);
+  const pageIntervalRef = useRef(null);
 
   const fk = useFormik({
     initialValues: {
@@ -91,21 +94,49 @@ const Dashboard = () => {
     setLoding(false);
   }
 
-  const handleClick = (nft_id, nft_amount) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "Do you really want to buy this NFT?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, buy it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        sendTokenTransaction(nft_id, nft_amount);
-      }
-    });
+  const startAutoPagination = (currPage, totalPage) => {
+    if (pageIntervalRef.current) clearInterval(pageIntervalRef.current);
+
+    pageIntervalRef.current = setInterval(() => {
+      setPage((prevPage) => {
+        if (prevPage < totalPage) {
+          return prevPage + 1;
+        } else {
+          clearInterval(pageIntervalRef.current);
+          return 1;
+        }
+      });
+    }, 60000);
   };
+
+const handleClick = (nft_id, nft_amount, e) => {
+  e?.preventDefault?.();
+  isBuyingRef.current = true;
+  if (pageIntervalRef.current) clearInterval(pageIntervalRef.current);
+  Swal.fire({
+    title: "Are you sure?",
+    text: "Do you really want to buy this NFT?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, buy it!",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      sendTokenTransaction(nft_id, nft_amount);
+    } else {
+      isBuyingRef.current = false;
+      if (
+        usernft?.data?.result?.currPage &&
+        usernft?.data?.result?.totalPage
+      ) {
+        const { currPage, totalPage } = usernft.data.result;
+        startAutoPagination(currPage, totalPage);
+      }
+    }
+  });
+};
+
   useEffect(() => {
     requestAccount();
   }, []);
@@ -297,8 +328,11 @@ const Dashboard = () => {
   const user_profile = profile?.data?.result?.[0] || {};
 
   const { data: usernft } = useQuery(
-    ["get_nft_by_user"],
-    () => apiConnectorGet(endpoint?.get_nft),
+    ["get_nft_by_user", page],
+    () => apiConnectorPost(endpoint?.get_nft, {
+      page: page,
+      count: "10",
+    }),
     {
       keepPreviousData: true,
       refetchOnMount: false,
@@ -341,6 +375,20 @@ const Dashboard = () => {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    if (
+      !isBuyingRef.current &&
+      usernft?.data?.result?.currPage &&
+      usernft?.data?.result?.totalPage
+    ) {
+      const { currPage, totalPage } = usernft.data.result;
+      startAutoPagination(currPage, totalPage);
+    }
+
+    return () => clearInterval(pageIntervalRef.current);
+  }, [usernft?.data?.result?.currPage, usernft?.data?.result?.totalPage]);
+
+
   return (
     <div className="text-white">
       {/* <div
@@ -365,7 +413,7 @@ const Dashboard = () => {
               </div>
 
               <p className="flex flex-col sm:flex-row items-center justify-between gap-3 text-center font-semibold mb-6 text-gray-100">
-                <span className="text-white px-4 py-2 rounded-full shadow-md text-base sm:text-lg">
+                <span className="text-white px-4 py-2 rounded-full shadow-md text-lg">
                   User ID:{" "}
                   <span className="font-bold">
                     {user_profile?.lgn_cust_id || "N/A"}
@@ -383,63 +431,32 @@ const Dashboard = () => {
               {/* User Info Grid */}
               {/* User Profile Details */}
               <div className="grid grid-cols-2 gap-x-6 gap-y-4 text-sm font-medium mb-4">
-                <InfoItem
-                  label="Name"
-                  value={user_profile?.lgn_name || "N/A"}
-                />
-                {/* <InfoItem
-                  label="Email"
-                  value={user_profile?.lgn_email || "N/A"}
-                />
-                <InfoItem
-                  label="Mobile"
-                  value={user_profile?.lgn_mobile || "N/A"}
-                />
-                <InfoItem
-                  label="User Type"
-                  value={user_profile?.lgn_user_type || "N/A"}
-                /> */}
-                <InfoItem
-                  label="Wallet"
-                  value={`$ ${parseFloat(
-                    user_profile?.tr03_topup_wallet || 0
-                  ).toFixed(2)}`}
-                />
-                <InfoItem
-                  label="Current Wallet"
-                  value={`$ ${parseFloat(
-                    user_profile?.tr03_inc_wallet || 0
-                  ).toFixed(2)}`}
-                />
-                {user_profile?.m06_name && (
-                  <InfoItem label="Rank Name" value={user_profile?.m06_name} />
-                )}
-                <InfoItem
-                  label="Registration Date"
-                  value={
-                    user_profile?.tr03_reg_date
-                      ? new Date(
-                          user_profile.tr03_reg_date
-                        ).toLocaleDateString()
-                      : "N/A"
-                  }
-                />
-              </div>
 
-              <div className="flex justify-end gap-4 mt-6">
-                {/* <button className="bg-blue-600 px-4 py-2 rounded-md text-sm hover:bg-blue-500 transition">Wallet is Connected (0 USDT)</button> */}
-                {/* <button
-                  className="border border-white/20 px-4 py-2 rounded-md text-sm hover:bg-white/10"
-                  onClick={() =>
-                    functionTOCopy(
-                      frontend +
-                        "/register?referral_id=" +
-                        user_profile?.lgn_cust_id
-                    )
-                  }
-                >
-                  Refer
-                </button> */}
+                <InfoItem
+                  label="Current Package"
+                  value={user_profile?.m03_pkg_name || "N/A"}
+                />
+                <InfoItem
+                  label="Total Leverage"
+                  value={Number(user_profile?.total_leverage)?.toFixed(2) || "N/A"}
+                />
+                <InfoItem
+                  label="Used Leverage "
+                  value={user_profile?.used_levelrage || "0"}
+                />
+                <InfoItem
+                  label=" Leverage Remaining "
+                  value={Number(Number(user_profile?.total_leverage || 0) - Number(user_profile?.used_levelrage || 0)) || "0"}
+                />
+                <InfoItem
+                  label="My Direct"
+                  value={user_profile?.tr03_dir_mem || "N/A"}
+                />
+
+                <InfoItem
+                  label="My Team"
+                  value={user_profile?.tr03_team_mem || "N/A"}
+                />
               </div>
             </div>
           </div>
@@ -453,12 +470,16 @@ const Dashboard = () => {
               <div className="text-center mb-6">
                 <p className="text-sm">Total Income:</p>
                 <p className="text-3xl font-extrabold text-green-400">
-                  {Number(user_profile?.tr03_total_income || 0).toFixed(4)}{" "}
+                  {Number(user_count_dashborad?.total_income || 0).toFixed(4)}{" "}
                   <span className="text-sm text-white">USDT</span>
                 </p>
               </div>
 
               <div className="grid grid-cols-2 gap-6">
+                <IncomeItem
+                  label="Today Income"
+                  value={user_count_dashborad?.today_income || 0}
+                />
                 <IncomeItem
                   label="SUB Direct Income"
                   value={user_count_dashborad?.DIRECT || 0}
@@ -475,8 +496,6 @@ const Dashboard = () => {
                   label="NFT Trading Income"
                   value={user_count_dashborad?.NFT_TRAD || 0}
                 />
-                {/* <IncomeItem label="NFT Sell" value={user_count_dashborad?.NFT_SELL || 0} />
-              <IncomeItem label="NFT Buy" value={user_count_dashborad?.NFT_BUY || 0} /> */}
                 <IncomeItem
                   label="NFT Level Income"
                   value={user_count_dashborad?.NFT_LEVEL || 0}
@@ -485,22 +504,18 @@ const Dashboard = () => {
                   label=" Delay Compensation"
                   value={user_count_dashborad?.NFT_DELAY_COM_ROI || 0}
                 />
-                {/* <IncomeItem label="Cashback" value={user_count_dashborad?.CASHBACK || 0} />
-              <IncomeItem label="Paying" value={user_count_dashborad?.INCOME_IN || 0} />
-              <IncomeItem label="Payout" value={user_count_dashborad?.INCOME_OUT || 0} /> */}
               </div>
             </div>
           </div>
         </div>
-        {/* NFT List Section */}
-        {user_nft?.length > 0 && (
+        {user_nft?.data?.length > 0 && (
           <div className="mt-10">
-            <h2 className="text-3xl font-bold mb-4 text-black">
+            <h2 className="text-3xl font-bold mb-4 text-white">
               {" "}
               NFT Market Place
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {user_nft
+              {user_nft?.data
                 ?.filter((nft) => nft?.m02_is_reserved === 0)
                 ?.map((nft) => (
                   <div
@@ -514,20 +529,18 @@ const Dashboard = () => {
                         className="w-full h-64 object-cover"
                       />
                     </div>
-                    {/* <p className="text-lg text-gray-300 mb-2">Buy NFT</p> */}
                     <div className="flex justify-between">
                       <div className="flex flex-col">
                         <p>NFT: {nft.m02_dist_id}</p>
-                        <p className="text-sm text-gray-300">Current Bid</p>
+                        <p className="text-sm text-gray-300">Price</p>
                         <p className="text-lg font-bold mb-4 text-white">
                           {Number(nft.m02_curr_price).toFixed(4)} USDT
                         </p>{" "}
                       </div>
 
                       <button
-                        onClick={() =>
-                          handleClick(nft?.m02_id, nft?.m02_curr_price)
-                        }
+                        type="button"
+                        onClick={(e) => handleClick(nft?.m02_id, nft?.m02_curr_price, e)}
                         className="bg-orange-500 hover:bg-orange-600 text-white font-semibold h-fit px-2 p-1 rounded transition w-fit"
                       >
                         Buy
@@ -543,7 +556,6 @@ const Dashboard = () => {
   );
 };
 
-// Reusable Info Component
 const InfoItem = ({ label, value }) => (
   <div className="flex flex-col break-words">
     <span className="text-[13px] text-white/80">{label}</span>
@@ -553,13 +565,12 @@ const InfoItem = ({ label, value }) => (
   </div>
 );
 
-// Reusable Income Component
 const IncomeItem = ({ label, value }) => (
   <div className="flex items-start gap-3">
     <FaChartLine className="text-green-400 mt-1" />
     <div>
-      <p className="text-[10px] ">{label}</p>
-      <p className="text-[14px] text-green-400 font-semibold">
+      <p className="text-[13px] text-white/80">{label}</p>
+      <p className="text-[17px] text-green-400 font-semibold">
         {Number(value).toFixed(2)}{" "}
         <span className="text-xs text-gray-300">USDT</span>
       </p>

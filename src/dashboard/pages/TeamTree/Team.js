@@ -239,26 +239,22 @@ const Team = () => {
             <p className="p-1 text-center text-xs border border-gray-700 font-semibold">
               Cust ID
             </p>
-            <p className="p-1 text-xs text-center border border-gray-700">
+           <p className="p-1 text-xs text-center border border-gray-700">
               {selectedNode?.lgn_cust_id || "--"}
             </p>
-            <p className="p-1 text-center text-xs font-semibold border border-gray-700">
+              {/*<p className="p-1 text-center text-xs font-semibold border border-gray-700">
               Joining Date
             </p>
             <p className="p-1 text-xs text-center border border-gray-700">
               {selectedNode?.tr03_reg_date
                 ? moment(selectedNode?.tr03_reg_date)?.format("DD-MM-YYYY")
                 : "--"}
-            </p>
+            </p> */}
             <p className="p-1 text-center text-xs font-semibold border border-gray-700">
-              Topup Date
+            Current Package
             </p>
             <p className="p-1 text-xs font-semibold text-center border border-gray-700">
-              {selectedNode?.tr03_topup_date
-                ? moment(selectedNode?.tr03_topup_date)?.format(
-                    "DD-MM-YYYY"
-                  )
-                : "--"}
+              {selectedNode?.m03_pkg_name || "--"}
             </p>
             <p className="px-4 py-2 text-xs text-center font-semibold border border-gray-700">
               Direct Team

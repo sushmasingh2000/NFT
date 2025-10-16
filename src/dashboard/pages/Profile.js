@@ -24,7 +24,7 @@ const Profile = () => {
     );
     const user_profile = profile?.data?.result?.[0] || {}; // Changed to empty object for safer access
 
-     console.log(profile)
+    console.log(profile)
     // Formik for Wallet Address
     const fkWallet = useFormik({ // Renamed from fk to fkWallet
         initialValues: {
@@ -127,75 +127,38 @@ const Profile = () => {
     return (
         <>
             <div className="rounded-xl lg:mt-8 text-white p-6">
-                <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="max-w-2xl mx-auto grid grid-cols-1 gap-8">
                     <div className="bg-custom-bg  p-3 rounded-lg shadow-lg">
                         <div className="flex flex-col items-center mb-6">
                             <img src={logo} alt="Coin Icon" className="w-32  mb-3 filter brightness-200" />
                             <h2 className="text-lg font-semibold text-white">General Account Information</h2>
                         </div>
-                        <div className="space-y-3 text-sm text-white">
-                            <div className="flex justify-between py-1 border-b border-green-700">
-                                <span>Registration Date:</span>
-                                <span className="text-white">{moment(user_profile?.lgn_created_at)?.format("DD-MM-YYYY") || "--"}</span>
-                            </div>
-
-                            <div className="flex justify-between py-1 border-b border-green-700">
-                                <span>Name:</span>
-                                <span className="text-white">{user_profile?.lgn_name || "--"}</span>
-                            </div>
-                            {/* <div className="flex justify-between py-1 border-b border-gray-700">
-                                <span>Email Id:</span>
-                                <span className="text-white">{user_profile?.lgn_email || "--"}</span>
-                            </div>
-                            <div className="flex justify-between py-1 border-b border-gray-700">
-                                <span>Mobile Number:</span>
-                                <span className="text-white">{user_profile?.lgn_mobile || "--"}</span>
-                            </div> */}
-
+                        <div className="space-y-3 text-sm text-white px-4">
+                           
                             <div className="flex justify-between py-1 border-b border-green-700">
                                 <span>Cust ID:</span>
                                 <span className="text-white">{user_profile?.lgn_cust_id || "--"}</span>
                             </div>
-                            <div className="flex justify-between py-1">
-                                <span>Account Status:</span>
-                                <span className={`font-medium `}>
-                                    {user_profile?.tr03_topup_date ?
-                                        "Active" : "DeActive"
-                                    }
-                                </span>
+                            <div className="flex justify-between py-1 border-b border-green-700">
+                                <span>User Name:</span>
+                                <span className="text-white">{user_profile?.lgn_name || "--"}</span>
+                            </div>
+                             <div className="flex justify-between py-1 border-b border-green-700">
+                                <span>Spon Name:</span>
+                                <span className="text-white">{user_profile?.spon_name || "--"}</span>
+                            </div>
+                             <div className="flex justify-between py-1 border-b border-green-700">
+                                <span>Registration Date:</span>
+                                <span className="text-white">{moment(user_profile?.lgn_created_at)?.format("DD-MM-YYYY") || "--"}</span>
+                            </div>
+                            <div className="flex  justify-between py-1 text-white ">
+                                <p>Wallet Address </p>
+                                <p className="break-words text-sm font-medium">  {user_profile?.lgn_wallet_add}</p>
                             </div>
                         </div>
                     </div>
 
-                    <div className="bg-custom-bg h-fit p-3 rounded-lg shadow-lg">
-                        <div className="flex flex-col items-center mb-6">
-                            <img src={logo} alt="Coin Icon" className="w-32  mb-3 filter brightness-200" />
-                            <h2 className="text-lg font-semibold text-white">Update &  Address</h2>
-                            {/* <p className="text-gray-400 text-sm">Manage account settings securely</p> */}
-                        </div>
 
-                        {/* {["Update Profile",
-                           
-                        ].map((label, index) => (
-                            <div key={index} className={`flex justify-between items-center mb-2 py-2 ${index < 2 ? "border-b border-green-700" : ""}`}>
-                                <span className="text-white">{label}:</span>
-                                <button
-                                    className="bg-gold-color hover:bg-green-600 text-gray-900 font-semibold py-1.5 px-4 rounded text-xs"
-                                    onClick={() => {
-                                        if (label === "Update Wallet Address") setShowWalletModal(true);
-                                        else if (label === "Update Password") setShowPasswordModal(true);
-                                        else if (label === "Update Profile") setShowProfileModal(true); // Open profile modal
-                                    }}
-                                >
-                                    Edit
-                                </button>
-                            </div>
-                        ))} */}
-                        <div className="flex flex-col justify-center  text-white ">
-                            <p>Wallet Address </p>
-                            <p className="break-words text-sm">  {user_profile?.lgn_wallet_add}</p>
-                        </div>
-                    </div>
 
                 </div>
 

@@ -53,14 +53,6 @@ export const endpoint = {
   admin_dashboard: `${domain}/api/v1/get-admin-dashboard`,
 
 
-
-
-
-
-
-
-
-
   //old
   trader_registration_api: `${domain}/api/v1/trader-registration`,
   add_user_withdrawal: `${domain}/api/v1/user-withdrawal-req`,

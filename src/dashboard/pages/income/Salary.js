@@ -99,7 +99,7 @@ const Salryfn = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const tablerow =user_profile.tr03_rank_date?  [
+  const tablerow = user_profile.tr03_rank_date ? [
     [
       <span> {1}</span>,
       <span>{moment(user_profile.tr03_rank_date)?.format("DD-MM-YYYY")}</span>,
@@ -121,83 +121,36 @@ const Salryfn = () => {
       </span>,
       // </span>,
     ],
-  ]:[];
+  ] : [];
 
   return (
-    <div className="p-2">
-      <div className="bg-gray-800 rounded-lg shadow-lg p-3 text-white border border-gray-700 mb-6">
-        <h2 className="text-xl font-semibold mb-4 text-gray-200">
+    <div className="flex flex-col items-center justify-center p-2">
+      <div className=" p-3">
+        <h2 className="text-xl font-extrabold mb-4 text-black">
           MileStone Reward
         </h2>
+        </div>
+    <div className="bg-custom-bg p-4 rounded-lg shadow-md text-white space-y-3 w-full max-w-lg">
 
-        {/* <div className="flex flex-col sm:flex-wrap md:flex-row items-center gap-3 sm:gap-4 w-full text-sm sm:text-base">
-          <TextField
-            type="date"
-            label="Start Date"
-            name="start_date"
-            id="start_date"
-            value={fk.values.start_date}
-            onChange={fk.handleChange}
-            InputLabelProps={{
-              shrink: true,
-              style: { color: "#fff" },
-            }}
-            inputProps={{
-              style: { color: "#fff" },
-            }}
-            className="bg-gray-700 border border-gray-600 rounded-md  text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
-          />
+        <h3 className="text-lg font-bold text-yellow-400">🎉 Milestone Achieved</h3>
+        <div className="flex justify-between items-center gap-10 ">
+          <div className="flex flex-col justify-start  gap-2">
+            <p><strong>Achieve Date:</strong> </p>
+            <p><strong>Release Date:</strong> </p>
+            <p><strong>Amount:</strong></p>
+            <p><strong>Rank:</strong></p>
+          </div>
+          <div className="flex flex-col justify-start  gap-2">
+            <p>{moment(user_profile.tr03_rank_date)?.format("DD-MM-YYYY")}</p>
+            <p> {displayDate.format("DD-MM-YYYY")}</p>
+            <p> ${Number(user_profile.m06_income || 0)?.toFixed(2)}</p>
+            <p>{user_profile.m06_name || "--"}</p>
+          </div>
+        </div>
 
-          <TextField
-            label="End Date"
-            type="date"
-            name="end_date"
-            id="end_date"
-            value={fk.values.end_date}
-            onChange={fk.handleChange}
-            InputLabelProps={{
-              shrink: true,
-              style: { color: "#fff" },
-            }}
-            inputProps={{
-              style: { color: "#fff" },
-            }}
-            className="bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
-          />
-
-      
-          <button
-            onClick={() => {
-              setPage(1);
-              client.invalidateQueries(["get_direct"]);
-            }}
-            type="submit"
-            className="bg-gold-color text-gray-900 font-bold py-2 px-4 rounded-full hover:bg-dark-color transition-colors w-full sm:w-auto text-sm"
-          >
-            Search
-          </button>
-          <button
-            onClick={() => {
-              fk.handleReset();
-              setPage(1);
-            }}
-            className="bg-gray-color text-gray-900 font-bold py-2 px-4 rounded-full hover:bg-black hover:text-white transition-colors w-full sm:w-auto text-sm"
-          >
-            Clear
-          </button>
-        </div> */}
-      </div>
-
-      {/* Main Table Section */}
-      <div className="bg-gray-800 rounded-lg shadow-lg p-3 text-white border border-gray-700">
-        <CustomTable
-          tablehead={tablehead}
-          tablerow={tablerow}
-          isLoading={false}
-        />
-
-        {/* Pagination */}
-        {/* <CustomToPagination page={page} setPage={setPage} data={allData} /> */}
+        <div className="text-rose-500 font-mono text-lg">
+          ⏰ {timeLeft.hrs}H:{timeLeft.mins}M:{timeLeft.secs}S
+        </div>
       </div>
     </div>
   );

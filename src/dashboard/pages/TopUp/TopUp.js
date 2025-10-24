@@ -288,7 +288,7 @@ function TopupWithContWithoutPull() {
               <span>{bnb}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gold-color font-medium">USDT (BEP20):</span>
+              <span className="text-gold-color font-medium">USDT (opBNB):</span>
               <span>{Number(no_of_Tokne || 0)?.toFixed(4)}</span>
             </div>
           </div>

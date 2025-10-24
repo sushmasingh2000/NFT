@@ -21,15 +21,13 @@ const Registration = () => {
   const [searchParams] = useSearchParams();
   const referral_id = searchParams.get("referral_id") || null;
   const [referralId, setReferralId] = useState(searchParams.get("referral_id") || "");
-  const [mobile, setMobile] = useState("");
-  const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
 
 
   // const params = window?.Telegram?.WebApp?.initDataUnsafe?.start_param;
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { logindataen, uid } = useSelector((state) => state.aviator);
+  const { uid } = useSelector((state) => state.aviator);
   const datatele = {
     id: referral_id,
   };
@@ -237,7 +235,7 @@ const Registration = () => {
 
             {/* Username */}
             <div>
-              <label className="block text-black mb-1">Username</label>
+              {/* <label className="block text-black mb-1">Username</label> */}
               <input
                 type="text"
                 value={username}
@@ -273,7 +271,7 @@ const Registration = () => {
 
             {/* Referral ID */}
             <div>
-              <label className="block text-black mb-1">Referral ID</label>
+              {/* <label className="block text-black mb-1">Referral ID</label> */}
               <input
                 value={referralId}
                 onChange={(e) => setReferralId(e.target.value)}

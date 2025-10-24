@@ -320,7 +320,7 @@ const Dashboard = () => {
 
   const functionTOCopy = (value) => {
     copy(value);
-    toast.success("Copied to clipboard!");
+    toast.success("Copied to clipboard!" , {id:1});
   };
 
   async function PayinZp(tr_hash, status, id, nft_id, nft_amount) {

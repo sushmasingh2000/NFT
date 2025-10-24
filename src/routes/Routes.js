@@ -35,7 +35,7 @@ export const routes = [
       </MainLayout>
     ),
   },
-  
+
   {
     path: "/topup_data",
     element: (
@@ -116,7 +116,7 @@ export const routes = [
       </MainLayout>
     ),
   },
-   {
+  {
     path: "/income/nft_trad",
     element: (
       <MainLayout>
@@ -124,7 +124,7 @@ export const routes = [
       </MainLayout>
     ),
   },
-   {
+  {
     path: "/income/nft_level",
     element: (
       <MainLayout>
@@ -132,7 +132,7 @@ export const routes = [
       </MainLayout>
     ),
   },
-   {
+  {
     path: "/income/nft_delay",
     element: (
       <MainLayout>
@@ -204,7 +204,7 @@ export const routes = [
       </MainLayout>
     ),
   },
-   {
+  {
     path: "/cashback",
     element: (
       <MainLayout>

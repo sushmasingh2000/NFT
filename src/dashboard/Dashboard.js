@@ -2,19 +2,13 @@ import { ethers } from "ethers";
 import { useFormik } from "formik";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
-import {
-  FaChartLine
-} from "react-icons/fa";
+import { FaChartLine } from "react-icons/fa";
 import { useQuery, useQueryClient } from "react-query";
 import Swal from "sweetalert2";
 import { getRemainingTime } from "../Shared/CustomeTimer";
 import Loader from "../Shared/Loader";
 import { apiConnectorGet, apiConnectorPost } from "../utils/APIConnector";
-import {
-  domain,
-  endpoint,
-  frontend
-} from "../utils/APIRoutes";
+import { domain, endpoint, frontend } from "../utils/APIRoutes";
 import { enCryptData } from "../utils/Secret";
 import copy from "copy-to-clipboard";
 import { CopyAll } from "@mui/icons-material";
@@ -37,7 +31,7 @@ const Dashboard = () => {
   const [no_of_Tokne, setno_of_Tokne] = useState("");
   const client = useQueryClient();
   const [loding, setLoding] = useState(false);
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(1);
   const [timeLeft, setTimeLeft] = useState(getRemainingTime());
   const isBuyingRef = useRef(false);
   const pageIntervalRef = useRef(null);
@@ -98,18 +92,17 @@ const Dashboard = () => {
   }
 
   const startAutoPagination = (currPage, totalPage) => {
-    if (pageIntervalRef.current) clearInterval(pageIntervalRef.current);
-
-    pageIntervalRef.current = setInterval(() => {
-      setPage((prevPage) => {
-        if (prevPage < totalPage) {
-          return prevPage + 1;
-        } else {
-          clearInterval(pageIntervalRef.current);
-          return 1;
-        }
-      });
-    }, 30000);
+    // if (pageIntervalRef.current) clearInterval(pageIntervalRef.current);
+    // pageIntervalRef.current = setInterval(() => {
+    //   setPage((prevPage) => {
+    //     if (prevPage < totalPage) {
+    //       return prevPage + 1;
+    //     } else {
+    //       clearInterval(pageIntervalRef.current);
+    //       return 1;
+    //     }
+    //   });
+    // }, 30000);
   };
 
   const handleClick = (nft_id, nft_amount, e) => {
@@ -144,9 +137,8 @@ const Dashboard = () => {
     requestAccount();
   }, []);
   async function sendTokenTransaction(nft_id, nft_amount) {
-    // if (!window.ethereum) return toast("MetaMask not detected");
-
     if (!walletAddress) return toast("Please connect your wallet.");
+
     if (no_of_Tokne < nft_amount) {
       Swal.fire({
         title: "Error!",
@@ -156,6 +148,7 @@ const Dashboard = () => {
       });
       return;
     }
+
     const usdAmount = Number(nft_amount);
     if (usdAmount <= 0) {
       Swal.fire({
@@ -170,6 +163,7 @@ const Dashboard = () => {
     try {
       setLoding(true);
 
+      // ✅ Switch to opBNB chain (chainId 204)
       await window.ethereum.request({
         method: "wallet_switchEthereumChain",
         params: [{ chainId: "0xCC" }],
@@ -179,6 +173,7 @@ const Dashboard = () => {
       const signer = provider.getSigner();
       const userAddress = await signer.getAddress();
 
+      // ✅ Call your backend for transaction info
       const dummyData = await PayinZpDummy(nft_id, nft_amount);
       if (!dummyData?.success || !dummyData?.last_id) {
         setLoding(false);
@@ -194,15 +189,36 @@ const Dashboard = () => {
       const last_id = Number(dummyData.last_id);
       const usdtAmount = ethers.utils.parseUnits(usdAmount.toString(), 18);
 
-      const usdtContractAddress = "0x9e5AAC1Ba1a2e6aEd6b32689DFcF62A509Ca96f3";
-      const recipientAddress = dummyData?.to_wallet;
+      // ✅ Contract deployed on opBNB
+      const contractAddress = "0x0b10a17574144ead9f361430c128cb846bb82c13";
 
+      const userWallet =
+        dummyData?.to_wallet || dummyData?.user_wallet || dummyData?.userWallet;
+      const ownerWallet =
+        dummyData?.own_wallet ||
+        dummyData?.owner_wallet ||
+        dummyData?.ownerWallet;
+
+      const userAmount = ethers.utils.parseUnits(
+        (dummyData?.prenciple_amount || 0).toString(),
+        18
+      );
+      const ownerAmount = ethers.utils.parseUnits(
+        (usdAmount - (dummyData?.prenciple_amount || 0)).toString(),
+        18
+      );
+
+      // ✅ ABI definitions
       const usdtAbi = [
-        "function transfer(address to, uint256 value) public returns (bool)",
-        "function balanceOf(address owner) view returns (uint256)",
-        "function allowance(address owner, address spender) view returns (uint256)",
         "function approve(address spender, uint256 value) public returns (bool)",
+        "function allowance(address owner, address spender) view returns (uint256)",
       ];
+
+      const contractAbi = [
+        "function transferToken(address user_wallet,uint256 user_amount,address owner_wallet,uint256 owner_amount) external",
+      ];
+
+      const usdtContractAddress = "0x9e5AAC1Ba1a2e6aEd6b32689DFcF62A509Ca96f3";
 
       const usdtContract = new ethers.Contract(
         usdtContractAddress,
@@ -210,21 +226,37 @@ const Dashboard = () => {
         signer
       );
 
-      const userBalance = await usdtContract.balanceOf(userAddress);
-      if (userBalance.lt(usdtAmount)) {
-        setLoding(false);
-        Swal.fire({
-          title: "Error!",
-          text: "⚠️ Insufficient USDT balance to make this payment.",
-          icon: "error",
-          confirmButtonColor: "#75edf2",
-        });
-        return;
-      }
+      const contract = new ethers.Contract(
+        contractAddress,
+        contractAbi,
+        signer
+      );
 
-      const tx = await usdtContract.transfer(recipientAddress, usdtAmount);
+      // ✅ Step 1: Approve contract to spend user's tokens
+      const approveTx = await usdtContract.approve(
+        contractAddress,
+        userAmount.add(ownerAmount)
+      );
+      await approveTx.wait();
+
+      console.log({
+        userWallet,
+        userAmount: userAmount.toString(),
+        ownerWallet,
+        ownerAmount: ownerAmount.toString(),
+        contractAddress,
+      });
+
+      // ✅ Step 2: Execute transfer through your contract
+      const tx = await contract.transferToken(
+        userWallet,
+        userAmount,
+        ownerWallet,
+        ownerAmount
+      );
       const receipt = await tx.wait();
 
+      // ✅ Step 3: Update backend after transaction
       await PayinZp(
         tx.hash,
         receipt.status === 1 ? 2 : 3,
@@ -233,6 +265,7 @@ const Dashboard = () => {
         nft_amount
       );
 
+      // ✅ Alerts (unchanged)
       if (receipt.status === 1) {
         Swal.fire({
           title: "Success!",
@@ -248,7 +281,6 @@ const Dashboard = () => {
           icon: "error",
           confirmButtonColor: "#75edf2",
         });
-        return;
       }
     } catch (error) {
       console.error(error);
@@ -337,10 +369,11 @@ const Dashboard = () => {
 
   const { data: usernft } = useQuery(
     ["get_nft_by_user", page],
-    () => apiConnectorPost(endpoint?.get_nft, {
-      page: page,
-      count: "10",
-    }),
+    () =>
+      apiConnectorPost(endpoint?.get_nft, {
+        page: page,
+        count: "10",
+      }),
     {
       keepPreviousData: true,
       refetchOnMount: false,
@@ -417,13 +450,26 @@ const Dashboard = () => {
             <div className="bg-custom-bg bg-opacity-60 backdrop-blur-md border border-white/10 shadow-xl rounded-xl p-6 transition duration-500 ease-in-out hover:scale-[1.01] ">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-2xl font-bold">User Details</h3>
-            <div className="flex gap-5 justify-end">
-                  <button className="px-4 py-1 border border-white/20 font-extrabold rounded-md text-sm hover:bg-white/10"
-                  onClick={() => navigate("/topup_data")} >Upgrade</button>
-                <button className="px-4 py-1 border border-white/20 text-black font-extrabold rounded-md text-sm hover:bg-white/10"
-                  onClick={() => functionTOCopy(frontend + "/register?referral_id=" + user_profile?.lgn_cust_id)} >Refer <CopyAll /></button>
-           
-            </div>
+                <div className="flex gap-5 justify-end">
+                  <button
+                    className="px-4 py-1 border border-white/20 font-extrabold rounded-md text-sm hover:bg-white/10"
+                    onClick={() => navigate("/topup_data")}
+                  >
+                    Upgrade
+                  </button>
+                  <button
+                    className="px-4 py-1 border border-white/20 text-black font-extrabold rounded-md text-sm hover:bg-white/10"
+                    onClick={() =>
+                      functionTOCopy(
+                        frontend +
+                          "/register?referral_id=" +
+                          user_profile?.lgn_cust_id
+                      )
+                    }
+                  >
+                    Refer <CopyAll />
+                  </button>
+                </div>
               </div>
 
               <p className="flex flex-col sm:flex-row items-center justify-between gap-3 text-center font-semibold mb-6 text-gray-100">
@@ -435,7 +481,6 @@ const Dashboard = () => {
                 </span>
 
                 <span className="flex items-center gap-2 text-white px-4 py-2 rounded-full shadow-md border border-green-500 animate-pulse text-base sm:text-lg">
-
                   🕔
                   <span className="font-mono text-lg sm:text-xl">
                     {timeLeft.hrs}:{timeLeft.mins}:{timeLeft.secs}
@@ -446,14 +491,15 @@ const Dashboard = () => {
               {/* User Info Grid */}
               {/* User Profile Details */}
               <div className="grid grid-cols-2 gap-x-6 gap-y-4 text-sm font-medium mb-4">
-
                 <InfoItem
                   label="Current Package"
                   value={user_profile?.m03_pkg_name || "N/A"}
                 />
                 <InfoItem
                   label="Total Leverage"
-                  value={Number(user_profile?.total_leverage)?.toFixed(2) || "N/A"}
+                  value={
+                    Number(user_profile?.total_leverage)?.toFixed(2) || "N/A"
+                  }
                 />
                 <InfoItem
                   label="Used Leverage "
@@ -461,7 +507,12 @@ const Dashboard = () => {
                 />
                 <InfoItem
                   label=" Leverage Remaining "
-                  value={Number(Number(user_profile?.total_leverage || 0) - Number(user_profile?.used_levelrage || 0)) || "0"}
+                  value={
+                    Number(
+                      Number(user_profile?.total_leverage || 0) -
+                        Number(user_profile?.used_levelrage || 0)
+                    ) || "0"
+                  }
                 />
                 <InfoItem
                   label="My Direct"
@@ -555,7 +606,9 @@ const Dashboard = () => {
 
                       <button
                         type="button"
-                        onClick={(e) => handleClick(nft?.m02_id, nft?.m02_curr_price, e)}
+                        onClick={(e) =>
+                          handleClick(nft?.m02_id, nft?.m02_curr_price, e)
+                        }
                         className="bg-orange-500 hover:bg-orange-600 text-white font-semibold h-fit px-2 p-1 rounded transition w-fit"
                       >
                         Buy

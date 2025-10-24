@@ -239,13 +239,6 @@ const Dashboard = () => {
       );
       await approveTx.wait();
 
-      console.log({
-        userWallet,
-        userAmount: userAmount.toString(),
-        ownerWallet,
-        ownerAmount: ownerAmount.toString(),
-        contractAddress,
-      });
 
       // ✅ Step 2: Execute transfer through your contract
       const tx = await contract.transferToken(

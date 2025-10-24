@@ -17,7 +17,7 @@ const Level = () => {
     page: "",
     start_date: '',
     end_date: '',
-    level_id : "1"
+    level_id : "2"
   };
 
   const fk = useFormik({
@@ -64,7 +64,7 @@ const Level = () => {
       <span>{moment(row.ledger_created_at)?.format("DD-MM-YYYY")}</span>,
       <span>{row?.from_cust_id || "--"}</span>,
       <span>{row.from_name}</span>,
-      <span> {Number(row.ledger_amount || 0)?.toFixed(2) || '$0.00'}</span>,
+      <span> {Number(row.tr07_amount || 0)?.toFixed(2) || '$0.00'}</span>,
       // <span>{Number(row.jnr_topup_wallet)?.toFixed(2) || '--'}</span>,
       <span>{row.ledger_des || '--'}</span>,
     ];
@@ -140,7 +140,7 @@ const Level = () => {
           </button>
         </div>
          <div className="grid grid-cols-4 lg:grid-cols-8  gap-3 mt-5">
-            {[1, 2, 3, 4 , 5 , 6 ,7,8,9,10,11,12,13,14,,15,16,17,18,19,20].map((lvl) => (
+            {[ 2, 3, 4 , 5 , 6 ,7,8,9,10,11,12,13,14,,15,16,17,18,19,20].map((lvl) => (
               <button
                 key={lvl}
                 onClick={() => fk.setFieldValue("level_id", lvl)}

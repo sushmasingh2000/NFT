@@ -51,14 +51,14 @@ function TopupWithContWithoutPull() {
 
     setLoding(true);
     const chainIdHex = "0xCC"; // 204 opBNB
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
 
     try {
+      // 🧠 1️⃣ Check current network
       const currentChain = await window.ethereum.request({
         method: "eth_chainId",
       });
 
-      // ✅ Only switch if not already on opBNB
+      // 🧱 2️⃣ If not opBNB, switch or add
       if (currentChain !== chainIdHex) {
         try {
           await window.ethereum.request({
@@ -66,7 +66,6 @@ function TopupWithContWithoutPull() {
             params: [{ chainId: chainIdHex }],
           });
         } catch (switchErr) {
-          // 🧩 If network not added, then add
           if (switchErr.code === 4902) {
             await window.ethereum.request({
               method: "wallet_addEthereumChain",
@@ -80,23 +79,28 @@ function TopupWithContWithoutPull() {
                 },
               ],
             });
-          } else {
-            throw switchErr;
-          }
+          } else throw switchErr;
         }
       }
 
-      // ⏳ short delay — allows TokenPocket to settle
+      // ⏳ short delay — allow wallet to switch fully
       await new Promise((r) => setTimeout(r, 800));
 
-      // ✅ Request account access
+      // ✅ 3️⃣ Request account access
       const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
       const userAccount = accounts[0];
       setWalletAddress(userAccount);
 
-      // ✅ Fetch token balance
+      // ✅ 4️⃣ Recreate provider after switch
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+      // ✅ 5️⃣ Fetch native BNB balance
+      const bnbBalance = await provider.getBalance(userAccount);
+      setBnb(ethers.utils.formatEther(bnbBalance));
+
+      // ✅ 6️⃣ Fetch USDT token balance
       const tokenContract = new ethers.Contract(
         "0x9e5AAC1Ba1a2e6aEd6b32689DFcF62A509Ca96f3", // opBNB USDT
         tokenABI,
@@ -123,6 +127,7 @@ function TopupWithContWithoutPull() {
     if (!walletAddress) return toast("Please connect your wallet.");
 
     const usdAmount = Number(selectedPackageAmount || 0);
+    alert(usdAmount);
     if (usdAmount <= 0) {
       Swal.fire({
         title: "Error!",
@@ -260,7 +265,6 @@ function TopupWithContWithoutPull() {
       pkg_id: fk.values.pkg_id,
       deposit_type: "Mlm",
     };
-    console.log(reqbody);
     try {
       const res = await apiConnectorPost(
         endpoint?.dummy_activation_request,
@@ -334,33 +338,33 @@ function TopupWithContWithoutPull() {
               <span>{Number(no_of_Tokne || 0)?.toFixed(4)}</span>
             </div>
           </div>
-          <div className="mb-4">
-            <select
-              name="pkg_id"
-              value={fk.values.pkg_id}
-              onChange={(e) => {
-                const pkg_id = e.target.value;
-                fk.setFieldValue("pkg_id", pkg_id);
-
-                const selectedPkg = fetchedData.find(
-                  (pkg) => String(pkg.m03_pkg_id) === String(pkg_id)
+          <div className="relative w-full mb-2">
+            <div className="grid grid-cols-3 gap-2 justify-center bg-gray-800 p-2 rounded-md">
+              {fetchedData.map((pkg) => {
+                const isSelected =
+                  String(fk.values.pkg_id) === String(pkg.m03_pkg_id);
+                return (
+                  <button
+                    key={pkg.m03_pkg_id}
+                    type="button"
+                    onClick={() => {
+                      fk.setFieldValue("pkg_id", pkg.m03_pkg_id);
+                      setSelectedPackageAmount(Number(pkg.m03_pkg_amount));
+                    }}
+                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200
+            ${
+              isSelected
+                ? "bg-yellow-400 text-black shadow-md scale-105"
+                : "bg-gray-700 text-white hover:bg-yellow-300 hover:text-black"
+            }`}
+                  >
+                    ${parseFloat(pkg.m03_pkg_amount)}
+                  </button>
                 );
-                if (selectedPkg) {
-                  setSelectedPackageAmount(Number(selectedPkg.m03_pkg_amount));
-                } else {
-                  setSelectedPackageAmount(0);
-                }
-              }}
-              className="w-full p-2 text-sm rounded-md bg-gray-700 text-white focus:ring focus:ring-yellow-300 outline-none"
-            >
-              <option value="">-- Select Package --</option>
-              {fetchedData.map((pkg) => (
-                <option key={pkg.m03_pkg_id} value={pkg.m03_pkg_id}>
-                  ${parseFloat(pkg.m03_pkg_amount)}
-                </option>
-              ))}
-            </select>
+              })}
+            </div>
           </div>
+
           {/* Amount Input */}
           {/* <div className="mb-4">
             <input

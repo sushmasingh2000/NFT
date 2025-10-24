@@ -32,6 +32,7 @@ export const slice = createSlice({
     isCP: "",
     uid: "",
     logindataen: "",
+    walletAddress: "",
   },
   reducers: {
     // main music and sound enabling and dessabling
@@ -102,6 +103,10 @@ export const slice = createSlice({
     saveUserCP: (state, actions) => {
       state.isCP = actions.payload;
     },
+    saveWalletAddress: (state, action) => {
+      state.walletAddress = action.payload;
+    }
+
   },
 });
 
@@ -128,6 +133,7 @@ export const {
   saveToken,
   saveUid,
   saveUserCP,
+  saveWalletAddress,
 } = slice.actions;
 
 // export const incrementAsync = amount => dispatch => {

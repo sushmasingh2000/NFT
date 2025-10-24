@@ -1,33 +1,25 @@
 import { Refresh } from "@mui/icons-material";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import logo from "../assets/logo.png";
 import Loader from "../Shared/Loader";
-import { saveToken, saveUid, saveUserCP, saveUsername } from "../Shared/redux/slices/counterSlice";
+import { saveToken, saveUid, saveUserCP, saveUsername, saveWalletAddress } from "../Shared/redux/slices/counterSlice";
 import { endpoint } from "../utils/APIRoutes";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const [walletAddress, setWalletAddress] = useState(null);
   const [walletAddressArray, setwalletAddressArray] = useState([]);
-  const [searchParams] = useSearchParams();
-  const referral_id = searchParams.get("startapp") || null;
-
-
-
-  // const params = window?.Telegram?.WebApp?.initDataUnsafe?.start_param;
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { logindataen, uid } = useSelector((state) => state.aviator);
-  const datatele = {
-    id: referral_id,
-  };
+
   useEffect(() => {
     requestAccount();
   }, []);
+
   async function requestAccount() {
     setLoading(true);
     if (window.ethereum) {
@@ -105,10 +97,12 @@ const Login = () => {
         dispatch(saveToken(response?.data?.result?.token));
         dispatch(saveUsername(reqBodyy?.username));
         dispatch(saveUserCP(response?.data?.result?.isCP));
+        dispatch(saveWalletAddress(walletAddress));
         localStorage.setItem("logindataen", response?.data?.result?.token);
         localStorage.setItem("uid", reqBodyy?.mobile);
         localStorage.setItem("username", reqBodyy?.username);
         localStorage.setItem("isCP", response?.data?.result?.isCP);
+        localStorage.setItem("walletAddress", walletAddress);
 
         Swal.fire({
           title: "🎉 Congratulations!",

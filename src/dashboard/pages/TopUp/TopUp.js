@@ -32,7 +32,6 @@ function TopupWithContWithoutPull() {
   const [bnb, setBnb] = useState("");
   const [selectedPackageAmount, setSelectedPackageAmount] = useState(0);
 
-
   const [loding, setLoding] = useState(false);
   const fk = useFormik({
     initialValues: {
@@ -40,44 +39,82 @@ function TopupWithContWithoutPull() {
     },
   });
   async function requestAccount() {
-    setLoding(true);
-
-    if (window.ethereum) {
-      try {
-        const accounts = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
-
-        // 🔄 Switch to opBNB
-        await window.ethereum.request({
-          method: "wallet_switchEthereumChain",
-          params: [{ chainId: "0xCC" }], // Chain ID for opBNB (204 decimal)
-        });
-
-        const userAccount = accounts[0];
-        setWalletAddress(userAccount);
-
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const nativeBalance = await provider.getBalance(userAccount);
-        setBnb(ethers.utils.formatEther(nativeBalance));
-
-        const tokenContract = new ethers.Contract(
-          "0x9e5AAC1Ba1a2e6aEd6b32689DFcF62A509Ca96f3", // opBNB USDT
-          tokenABI,
-          provider
-        );
-
-        const tokenBalance = await tokenContract.balanceOf(userAccount);
-        setno_of_Tokne(ethers.utils.formatUnits(tokenBalance, 18));
-      } catch (error) {
-        console.log(error);
-        toast("Error connecting...", error);
-      }
-    } else {
-      toast("Wallet not detected.");
+    if (!window.ethereum) {
+      Swal.fire({
+        title: "Error!",
+        text: "Wallet not detected.",
+        icon: "error",
+        confirmButtonColor: "#75edf2",
+      });
+      return;
     }
 
-    setLoding(false);
+    setLoding(true);
+    const chainIdHex = "0xCC"; // 204 opBNB
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+    try {
+      const currentChain = await window.ethereum.request({
+        method: "eth_chainId",
+      });
+
+      // ✅ Only switch if not already on opBNB
+      if (currentChain !== chainIdHex) {
+        try {
+          await window.ethereum.request({
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId: chainIdHex }],
+          });
+        } catch (switchErr) {
+          // 🧩 If network not added, then add
+          if (switchErr.code === 4902) {
+            await window.ethereum.request({
+              method: "wallet_addEthereumChain",
+              params: [
+                {
+                  chainId: chainIdHex,
+                  chainName: "opBNB Mainnet",
+                  rpcUrls: ["https://opbnb-mainnet-rpc.bnbchain.org"],
+                  nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 },
+                  blockExplorerUrls: ["https://mainnet.opbnbscan.com"],
+                },
+              ],
+            });
+          } else {
+            throw switchErr;
+          }
+        }
+      }
+
+      // ⏳ short delay — allows TokenPocket to settle
+      await new Promise((r) => setTimeout(r, 800));
+
+      // ✅ Request account access
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      const userAccount = accounts[0];
+      setWalletAddress(userAccount);
+
+      // ✅ Fetch token balance
+      const tokenContract = new ethers.Contract(
+        "0x9e5AAC1Ba1a2e6aEd6b32689DFcF62A509Ca96f3", // opBNB USDT
+        tokenABI,
+        provider
+      );
+      const tokenBalance = await tokenContract.balanceOf(userAccount);
+      setno_of_Tokne(ethers.utils.formatUnits(tokenBalance, 18));
+    } catch (error) {
+      console.error(error);
+      // Swal.fire({
+      //   title: "Error!",
+      //   text: "Connection failed: " + (error?.message || JSON.stringify(error)),
+      //   icon: "error",
+      //   confirmButtonColor: "#75edf2",
+      // });
+    } finally {
+      setLoding(false);
+    }
   }
 
   const navigate = useNavigate();
@@ -124,16 +161,20 @@ function TopupWithContWithoutPull() {
       const usdtAmount = ethers.utils.parseUnits(usdAmount.toString(), 18);
 
       const usdtContractAddress = "0x9e5AAC1Ba1a2e6aEd6b32689DFcF62A509Ca96f3";
-      const recipientAddress = reciepientaddress
+      const recipientAddress = reciepientaddress;
 
       const usdtAbi = [
         "function transfer(address to, uint256 value) public returns (bool)",
         "function balanceOf(address owner) view returns (uint256)",
         "function allowance(address owner, address spender) view returns (uint256)",
-        "function approve(address spender, uint256 value) public returns (bool)"
+        "function approve(address spender, uint256 value) public returns (bool)",
       ];
 
-      const usdtContract = new ethers.Contract(usdtContractAddress, usdtAbi, signer);
+      const usdtContract = new ethers.Contract(
+        usdtContractAddress,
+        usdtAbi,
+        signer
+      );
 
       const userBalance = await usdtContract.balanceOf(userAddress);
       if (userBalance.lt(usdtAmount)) {
@@ -162,7 +203,7 @@ function TopupWithContWithoutPull() {
           icon: "success",
           confirmButtonColor: "#75edf2",
         });
-        navigate("/dashboard")
+        navigate("/dashboard");
       } else {
         toast("Transaction failed!");
       }
@@ -191,7 +232,7 @@ function TopupWithContWithoutPull() {
       last_id: id,
     };
     try {
-      console.log(reqbody)
+      console.log(reqbody);
       await apiConnectorPost(
         endpoint?.activation_request,
         {
@@ -219,7 +260,7 @@ function TopupWithContWithoutPull() {
       pkg_id: fk.values.pkg_id,
       deposit_type: "Mlm",
     };
-    console.log(reqbody)
+    console.log(reqbody);
     try {
       const res = await apiConnectorPost(
         endpoint?.dummy_activation_request,
@@ -236,7 +277,7 @@ function TopupWithContWithoutPull() {
   }
 
   const { data, isLoading } = useQuery(
-    ['get_package'],
+    ["get_package"],
     () => apiConnectorGet(endpoint.get_package),
     {
       refetchOnMount: true,
@@ -254,7 +295,10 @@ function TopupWithContWithoutPull() {
         <Box className="w-full max-w-md  p-5 rounded-xl shadow-lg bg-gray-900 ">
           {/* Wallet Icon */}
           <div className="flex justify-center mb-4">
-            <AccountBalance className="text-gold-color" style={{ fontSize: 60 }} />
+            <AccountBalance
+              className="text-gold-color"
+              style={{ fontSize: 60 }}
+            />
           </div>
 
           {/* Connect Wallet Button */}
@@ -277,8 +321,6 @@ function TopupWithContWithoutPull() {
                 {walletAddress?.substring(walletAddress?.length - 10)}
               </p>
             </div>
-
-
 
             <p className="font-semibold text-gold-color mt-2 mb-1">
               Wallet Balance:
@@ -318,7 +360,6 @@ function TopupWithContWithoutPull() {
                 </option>
               ))}
             </select>
-
           </div>
           {/* Amount Input */}
           {/* <div className="mb-4">

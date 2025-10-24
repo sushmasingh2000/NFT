@@ -17,6 +17,7 @@ const Navbar = () => {
     }
   );
   const user_profile = profile?.data?.result || 0 ;
+  
   return (
     <nav className="bg-[#1e293b] text-white p-4 flex items-center justify-between shadow-md sticky top-0 z-50 ">
       <div className="flex items-center space-x-4">

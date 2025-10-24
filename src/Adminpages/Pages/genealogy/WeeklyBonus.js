@@ -28,6 +28,7 @@ const MILESTONE = () => {
     () =>
       apiConnectorPost(endpoint?.roi_income_api, {
         income_type: 'MILESTONE',
+        wallet_type: 'INCOME',
         search: fk.values.search,
         start_date: fk.values.start_date,
         end_date: fk.values.end_date,

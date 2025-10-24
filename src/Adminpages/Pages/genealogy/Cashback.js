@@ -28,6 +28,7 @@ const Cashback = () => {
     () =>
       apiConnectorPost(endpoint?.roi_income_api, {
         income_type: 'CASHBACK',
+        wallet_type: 'INCOME',
         search: fk.values.search,
         start_date: fk.values.start_date,
         end_date: fk.values.end_date,
@@ -45,32 +46,32 @@ const Cashback = () => {
 
   const allData = data?.data?.result || [];
 
- const tablehead = [
-     <span>S.No.</span>,
-     <span>Date</span>,
-     <span>Customer Id</span>,
-     <span>Amount ($)</span>,
-     <span>User Name</span>,
+  const tablehead = [
+    <span>S.No.</span>,
+    <span>Date</span>,
+    <span>Customer Id</span>,
+    <span>Amount ($)</span>,
+    <span>User Name</span>,
     //  <span>Mobile</span>,
-     <span>Description</span>,
-   ];
-   const tablerow = allData?.data?.map((row, index) => {
-     return [
+    <span>Description</span>,
+  ];
+  const tablerow = allData?.data?.map((row, index) => {
+    return [
       <span> {(page - 1) * 10 + index + 1}</span>,
-       <span>{moment(row.ledger_created_at)?.format("DD-MM-YYYY")}</span>,
-       <span>{row.lgn_cust_id || "--"}</span>,
-       <span> {row.tr07_amount ||'$0.00'}</span>,
-       <span>{row.from_name || "--"}</span>,
+      <span>{moment(row.ledger_created_at)?.format("DD-MM-YYYY")}</span>,
+      <span>{row.lgn_cust_id || "--"}</span>,
+      <span> {row.tr07_amount || '$0.00'}</span>,
+      <span>{row.from_name || "--"}</span>,
       //  <span>{row.lgn_mobile || '--'}</span>,
-       <span>{row.tr07_description || '--'}</span>,
- 
- 
-     ];
-   });
+      <span>{row.tr07_description || '--'}</span>,
+
+
+    ];
+  });
   return (
     <div className="p-2">
       <div className="bg-white bg-opacity-50 rounded-lg shadow-lg p-3 text-white mb-6">
-      
+
 
         <div className="flex flex-col sm:flex-wrap md:flex-row items-center gap-3 sm:gap-4 w-full text-sm sm:text-base">
           <input
@@ -122,21 +123,21 @@ const Cashback = () => {
 
 
       {/* Main Table Section */}
-    
-        <CustomTable
-          tablehead={tablehead}
-          tablerow={tablerow}
-          isLoading={isLoading}
-        />
+
+      <CustomTable
+        tablehead={tablehead}
+        tablerow={tablerow}
+        isLoading={isLoading}
+      />
 
 
-        {/* Pagination */}
-        <CustomToPagination
-          page={page}
-          setPage={setPage}
-          data={allData}
-        />
-    
+      {/* Pagination */}
+      <CustomToPagination
+        page={page}
+        setPage={setPage}
+        data={allData}
+      />
+
     </div>
   );
 };

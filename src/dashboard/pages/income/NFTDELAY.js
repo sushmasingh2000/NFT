@@ -33,8 +33,7 @@ const NFTDelay = () => {
         start_date: fk.values.start_date,
         end_date: fk.values.end_date,
         page: page,
-                wallet_type:"INCOME",
-
+        wallet_type: "INCOME",
         count: 10,
       }),
     {
@@ -59,7 +58,7 @@ const NFTDelay = () => {
   ];
   const tablerow = allData?.data?.map((row, index) => {
     return [
-     <span> {(page - 1) * 10 + index + 1}</span>,
+      <span> {(page - 1) * 10 + index + 1}</span>,
       <span>{moment(row.ledger_created_at)?.format("DD-MM-YYYY")}</span>,
       <span>{row?.m02_dist_id || "--"}</span>,
       // <span>{row.from_name}</span>,

@@ -13,6 +13,7 @@ import { enCryptData } from "../utils/Secret";
 import copy from "copy-to-clipboard";
 import { CopyAll } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const tokenABI = [
   "function approve(address spender, uint256 amount) external returns (bool)",
@@ -35,6 +36,7 @@ const Dashboard = () => {
   const [timeLeft, setTimeLeft] = useState(getRemainingTime());
   const isBuyingRef = useRef(false);
   const pageIntervalRef = useRef(null);
+  const loginwalletAddress = useSelector((state) => state?.counter?.walletAddress) ||  localStorage.getItem("walletAddress");
 
   const fk = useFormik({
     initialValues: {
@@ -517,6 +519,7 @@ const Dashboard = () => {
                   value={user_profile?.tr03_team_mem || "N/A"}
                 />
               </div>
+              <p className="break-words text-xs">{loginwalletAddress}</p>
             </div>
           </div>
 

@@ -29,6 +29,7 @@ const PayoutDetails = () => {
     () =>
       apiConnectorPost(endpoint?.roi_income_api, {
         income_type: "OUT",
+       wallet_type: "FUND",
         search: formik.values.search,
         start_date: formik.values.start_date,
         end_date: formik.values.end_date,

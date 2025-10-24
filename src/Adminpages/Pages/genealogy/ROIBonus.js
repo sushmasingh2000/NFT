@@ -28,6 +28,7 @@ const NFT_TRAD = () => {
     () =>
       apiConnectorPost(endpoint?.roi_income_api, {
         income_type: 'NFT_TRAD',
+        wallet_type: 'INCOME',
         search: fk.values.search,
         start_date: fk.values.start_date,
         end_date: fk.values.end_date,

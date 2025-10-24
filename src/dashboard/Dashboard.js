@@ -114,12 +114,12 @@ const Dashboard = () => {
       setno_of_Tokne(ethers.utils.formatUnits(tokenBalance, 18));
     } catch (error) {
       console.error(error);
-      Swal.fire({
-        title: "Error!",
-        text: "Connection failed: " + (error?.message || JSON.stringify(error)),
-        icon: "error",
-        confirmButtonColor: "#75edf2",
-      });
+      // Swal.fire({
+      //   title: "Error!",
+      //   text: "Connection failed: " + (error?.message || JSON.stringify(error)),
+      //   icon: "error",
+      //   confirmButtonColor: "#75edf2",
+      // });
     } finally {
       setLoding(false);
     }
@@ -172,7 +172,7 @@ const Dashboard = () => {
   }, []);
   async function sendTokenTransaction(nft_id, nft_amount) {
     if (!walletAddress) return toast("Please connect your wallet.");
-    console.log(no_of_Tokne, nft_amount);
+    console.log(no_of_Tokne, nft_amount, "all-data");
     if (no_of_Tokne < nft_amount) {
       Swal.fire({
         title: "Error!",

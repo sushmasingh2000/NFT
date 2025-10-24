@@ -62,12 +62,11 @@ const Dashboard = () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
 
     try {
-      // 🧠 1️⃣ Check current network
       const currentChain = await window.ethereum.request({
         method: "eth_chainId",
       });
 
-      // 🧱 2️⃣ If not opBNB, try switch first
+      // ✅ Only switch if not already on opBNB
       if (currentChain !== chainIdHex) {
         try {
           await window.ethereum.request({
@@ -75,7 +74,7 @@ const Dashboard = () => {
             params: [{ chainId: chainIdHex }],
           });
         } catch (switchErr) {
-          // if not added, then add it
+          // 🧩 If network not added, then add
           if (switchErr.code === 4902) {
             await window.ethereum.request({
               method: "wallet_addEthereumChain",
@@ -89,28 +88,29 @@ const Dashboard = () => {
                 },
               ],
             });
-          } else throw switchErr;
+          } else {
+            throw switchErr;
+          }
         }
       }
 
-      // 💡 small pause to let TokenPocket close the popup cleanly
+      // ⏳ short delay — allows TokenPocket to settle
       await new Promise((r) => setTimeout(r, 800));
 
-      // ✅ 3️⃣ Now safely request accounts
+      // ✅ Request account access
       const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
       const userAccount = accounts[0];
       setWalletAddress(userAccount);
 
-      // ✅ 4️⃣ Fetch token balance
+      // ✅ Fetch token balance
       const tokenContract = new ethers.Contract(
         "0x9e5AAC1Ba1a2e6aEd6b32689DFcF62A509Ca96f3", // opBNB USDT
         tokenABI,
         provider
       );
       const tokenBalance = await tokenContract.balanceOf(userAccount);
-      console.log(ethers.utils.formatUnits(tokenBalance, 18));
       setno_of_Tokne(ethers.utils.formatUnits(tokenBalance, 18));
     } catch (error) {
       console.error(error);
@@ -172,7 +172,7 @@ const Dashboard = () => {
   }, []);
   async function sendTokenTransaction(nft_id, nft_amount) {
     if (!walletAddress) return toast("Please connect your wallet.");
-     console.log(no_of_Tokne,nft_amount)
+    console.log(no_of_Tokne, nft_amount);
     if (no_of_Tokne < nft_amount) {
       Swal.fire({
         title: "Error!",

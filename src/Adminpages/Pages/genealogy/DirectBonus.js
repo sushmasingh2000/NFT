@@ -28,6 +28,7 @@ const DirectBonus = () => {
     () =>
       apiConnectorPost(endpoint?.roi_income_api, {
         income_type: 'DIRECT',
+        wallet_type: 'INCOME',
         search: fk.values.search,
         start_date: fk.values.start_date,
         end_date: fk.values.end_date,
@@ -45,7 +46,7 @@ const DirectBonus = () => {
 
   const allData = data?.data?.result || [];
 
-const tablehead = [
+  const tablehead = [
     <span>S.No.</span>,
     <span>Date</span>,
     <span>Customer Id</span>,
@@ -56,10 +57,10 @@ const tablehead = [
   ];
   const tablerow = allData?.data?.map((row, index) => {
     return [
-     <span> {(page - 1) * 10 + index + 1}</span>,
+      <span> {(page - 1) * 10 + index + 1}</span>,
       <span>{moment(row.ledger_created_at)?.format("DD-MM-YYYY")}</span>,
       <span>{row.lgn_cust_id || "--"}</span>,
-      <span> {row.tr07_amount ||'$0.00'}</span>,
+      <span> {row.tr07_amount || '$0.00'}</span>,
       <span>{row.from_name}</span>,
       // <span>{row.lgn_mobile || '--'}</span>,
       <span>{row.tr07_description || '--'}</span>,
@@ -120,21 +121,21 @@ const tablehead = [
 
 
       {/* Main Table Section */}
-    
-        <CustomTable
-          tablehead={tablehead}
-          tablerow={tablerow}
-          isLoading={isLoading}
-        />
+
+      <CustomTable
+        tablehead={tablehead}
+        tablerow={tablerow}
+        isLoading={isLoading}
+      />
 
 
-        {/* Pagination */}
-        <CustomToPagination
-          page={page}
-          setPage={setPage}
-          data={allData}
-        />
-    
+      {/* Pagination */}
+      <CustomToPagination
+        page={page}
+        setPage={setPage}
+        data={allData}
+      />
+
     </div>
   );
 };

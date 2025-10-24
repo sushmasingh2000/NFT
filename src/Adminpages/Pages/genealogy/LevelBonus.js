@@ -11,6 +11,7 @@ const Level = () => {
   const client = useQueryClient();
   const initialValues = {
     income_Type: "",
+    wallet_type: "",
     search: '',
     count: 10,
     page: "",
@@ -28,6 +29,7 @@ const Level = () => {
     () =>
       apiConnectorPost(endpoint?.roi_income_api, {
         income_type: 'Level',
+        wallet_type: 'INCOME',
         search: fk.values.search,
         start_date: fk.values.start_date,
         end_date: fk.values.end_date,

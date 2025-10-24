@@ -33,8 +33,7 @@ const NFTTRAD = () => {
         start_date: fk.values.start_date,
         end_date: fk.values.end_date,
         page: page,
-                wallet_type:"INCOME",
-
+        wallet_type: "INCOME",
         count: 10,
       }),
     {
@@ -59,7 +58,7 @@ const NFTTRAD = () => {
   ];
   const tablerow = allData?.data?.map((row, index) => {
     return [
-     <span> {(page - 1) * 10 + index + 1}</span>,
+      <span> {(page - 1) * 10 + index + 1}</span>,
       <span>{moment(row.ledger_created_at)?.format("DD-MM-YYYY")}</span>,
       <span>{row?.m02_dist_id || "--"}</span>,
       // <span>{row.from_name}</span>,
@@ -74,7 +73,7 @@ const NFTTRAD = () => {
         <h2 className="text-xl font-semibold mb-4 text-gray-200">NFT TRADING Income</h2>
 
         <div className="flex flex-col sm:flex-wrap md:flex-row items-center gap-3 sm:gap-4 w-full text-sm sm:text-base">
-           {/* <TextField
+          {/* <TextField
             type="date"
             label="Start Date"
             name="start_date"

@@ -27,11 +27,12 @@ const INRPayout = () => {
     enableReinitialize: true,
 
   })
-const { data, isLoading } = useQuery(
+  const { data, isLoading } = useQuery(
     ['get_actiavtion_admin_payout', fk.values.search, fk.values.start_date, fk.values.end_date, page],
     () =>
       apiConnectorPost(endpoint?.roi_income_api, {
-        income_type:"OUT",
+        income_type: "OUT",
+        wallet_type: 'FUND',
         search: fk.values.search,
         start_date: fk.values.start_date,
         end_date: fk.values.end_date,
@@ -50,30 +51,30 @@ const { data, isLoading } = useQuery(
   const allData = data?.data?.result || [];
 
 
- const tablehead = [
-  <span>S.No.</span>,
-  <span>Date</span>,
-  <span>Transaction ID</span>,
-  <span>User</span>,
-  <span>Email</span>,
-  <span>Amount ($)</span>,
-  // <span>Wallet</span>,
-  // <span>Description</span>,
-];
-
-const tablerow = allData?.data?.map((row, index) => {
-  return [
-    <span>{(page - 1) * 10 + index + 1}</span>,
-    <span>{moment.utc(row.tr07_created_at).format("DD-MM-YYYY HH:mm:ss")}</span>,
-    <span>{row.tr07_trans_id}</span>,
-    <span>{row.lgn_name || 'N/A'}</span>,
-    <span>{row.lgn_email || 'N/A'}</span>,
-    <span>{Number(row.tr07_amount).toFixed(2)}</span>,
-    // <span>{row.tr07_wallet || 'N/A'}</span>,
-    // <span>{row.tr07_description || 'N/A'}</span>,
-   
+  const tablehead = [
+    <span>S.No.</span>,
+    <span>Date</span>,
+    <span>Transaction ID</span>,
+    <span>User</span>,
+    <span>Email</span>,
+    <span>Amount ($)</span>,
+    // <span>Wallet</span>,
+    // <span>Description</span>,
   ];
-});
+
+  const tablerow = allData?.data?.map((row, index) => {
+    return [
+      <span>{(page - 1) * 10 + index + 1}</span>,
+      <span>{moment.utc(row.tr07_created_at).format("DD-MM-YYYY HH:mm:ss")}</span>,
+      <span>{row.tr07_trans_id}</span>,
+      <span>{row.lgn_name || 'N/A'}</span>,
+      <span>{row.lgn_email || 'N/A'}</span>,
+      <span>{Number(row.tr07_amount).toFixed(2)}</span>,
+      // <span>{row.tr07_wallet || 'N/A'}</span>,
+      // <span>{row.tr07_description || 'N/A'}</span>,
+
+    ];
+  });
 
   return (
     <>

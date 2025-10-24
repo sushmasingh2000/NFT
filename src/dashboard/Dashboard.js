@@ -36,7 +36,9 @@ const Dashboard = () => {
   const [timeLeft, setTimeLeft] = useState(getRemainingTime());
   const isBuyingRef = useRef(false);
   const pageIntervalRef = useRef(null);
-  const loginwalletAddress = useSelector((state) => state?.counter?.walletAddress) ||  localStorage.getItem("walletAddress");
+  const loginwalletAddress =
+    useSelector((state) => state?.counter?.walletAddress) ||
+    localStorage.getItem("walletAddress");
 
   const fk = useFormik({
     initialValues: {
@@ -45,52 +47,82 @@ const Dashboard = () => {
   });
 
   async function requestAccount() {
-    setLoding(true);
-
-    if (window.ethereum) {
-      try {
-        const accounts = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
-
-        // 🔄 Switch to opBNB
-        await window.ethereum.request({
-          method: "wallet_switchEthereumChain",
-          params: [{ chainId: "0xCC" }], // Chain ID for opBNB (204 decimal)
-        });
-
-        const userAccount = accounts[0];
-        setWalletAddress(userAccount);
-
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        // const nativeBalance = await provider.getBalance(userAccount);
-        // setBnb(ethers.utils.formatEther(nativeBalance));
-
-        const tokenContract = new ethers.Contract(
-          "0x9e5AAC1Ba1a2e6aEd6b32689DFcF62A509Ca96f3", // opBNB USDT
-          tokenABI,
-          provider
-        );
-
-        const tokenBalance = await tokenContract.balanceOf(userAccount);
-        setno_of_Tokne(ethers.utils.formatUnits(tokenBalance, 18));
-      } catch (error) {
-        Swal.fire({
-          title: "Error!",
-          text: "Error connecting..." + error,
-          icon: "error",
-          confirmButtonColor: "#75edf2",
-        });
-      }
-    } else {
+    if (!window.ethereum) {
       Swal.fire({
         title: "Error!",
         text: "Wallet not detected.",
         icon: "error",
         confirmButtonColor: "#75edf2",
       });
+      return;
     }
-    setLoding(false);
+
+    setLoding(true);
+    const chainIdHex = "0xCC"; // 204 opBNB
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+    try {
+      // 🧠 1️⃣ Check current network
+      const currentChain = await window.ethereum.request({
+        method: "eth_chainId",
+      });
+
+      // 🧱 2️⃣ If not opBNB, try switch first
+      if (currentChain !== chainIdHex) {
+        try {
+          await window.ethereum.request({
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId: chainIdHex }],
+          });
+        } catch (switchErr) {
+          // if not added, then add it
+          if (switchErr.code === 4902) {
+            await window.ethereum.request({
+              method: "wallet_addEthereumChain",
+              params: [
+                {
+                  chainId: chainIdHex,
+                  chainName: "opBNB Mainnet",
+                  rpcUrls: ["https://opbnb-mainnet-rpc.bnbchain.org"],
+                  nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 },
+                  blockExplorerUrls: ["https://mainnet.opbnbscan.com"],
+                },
+              ],
+            });
+          } else throw switchErr;
+        }
+      }
+
+      // 💡 small pause to let TokenPocket close the popup cleanly
+      await new Promise((r) => setTimeout(r, 800));
+
+      // ✅ 3️⃣ Now safely request accounts
+      const accounts = await window.ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      const userAccount = accounts[0];
+      setWalletAddress(userAccount);
+
+      // ✅ 4️⃣ Fetch token balance
+      const tokenContract = new ethers.Contract(
+        "0x9e5AAC1Ba1a2e6aEd6b32689DFcF62A509Ca96f3", // opBNB USDT
+        tokenABI,
+        provider
+      );
+      const tokenBalance = await tokenContract.balanceOf(userAccount);
+      console.log(ethers.utils.formatUnits(tokenBalance, 18));
+      setno_of_Tokne(ethers.utils.formatUnits(tokenBalance, 18));
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        title: "Error!",
+        text: "Connection failed: " + (error?.message || JSON.stringify(error)),
+        icon: "error",
+        confirmButtonColor: "#75edf2",
+      });
+    } finally {
+      setLoding(false);
+    }
   }
 
   const startAutoPagination = (currPage, totalPage) => {
@@ -140,7 +172,7 @@ const Dashboard = () => {
   }, []);
   async function sendTokenTransaction(nft_id, nft_amount) {
     if (!walletAddress) return toast("Please connect your wallet.");
-
+     console.log(no_of_Tokne,nft_amount)
     if (no_of_Tokne < nft_amount) {
       Swal.fire({
         title: "Error!",
@@ -240,7 +272,6 @@ const Dashboard = () => {
         userAmount.add(ownerAmount)
       );
       await approveTx.wait();
-
 
       // ✅ Step 2: Execute transfer through your contract
       const tx = await contract.transferToken(

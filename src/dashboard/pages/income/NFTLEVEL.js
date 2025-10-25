@@ -108,7 +108,7 @@ const NFTLevel = () => {
             }}
             className="bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
           /> */}
-          <select
+          {/* <select
             name="level_id"
             id="level_id"
             value={fk.values.level_id}
@@ -120,7 +120,7 @@ const NFTLevel = () => {
                 Level {i + 1}
               </option>
             ))}
-          </select>
+          </select> */}
 
 
           <input
@@ -152,6 +152,20 @@ const NFTLevel = () => {
             Clear
           </button>
         </div>
+         <div className="grid grid-cols-4 lg:grid-cols-8  gap-3 mt-5">
+            {[1, 2, 3, 4 , 5 , 6 ,7,8,9,10,11,12,13,14,,15,16,17,18,19,20].map((lvl) => (
+              <button
+                key={lvl}
+                onClick={() => fk.setFieldValue("level_id", lvl)}
+                className={`py-2 px-4 rounded ${fk.values.level_id == lvl
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-700 text-gray-300"
+                  } hover:bg-blue-500`}
+              >
+                Level {lvl}
+              </button>
+            ))}
+          </div>
       </div>
 
 

@@ -127,7 +127,7 @@ function TopupWithContWithoutPull() {
     if (!walletAddress) return toast("Please connect your wallet.");
 
     const usdAmount = Number(selectedPackageAmount || 0);
-    alert(usdAmount);
+    // alert(usdAmount);
     if (usdAmount <= 0) {
       Swal.fire({
         title: "Error!",

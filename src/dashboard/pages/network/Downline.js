@@ -109,25 +109,6 @@ const Downline = () => {
             ))}
           </div>
 
-          {/* <button
-                        onClick={() => {
-                            setPage(1);
-                            client.invalidateQueries(["get_direct"]);
-                        }}
-                        type="submit"
-                        className="bg-gold-color text-gray-900 font-bold py-2 px-4 rounded-full hover:bg-dark-color transition-colors w-full sm:w-auto text-sm"
-                    >
-                        Search
-                    </button>
-                    <button
-                        onClick={() => {
-                            fk.handleReset();
-                            setPage(1);
-                        }}
-                        className="bg-gray-color text-gray-900 font-bold py-2 px-4 rounded-full hover:bg-black hover:text-white transition-colors w-full sm:w-auto text-sm"
-                    >
-                        Clear
-                    </button> */}
         </div>
       </div>
 

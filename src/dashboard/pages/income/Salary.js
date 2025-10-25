@@ -1,16 +1,14 @@
-import { TextField } from "@mui/material";
 import { useFormik } from "formik";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 import { getRemainingTime } from "../../../Shared/CustomeTimer";
-import CustomTable from "../../../Shared/CustomTable";
 import { apiConnectorGet } from "../../../utils/APIConnector";
 import { endpoint } from "../../../utils/APIRoutes";
 
 const Salryfn = () => {
-  const [page, setPage] = useState(1);
-  const client = useQueryClient();
+  // const [page, setPage] = useState(1);
+  // const client = useQueryClient();
   const [timeLeft, setTimeLeft] = useState(getRemainingTime());
 
   const initialValues = {

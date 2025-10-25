@@ -13,6 +13,7 @@ import LogIn from "./Adminpages/Authentication/Login";
 import ForgotPassword from "./authentication/Forgotpassword";
 import TopupWithContWithoutPull from "./dashboard/pages/TopUp/TopUp";
 import MainLayout from "./dashboard/pages/Layout/MainLayout";
+import Test from "./Test";
 
 const App = () => {
   const user = localStorage.getItem("logindataen");
@@ -22,12 +23,12 @@ const App = () => {
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Login />} />
+        <Route path="/test" element={<Test />} />
         <Route path="/register" element={<Registration />} />
         <Route path="/forgot" element={<ForgotPassword />} />
         {/* //admin */}
         <Route path="/10dmhkv45bne87kq6jw" element={<LogIn />} />
-        <Route path="/topup_without" element={ <TopupWithContWithoutPull />  } />
-
+        <Route path="/topup_without" element={<TopupWithContWithoutPull />} />
 
         {user ? (
           adminroutes.map((route, i) => (

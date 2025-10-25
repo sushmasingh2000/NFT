@@ -90,20 +90,24 @@ const Downline = () => {
         <h2 className="text-xl font-semibold mb-4 text-gray-200">Level View</h2>
 
         <div className="flex flex-col sm:flex-wrap md:flex-row items-center gap-3 sm:gap-4 w-full text-sm sm:text-base">
-
-          <select
-            name="level_id"
-            id="level_id"
-            value={fk.values.level_id}
-            onChange={fk.handleChange}
-            className="bg-gray-700 border w-full border-gray-600 py-2 px-6 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 sm:w-auto text-sm"
-          >
+          <div className="flex flex-wrap gap-2 bg-gray-800 p-3 rounded-lg">
             {Array.from({ length: 20 }, (_, i) => (
-              <option key={i + 1} value={i + 1}>
+              <button
+                key={i + 1}
+                type="button"
+                // onClick={() => handleSelect(i + 1)}
+                onClick={() => fk.setFieldValue("level_id", i + 1)}
+                className={`px-4 py-2 rounded-md text-sm transition-all
+            ${
+              Number(fk.values.level_id) === i + 1
+                ? "bg-blue-600 text-white font-semibold"
+                : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+            }`}
+              >
                 Level {i + 1}
-              </option>
+              </button>
             ))}
-          </select>
+          </div>
 
           {/* <button
                         onClick={() => {

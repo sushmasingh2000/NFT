@@ -11,7 +11,10 @@ import Loader from "../Shared/Loader";
 import { saveToken, saveUid, saveUserCP, saveUsername } from "../Shared/redux/slices/counterSlice";
 import { endpoint } from "../utils/APIRoutes";
 import { Refresh } from "@mui/icons-material";
-import { apiConnectorPost } from "../utils/APIConnector";
+import { apiConnectorGet, apiConnectorPost } from "../utils/APIConnector";
+import { useQuery } from "react-query";
+import moment from "moment";
+import { getRemainingTime } from "../Shared/CustomeTimer";
 
 const Registration = () => {
   const [loading, setLoading] = useState(false);
@@ -22,6 +25,7 @@ const Registration = () => {
   const referral_id = searchParams.get("referral_id") || null;
   const [referralId, setReferralId] = useState(searchParams.get("referral_id") || "");
   const [username, setUsername] = useState("");
+  const [timeLeft, setTimeLeft] = useState(getRemainingTime());
 
 
   // const params = window?.Telegram?.WebApp?.initDataUnsafe?.start_param;
@@ -153,7 +157,7 @@ const Registration = () => {
                 navigate("/dashboard");
               }
             }
-             else {
+            else {
               navigate("/dashboard");
             }
             window.location.reload();
@@ -196,15 +200,63 @@ const Registration = () => {
       }
     }
   }, [walletAddress]);
+
+  const { data: master_data_9, isLoading } = useQuery(
+    ['master_data'],
+    () => axios.get(endpoint.master_data),
+    {
+      refetchOnMount: true,
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
+    }
+  );
+  const fetchedData = master_data_9?.data?.result || [];
+
+  useEffect(() => {
+    if (!fetchedData?.[0]?.m00_updated_at) return;
+    const startMoment = moment.utc(fetchedData[0].m00_updated_at);
+    const targetMoment = startMoment.clone().add(48, "hours");
+    let interval;
+    const updateTimer = () => {
+      const now = new Date();
+      const totalSec = Math.max(
+        Math.floor((targetMoment.toDate() - now) / 1000),
+        0
+      );
+      const hrs = String(Math.floor(totalSec / 3600)).padStart(2, "0");
+      const mins = String(Math.floor((totalSec % 3600) / 60)).padStart(2, "0");
+      const secs = String(totalSec % 60).padStart(2, "0");
+      setTimeLeft({ hrs, mins, secs, totalSec });
+      if (totalSec <= 0 && interval) {
+        clearInterval(interval);
+      }
+    };
+    updateTimer();
+    interval = setInterval(updateTimer, 1000);
+    return () => clearInterval(interval);
+  }, [fetchedData?.[0]?.m00_updated_at]);
+
+
   return (
     <>
       <Loader isLoading={loading} />
       <div className="flex justify-center items-center min-h-screen login-section">
         <div className="bg-glassy bg-custom-bg border border-black p-6 rounded-2xl shadow-lg w-full max-w-md">
+
           <div className="flex justify-center  cursor-pointer  mb-5">
             <img src={logo} alt="" className="w-[180px] filter brightness-200" />
           </div>
           {/* Wallet Address */}
+          {fetchedData?.[0]?.m00_status === 1 && (
+            <div className='flex justify-end mb-5' >
+              <span className="flex items-center gap-2 text-white px-4 py-2 rounded-full shadow-md border border-green-500 animate-pulse text-base sm:text-lg">
+                🕔
+                <span className="font-mono text-lg sm:text-xl">
+                  {timeLeft.hrs}:{timeLeft.mins}:{timeLeft.secs}
+                </span>
+              </span>
+            </div>
+          )}
           <div className="mb-2">
             <label className="block text-black mb-1">
               Wallet Address

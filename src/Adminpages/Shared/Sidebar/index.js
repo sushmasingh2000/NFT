@@ -30,7 +30,7 @@ const Sidebar = () => {
   return (
     <List
       className={`${openSlide ? "!min-w-[16vw] max-w-[16vw]" : "!w-auto"
-        }  shadow-md   !h-screen  !relative !overflow-y-auto !p-2 glass !bg-white !bg-opacity-50`}
+        }  shadow-md   !h-screen  !relative !overflow-y-auto example !p-2 glass !bg-white !bg-opacity-50`}
     >
       <ListItem className="!py-3 !flex !justify-center">
         {openSlide ? (

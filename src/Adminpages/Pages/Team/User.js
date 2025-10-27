@@ -10,7 +10,6 @@ import toast from "react-hot-toast";
 import { Switch } from "@mui/material";
 import Loader from "../../../Shared/Loader";
 import Swal from "sweetalert2";
-import { Edit } from "@mui/icons-material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -26,6 +25,9 @@ const UserDetail = () => {
   const [loading, setLoading] = useState(false);
   const client = useQueryClient();
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [walletModalOpen, setWalletModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+
   const [editUserData, setEditUserData] = useState({
     customer_id: "",
     email: "",
@@ -86,6 +88,25 @@ const UserDetail = () => {
 
   const allData = data?.data?.result || [];
 
+
+  const { data: count_dashboard, isLoading: countLoading } = useQuery(
+    ["get_member_dashboard_view", selectedUser?.tr03_reg_id],
+    () =>
+      apiConnectorGet(
+        `${endpoint?.get_member_dashboard_view}?user_id=${selectedUser?.tr03_reg_id}`
+      ),
+    {
+      enabled: !!selectedUser?.tr03_reg_id,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
+    }
+  );
+  const handleWalletClick = async (user) => {
+    setSelectedUser(user);
+    setWalletModalOpen(true);
+  };
+
   const changestatus = async (id) => {
     const confirm = await Swal.fire({
       title: "Are you sure?",
@@ -106,12 +127,9 @@ const UserDetail = () => {
         status_type: "login",
       });
       setLoading(false);
-
+      toast(response?.data?.message);
       if (response?.data?.success) {
-        toast.success("Account status updated successfully.");
         client.invalidateQueries(["get_user_admin"]);
-      } else {
-        toast.error("Failed to update account status.");
       }
     } catch (error) {
       console.error("Error updating account status:", error);
@@ -138,9 +156,7 @@ const UserDetail = () => {
         name,
         mobile,
       });
-
-      toast(res?.data?.message || "Profile updated");
-
+      toast(res?.data?.message);
       if (res?.data?.success) {
         setEditModalOpen(false);
         client.invalidateQueries(["get_user_admin"]);
@@ -245,13 +261,23 @@ const UserDetail = () => {
     }
   };
 
+  const IncomeItem = ({ label, value }) => (
+    <div className="flex flex-col items-center justify-center bg-white/10 hover:bg-white/20 transition rounded-xl p-3 backdrop-blur-sm border border-white/10 shadow-md">
+      <p className="text-xs text-gray-300">{label}</p>
+      <p className="text-green-400 font-semibold text-sm sm:text-base mt-1">
+        {Number(value || 0).toFixed(4)}
+      </p>
+    </div>
+  );
+
+
   const tablehead = [
     <span>S.No.</span>,
     <span>User ID</span>,
     <span>Spon ID</span>,
     <span>User Name</span>,
-    <span>Email</span>,
-    <span>Mobile No</span>,
+    // <span>Email</span>,
+    // <span>Mobile No</span>,
     <span>Topup Wallet ($)</span>,
     <span>Current Package ($)</span>,
     <span>Wallet Address</span>,
@@ -272,12 +298,15 @@ const UserDetail = () => {
       </span>,
       <span>{row.spon_id || "--"}</span>,
       <span>{row.lgn_name || "--"}</span>,
-      <span>{row.lgn_email || "--"}</span>,
-      // <span>{row.lgn_mobile}</span>,
-      <span>{row?.lgn_mobile || "--"}</span>,
+      // <span>{row.lgn_email || "--"}</span>,
+      // // <span>{row.lgn_mobile}</span>,
+      // <span>{row?.lgn_mobile || "--"}</span>,
       <span>{row.tr03_topup_wallet || "--"}</span>,
       <span>{Number(row.m03_pkg_amount || 0)?.toFixed(2) || "--"}</span>,
-      <span>{row.lgn_wallet_add || "--"}</span>,
+      <span
+        className="underline text-blue-500 cursor-pointer"
+        onClick={() => handleWalletClick(row)}>
+        {row.lgn_wallet_add || "--"}</span>,
       // <span>{row?.lgn_pass}</span>,
       <span>
         <Switch
@@ -408,12 +437,12 @@ const UserDetail = () => {
                 className="border rounded px-3 py-2"
               />
               {/* <input
-                                type="password"
-                                placeholder="Password"
-                                value={editUserData.password}
-                                onChange={(e) => setEditUserData({ ...editUserData, password: e.target.value })}
-                                className="border rounded px-3 py-2"
-                            /> */}
+                  type="password"
+                  placeholder="Password"
+                  value={editUserData.password}
+                  onChange={(e) => setEditUserData({ ...editUserData, password: e.target.value })}
+                  className="border rounded px-3 py-2"
+        /> */}
             </div>
 
             <div className="flex justify-end gap-2 mt-4">
@@ -429,6 +458,66 @@ const UserDetail = () => {
               >
                 Save
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {walletModalOpen && selectedUser && (
+        <div className="fixed inset-0 z-50 flex justify-center items-center bg-black/60 backdrop-blur-sm">
+          <div className="relative w-full max-w-2xl rounded-2xl border border-white/20 bg-gradient-to-br from-[#4183da] via-[#134ea1] to-[#0a1a2f]/80 shadow-2xl text-white p-6">
+            <button
+              onClick={() => setWalletModalOpen(false)}
+              className="absolute top-3 right-4 text-gray-300 hover:text-white text-2xl font-bold"
+            >
+              ×
+            </button>
+            <h2 className="text-2xl font-bold mb-5 text-center bg-gradient-to-r from-teal-400 to-cyan-300 bg-clip-text text-transparent">
+              Member Detail
+            </h2>
+            <div className="text-sm sm:text-base mb-5 space-y-1 text-center">
+              <p><span className="text-black">User ID:</span> {selectedUser?.lgn_cust_id}</p>
+              <p><span className="text-black">Name:</span> {selectedUser?.lgn_name}</p>
+              <p><span className="text-black">Wallet:</span> {selectedUser?.lgn_wallet_add}</p>
+            </div>
+
+            <div className="border-t border-white/10 my-4"></div>
+            <div className="text-center mb-6">
+              <p className="text-sm text-gray-400">Total Income</p>
+              <p className="text-4xl font-extrabold text-green-400 drop-shadow-md">
+                {Number(count_dashboard?.data?.result?.[0]?.total_income || 0).toFixed(4)}{" "}
+                <span className="text-sm text-white">USDT</span>
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              <IncomeItem
+                label="Today Income"
+                value={count_dashboard?.data?.result?.[0]?.today_income}
+              />
+              <IncomeItem
+                label="SUB Direct Income"
+                value={count_dashboard?.data?.result?.[0]?.DIRECT}
+              />
+              <IncomeItem
+                label="SUB Level Income"
+                value={count_dashboard?.data?.result?.[0]?.LEVEL}
+              />
+              <IncomeItem
+                label="MILESTONE Income"
+                value={count_dashboard?.data?.result?.[0]?.MILESTONE}
+              />
+              <IncomeItem
+                label="NFT Trading Income"
+                value={count_dashboard?.data?.result?.[0]?.NFT_TRAD}
+              />
+              <IncomeItem
+                label="NFT Level Income"
+                value={count_dashboard?.data?.result?.[0]?.NFT_LEVEL}
+              />
+              <IncomeItem
+                label="Delay Compensation"
+                value={count_dashboard?.data?.result?.[0]?.NFT_DELAY_COM_ROI}
+              />
             </div>
           </div>
         </div>

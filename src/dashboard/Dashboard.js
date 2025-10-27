@@ -324,7 +324,6 @@ const Dashboard = () => {
       );
       const receipt = await tx.wait();
 
-      // ✅ Step 3: Update backend after transaction
       await PayinZp(
         tx.hash,
         receipt.status === 1 ? 2 : 3,
@@ -333,7 +332,6 @@ const Dashboard = () => {
         nft_amount
       );
 
-      // ✅ Alerts (unchanged)
       if (receipt.status === 1) {
         Swal.fire({
           title: "Success!",
@@ -384,9 +382,7 @@ const Dashboard = () => {
         {
           payload: enCryptData(reqbody),
         }
-        // base64String
       );
-      // toast(res?.data?.message);
       fk.handleReset();
     } catch (e) {
       console.log(e);

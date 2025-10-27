@@ -19,6 +19,8 @@ export const endpoint = {
   update_nft_image: `${domain}/api/v1/update-image-nft-cat`,
   delete_nft_image: `${domain}/api/v1/delete-image-nft-cat`,
 
+  get_member_dashboard_view: `${domain}/api/v1/get-member-dashboard-admin-view`,
+
   //nft
   create_nft: `${domain}/api/v1/craete-nft`,
   get_nft_Admin: `${domain}/api/v1/get-nft-admin`,

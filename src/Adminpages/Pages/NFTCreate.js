@@ -81,7 +81,7 @@ const NFTTableManager = () => {
             });
             toast(res?.data?.message);
             if (res?.data?.success) {
-                client.refetchQueries("get_nft")
+                client.refetchQueries("get_nft_admin")
                 setModalOpen(false);
                 resetForm();
             }
@@ -113,7 +113,7 @@ const NFTTableManager = () => {
             });
             toast(res?.data?.message);
             if (res?.data?.success) {
-                client.refetchQueries("get_nft");
+                client.refetchQueries("get_nft_admin");
             } else {
                 toast.error("Failed to update status.");
             }

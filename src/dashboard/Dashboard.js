@@ -174,9 +174,9 @@ const Dashboard = () => {
     });
   };
 
-  useEffect(() => {
-    requestAccount();
-  }, []);
+  // useEffect(() => {
+  //   requestAccount();
+  // }, []);
 
   // ✅ Fetch balances
   async function getBalances(wallet) {
@@ -528,8 +528,8 @@ const Dashboard = () => {
                     onClick={() =>
                       functionTOCopy(
                         frontend +
-                          "/register?referral_id=" +
-                          user_profile?.lgn_cust_id
+                        "/register?referral_id=" +
+                        user_profile?.lgn_cust_id
                       )
                     }
                   >
@@ -576,7 +576,7 @@ const Dashboard = () => {
                   value={
                     Number(
                       Number(user_profile?.total_leverage || 0) -
-                        Number(user_profile?.used_levelrage || 0)
+                      Number(user_profile?.used_levelrage || 0)
                     ) || "0"
                   }
                 />
@@ -647,22 +647,39 @@ const Dashboard = () => {
               {" "}
               NFT Market Place
             </h2>
-            <div className="my-4 w-full max-w-sm mx-auto">
-              <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black border border-gray-700 rounded-2xl shadow-lg p-5 text-white flex flex-col sm:flex-row sm:justify-between items-center transition-transform transform hover:scale-[1.02]">
-                <div className="flex flex-col items-center sm:items-start mb-3 sm:mb-0">
-                  <span className="text-sm text-gray-400">BNB Balance</span>
-                  <span className="text-lg font-bold text-yellow-400">
-                    {balances?.bnb || "0.0000"}
-                  </span>
-                </div>
-                <div className="h-[1px] w-full sm:w-[1px] sm:h-10 bg-gray-600 my-2 sm:my-0"></div>
-                <div className="flex flex-col items-center sm:items-end">
-                  <span className="text-sm text-gray-400">USD Token</span>
-                  <span className="text-lg font-bold text-green-400">
-                    {balances?.usd || "0.00"}
-                  </span>
+            <div className="flex flex-wrap justify-start ">
+              <div className="my-4 w-full max-w-sm mx-auto">
+                <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black border border-gray-700 rounded-2xl shadow-lg p-5 text-white flex flex-col justify-center items-center transition-transform transform hover:scale-[1.02]">
+                  <button
+                    className="text-sm text-center text-gray-300 font-semibold py-2 px-5 rounded-md transition duration-200"
+                    onClick={requestAccount}
+                  >
+                    Connect Your Wallet
+                  </button>
+                 <p className="text-xs"> {walletAddress}</p>
                 </div>
               </div>
+
+              {walletAddress && (
+                <div className="my-4 w-full max-w-sm mx-auto">
+                  <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black border border-gray-700 rounded-2xl shadow-lg p-5 text-white flex flex-col sm:flex-row sm:justify-between items-center transition-transform transform hover:scale-[1.02]">
+                    <div className="flex flex-col items-center sm:items-start mb-3 sm:mb-0">
+                      <span className="text-sm text-gray-400">BNB Balance</span>
+                      <span className="text-lg font-bold text-yellow-400">
+                        {balances?.bnb || "0.0000"}
+                      </span>
+                    </div>
+                    <div className="h-[1px] w-full sm:w-[1px] sm:h-10 bg-gray-600 my-2 sm:my-0"></div>
+                    <div className="flex flex-col items-center sm:items-end">
+                      <span className="text-sm text-gray-400">USD Token</span>
+                      <span className="text-lg font-bold text-green-400">
+                        {balances?.usd || "0.00"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

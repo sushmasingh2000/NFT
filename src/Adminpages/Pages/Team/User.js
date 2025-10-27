@@ -27,6 +27,7 @@ const UserDetail = () => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [walletModalOpen, setWalletModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const getimage = localStorage.getItem("background_url")
 
   const [editUserData, setEditUserData] = useState({
     customer_id: "",
@@ -463,80 +464,89 @@ const UserDetail = () => {
         </div>
       )}
       {walletModalOpen && selectedUser && (
-        <div className="fixed inset-0 z-50 flex justify-center items-center bg-black/60 backdrop-blur-sm">
-          <div className="relative w-full max-w-2xl rounded-2xl border border-white/20 bg-white bg-opacity-50 shadow-2xl text-white p-6">
-            <button
-              onClick={() => setWalletModalOpen(false)}
-              className="absolute top-3 right-4 text-black hover:text-white text-2xl font-bold"
-            >
-              ×
-            </button>
-            <h2 className="text-2xl font-bold mb-5 text-center bg-black  bg-clip-text text-transparent">
-              Member Detail
-            </h2>
-            <div className="text-sm sm:text-base mb-5 space-y-1 text-center">
-              <p><span className="text-black">Name:</span> {selectedUser?.lgn_name}</p>
-              <p><span className="text-black">Wallet Address:</span> {selectedUser?.lgn_wallet_add}</p>
-            </div>
+        <div
+          className="fixed inset-0 z-50 flex justify-center items-center bg-black/60 backdrop-blur-sm">
 
-            <div className="border-t border-white/10 my-4"></div>
-            <div className="text-center mb-6">
-              <p className="text-sm text-black">Total Income</p>
-              <p className="text-4xl font-extrabold text-black drop-shadow-md">
-                {Number(count_dashboard?.data?.result?.[0]?.total_income || 0).toFixed(4)}{" "}
-                <span className="text-sm text-white">USDT</span>
-              </p>
-            </div>
+          <div className="relative w-full max-w-2xl  rounded-2xl border border-white/20   text-white "
+            style={{
+              backgroundImage: `url(${getimage})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}>
+            <div className=" rounded-2xl   !bg-white !bg-opacity-50 p-6 shadow-2xl">
+              <button
+                onClick={() => setWalletModalOpen(false)}
+                className="absolute top-3 right-4 text-black hover:text-white text-2xl font-bold"
+              >
+                ×
+              </button>
+              <h2 className="text-2xl font-bold mb-5 text-center bg-black  bg-clip-text text-transparent">
+                Member Detail
+              </h2>
+              <div className="text-sm sm:text-base mb-5 space-y-1 text-center">
+                <p><span className="text-black">Name:</span> {selectedUser?.lgn_name}</p>
+                <p><span className="text-black">Wallet Address:</span> {selectedUser?.lgn_wallet_add}</p>
+              </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <IncomeItem
-                label="Today Income"
-                value={count_dashboard?.data?.result?.[0]?.today_income}
-              />
-              <IncomeItem
-                label="Cashback"
-                value={count_dashboard?.data?.result?.[0]?.CASHBACK}
-              />
-              <IncomeItem
-                label="SUB Direct Income"
-                value={count_dashboard?.data?.result?.[0]?.DIRECT}
-              />
-              <IncomeItem
-                label="SUB Level Income"
-                value={count_dashboard?.data?.result?.[0]?.LEVEL}
-              />
-              <IncomeItem
-                label="MILESTONE Income"
-                value={count_dashboard?.data?.result?.[0]?.MILESTONE}
-              />
-              <IncomeItem
-                label="NFT BUY"
-                value={count_dashboard?.data?.result?.[0]?.NFT_BUY}
-              />
-              <IncomeItem
-                label="NFT SELL"
-                value={count_dashboard?.data?.result?.[0]?.NFT_SELL}
-              />
-              <IncomeItem
-                label="NFT Trading Income"
-                value={count_dashboard?.data?.result?.[0]?.NFT_TRAD}
-              />
-              <IncomeItem
-                label="NFT Level Income"
-                value={count_dashboard?.data?.result?.[0]?.NFT_LEVEL}
-              />
-              <IncomeItem
-                label="Delay Compensation"
-                value={count_dashboard?.data?.result?.[0]?.NFT_DELAY_COM_ROI}
-              />
-               <IncomeItem
-                label="Paying"
-                value={count_dashboard?.data?.result?.[0]?.INCOME_IN}
-              />
-              <IncomeItem
-                label="Payout"
-                value={count_dashboard?.data?.result?.[0]?.INCOME_OUT}
-              />
+              <div className="border-t border-white/10 my-4"></div>
+              <div className="text-center mb-6">
+                <p className="text-sm text-black">Total Income</p>
+                <p className="text-4xl font-extrabold text-black drop-shadow-md">
+                  {Number(count_dashboard?.data?.result?.[0]?.total_income || 0).toFixed(4)}{" "}
+                  <span className="text-sm text-white">USDT</span>
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <IncomeItem
+                  label="Today Income"
+                  value={count_dashboard?.data?.result?.[0]?.today_income}
+                />
+                <IncomeItem
+                  label="Cashback"
+                  value={count_dashboard?.data?.result?.[0]?.CASHBACK}
+                />
+                <IncomeItem
+                  label="SUB Direct Income"
+                  value={count_dashboard?.data?.result?.[0]?.DIRECT}
+                />
+                <IncomeItem
+                  label="SUB Level Income"
+                  value={count_dashboard?.data?.result?.[0]?.LEVEL}
+                />
+                <IncomeItem
+                  label="MILESTONE Income"
+                  value={count_dashboard?.data?.result?.[0]?.MILESTONE}
+                />
+                <IncomeItem
+                  label="NFT BUY"
+                  value={count_dashboard?.data?.result?.[0]?.NFT_BUY}
+                />
+                <IncomeItem
+                  label="NFT SELL"
+                  value={count_dashboard?.data?.result?.[0]?.NFT_SELL}
+                />
+                <IncomeItem
+                  label="NFT Trading Income"
+                  value={count_dashboard?.data?.result?.[0]?.NFT_TRAD}
+                />
+                <IncomeItem
+                  label="NFT Level Income"
+                  value={count_dashboard?.data?.result?.[0]?.NFT_LEVEL}
+                />
+                <IncomeItem
+                  label="Delay Compensation"
+                  value={count_dashboard?.data?.result?.[0]?.NFT_DELAY_COM_ROI}
+                />
+                <IncomeItem
+                  label="Paying"
+                  value={count_dashboard?.data?.result?.[0]?.INCOME_IN}
+                />
+                <IncomeItem
+                  label="Payout"
+                  value={count_dashboard?.data?.result?.[0]?.INCOME_OUT}
+                />
+              </div>
             </div>
 
           </div>

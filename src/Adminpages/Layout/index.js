@@ -16,7 +16,7 @@ const AdminLayout = ({ component, navItem, navLink, id }) => {
   const background = localStorage.getItem('background_url');
   const [color, setcolor] = useState(
     background ||
-      'https://cdn.neowin.com/news/images/uploaded/2023/11/1699098103_windows_10_and_windows_11_story.jpg'
+    'https://cdn.neowin.com/news/images/uploaded/2023/11/1699098103_windows_10_and_windows_11_story.jpg'
   );
   // const user1 = localStorage.getItem("role_user");
   const [openCustomDialogBox, setopenCustomDialogBox] = useState(false);
@@ -50,9 +50,9 @@ const AdminLayout = ({ component, navItem, navLink, id }) => {
     },
   ];
 
-  // useEffect(() => {
-  //   setuser_exist(user1);
-  // }, [user1]);
+  useEffect(() => {
+    localStorage.setItem("background_url", "https://cdn.neowin.com/news/images/uploaded/2023/11/1699098103_windows_10_and_windows_11_story.jpg");
+  }, []);
 
   return (
     <div

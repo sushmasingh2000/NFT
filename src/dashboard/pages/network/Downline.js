@@ -56,8 +56,8 @@ const Downline = () => {
     <span>S.No.</span>,
     <span>Cust ID</span>,
     <span>User Name</span>,
-    <span>Topup Wallet</span>,
-    <span>Total Income</span>,
+    <span>Package</span>,
+    // <span>Total Income</span>,
     <span> Level</span>,
     <span>Registration Date</span>,
     <span>Topup Date</span>,
@@ -69,7 +69,7 @@ const Downline = () => {
       <span>{row.lgn_cust_id}</span>,
       <span>{row.lgn_name || "--"}</span>,
       <span>{Number(row.tr03_topup_wallet || 0).toFixed(2)}</span>,
-      <span>{Number(row.tr03_total_income || 0).toFixed(2)}</span>,
+      // <span>{Number(row.tr03_total_income || 0).toFixed(2)}</span>,
       <span>Level {row.level_id}</span>,
       <span>
         {row.tr03_reg_date

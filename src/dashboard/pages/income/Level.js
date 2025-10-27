@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
-import { apiConnectorPost } from '../../../utils/APIConnector';
-import { endpoint } from '../../../utils/APIRoutes';
-import CustomTable from '../../../Shared/CustomTable';
-import CustomToPagination from '../../../Shared/Pagination';
 import { useFormik } from 'formik';
 import moment from 'moment';
-import { TextField } from '@mui/material';
+import { useState } from 'react';
+import { useQuery, useQueryClient } from 'react-query';
+import CustomTable from '../../../Shared/CustomTable';
+import CustomToPagination from '../../../Shared/Pagination';
+import { apiConnectorPost } from '../../../utils/APIConnector';
+import { endpoint } from '../../../utils/APIRoutes';
 
 const Level = () => {
   const [page, setPage] = useState(1)
@@ -56,7 +55,7 @@ const Level = () => {
     <span>User Name</span>,
     <span>Amount ($)</span>,
     // <span>TopUp Wallet</span>,
-    <span>Description</span>,
+    // <span>Description</span>,
   ];
   const tablerow = allData?.data?.map((row, index) => {
     return [
@@ -66,7 +65,7 @@ const Level = () => {
       <span>{row.from_name}</span>,
       <span> {Number(row.tr07_amount || 0)?.toFixed(2) || '$0.00'}</span>,
       // <span>{Number(row.jnr_topup_wallet)?.toFixed(2) || '--'}</span>,
-      <span>{row.ledger_des || '--'}</span>,
+      // <span>{row.ledger_des || '--'}</span>,
     ];
   });
   return (

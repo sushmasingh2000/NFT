@@ -4,6 +4,7 @@ export const domain = "https://nftvault.biz";
 export const frontend = "https://nftvault.biz";
 export const dollar = "$";
 export const reciepientaddress = "0x06a178358A151631FdBb83A334108182F4fd1142";
+export const token_contract = "0x9e5aac1ba1a2e6aed6b32689dfcf62a509ca96f3";
 
 export const endpoint = {
   registration_api: `${domain}/api/v1/member-registration`,

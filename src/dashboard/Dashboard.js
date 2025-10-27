@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 import { getRemainingTime } from "../Shared/CustomeTimer";
 import Loader from "../Shared/Loader";
 import { apiConnectorGet, apiConnectorPost } from "../utils/APIConnector";
-import { domain, endpoint, frontend } from "../utils/APIRoutes";
+import { domain, endpoint, frontend, token_contract } from "../utils/APIRoutes";
 import { enCryptData } from "../utils/Secret";
 import copy from "copy-to-clipboard";
 import { CopyAll } from "@mui/icons-material";
@@ -26,6 +26,11 @@ const tokenABI = [
   "event Deposited(address indexed user, uint256 usdtAmount, uint256 fstAmount)",
   "event TokenBurned(address indexed user, uint256 amount)",
 ];
+const erc20Abi = [
+  "function balanceOf(address owner) view returns (uint256)",
+  "function decimals() view returns (uint8)",
+];
+const rpcUrl = "https://opbnb-mainnet-rpc.bnbchain.org";
 
 const Dashboard = () => {
   const [walletAddress, setWalletAddress] = useState("");
@@ -36,6 +41,8 @@ const Dashboard = () => {
   const [timeLeft, setTimeLeft] = useState(getRemainingTime());
   const isBuyingRef = useRef(false);
   const pageIntervalRef = useRef(null);
+  const [balances, setBalances] = useState({ bnb: "0", usd: "0" });
+  const usdTokenAddress = token_contract;
   const loginwalletAddress =
     useSelector((state) => state?.counter?.walletAddress) ||
     localStorage.getItem("walletAddress");
@@ -67,32 +74,32 @@ const Dashboard = () => {
       });
 
       // ✅ Only switch if not already on opBNB
-      if (currentChain !== chainIdHex) {
-        try {
-          await window.ethereum.request({
-            method: "wallet_switchEthereumChain",
-            params: [{ chainId: chainIdHex }],
-          });
-        } catch (switchErr) {
-          // 🧩 If network not added, then add
-          if (switchErr.code === 4902) {
-            await window.ethereum.request({
-              method: "wallet_addEthereumChain",
-              params: [
-                {
-                  chainId: chainIdHex,
-                  chainName: "opBNB Mainnet",
-                  rpcUrls: ["https://opbnb-mainnet-rpc.bnbchain.org"],
-                  nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 },
-                  blockExplorerUrls: ["https://mainnet.opbnbscan.com"],
-                },
-              ],
-            });
-          } else {
-            throw switchErr;
-          }
-        }
-      }
+      // if (currentChain !== chainIdHex) {
+      //   try {
+      //     await window.ethereum.request({
+      //       method: "wallet_switchEthereumChain",
+      //       params: [{ chainId: chainIdHex }],
+      //     });
+      //   } catch (switchErr) {
+      //     // 🧩 If network not added, then add
+      //     if (switchErr.code === 4902) {
+      //       await window.ethereum.request({
+      //         method: "wallet_addEthereumChain",
+      //         params: [
+      //           {
+      //             chainId: chainIdHex,
+      //             chainName: "opBNB Mainnet",
+      //             rpcUrls: ["https://opbnb-mainnet-rpc.bnbchain.org"],
+      //             nativeCurrency: { name: "BNB", symbol: "BNB", decimals: 18 },
+      //             blockExplorerUrls: ["https://mainnet.opbnbscan.com"],
+      //           },
+      //         ],
+      //       });
+      //     } else {
+      //       throw switchErr;
+      //     }
+      //   }
+      // }
 
       // ⏳ short delay — allows TokenPocket to settle
       await new Promise((r) => setTimeout(r, 800));
@@ -126,17 +133,17 @@ const Dashboard = () => {
   }
 
   const startAutoPagination = (currPage, totalPage) => {
-    // if (pageIntervalRef.current) clearInterval(pageIntervalRef.current);
-    // pageIntervalRef.current = setInterval(() => {
-    //   setPage((prevPage) => {
-    //     if (prevPage < totalPage) {
-    //       return prevPage + 1;
-    //     } else {
-    //       clearInterval(pageIntervalRef.current);
-    //       return 1;
-    //     }
-    //   });
-    // }, 30000);
+    if (pageIntervalRef.current) clearInterval(pageIntervalRef.current);
+    pageIntervalRef.current = setInterval(() => {
+      setPage((prevPage) => {
+        if (prevPage < totalPage) {
+          return prevPage + 1;
+        } else {
+          clearInterval(pageIntervalRef.current);
+          return 1;
+        }
+      });
+    }, 10000);
   };
 
   const handleClick = (nft_id, nft_amount, e) => {
@@ -170,13 +177,48 @@ const Dashboard = () => {
   useEffect(() => {
     requestAccount();
   }, []);
+
+  // ✅ Fetch balances
+  async function getBalances(wallet) {
+    try {
+      const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
+
+      // 1️⃣ Get BNB balance
+      const rawBnb = await provider.getBalance(wallet);
+      const bnb = ethers.utils.formatEther(rawBnb);
+
+      // 2️⃣ Get USD token balance
+      const token = new ethers.Contract(usdTokenAddress, erc20Abi, provider);
+      const [rawUsd, decimals] = await Promise.all([
+        token.balanceOf(wallet),
+        token.decimals(),
+      ]);
+
+      const usd = ethers.utils.formatUnits(rawUsd, decimals);
+
+      // 3️⃣ Save into object
+      setBalances({
+        bnb: Number(bnb).toFixed(6),
+        usd: Number(usd).toFixed(2),
+      });
+    } catch (err) {
+      console.error("Balance fetch error:", err);
+    }
+  }
+
+  useEffect(() => {
+    if (walletAddress) {
+      getBalances(walletAddress);
+    }
+  }, [walletAddress]);
   async function sendTokenTransaction(nft_id, nft_amount) {
     if (!walletAddress) return toast("Please connect your wallet.");
-    console.log(no_of_Tokne, nft_amount, "all-data");
-    if (no_of_Tokne < nft_amount) {
+    if (Number(no_of_Tokne || 0) < Number(nft_amount || 0)) {
       Swal.fire({
         title: "Error!",
-        text: "Insufficient Wallet Balance!",
+        text: `Insufficient Wallet Balance! Expected: ${Number(
+          nft_amount
+        )?.toFixed(3)}, Got: ${Number(no_of_Tokne)?.toFixed(3)}`,
         icon: "error",
         confirmButtonColor: "#75edf2",
       });
@@ -309,7 +351,6 @@ const Dashboard = () => {
         });
       }
     } catch (error) {
-      console.error(error);
       if (error?.data?.message) toast(error.data.message);
       else if (error?.reason) toast(error.reason);
       else toast("Transaction failed.");
@@ -320,7 +361,7 @@ const Dashboard = () => {
 
   const functionTOCopy = (value) => {
     copy(value);
-    toast.success("Copied to clipboard!" , {id:1});
+    toast.success("Copied to clipboard!", { id: 1 });
   };
 
   async function PayinZp(tr_hash, status, id, nft_id, nft_amount) {
@@ -338,7 +379,6 @@ const Dashboard = () => {
       last_id: id,
     };
     try {
-      console.log(reqbody);
       await apiConnectorPost(
         endpoint?.activation_request_nft,
         {
@@ -607,6 +647,24 @@ const Dashboard = () => {
               {" "}
               NFT Market Place
             </h2>
+            <div className="my-4 w-full max-w-sm mx-auto">
+              <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black border border-gray-700 rounded-2xl shadow-lg p-5 text-white flex flex-col sm:flex-row sm:justify-between items-center transition-transform transform hover:scale-[1.02]">
+                <div className="flex flex-col items-center sm:items-start mb-3 sm:mb-0">
+                  <span className="text-sm text-gray-400">BNB Balance</span>
+                  <span className="text-lg font-bold text-yellow-400">
+                    {balances?.bnb || "0.0000"}
+                  </span>
+                </div>
+                <div className="h-[1px] w-full sm:w-[1px] sm:h-10 bg-gray-600 my-2 sm:my-0"></div>
+                <div className="flex flex-col items-center sm:items-end">
+                  <span className="text-sm text-gray-400">USD Token</span>
+                  <span className="text-lg font-bold text-green-400">
+                    {balances?.usd || "0.00"}
+                  </span>
+                </div>
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {user_nft?.data
                 ?.filter((nft) => nft?.m02_is_reserved === 0)

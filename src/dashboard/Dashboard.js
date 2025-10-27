@@ -201,6 +201,7 @@ const Dashboard = () => {
         bnb: Number(bnb).toFixed(6),
         usd: Number(usd).toFixed(2),
       });
+      setno_of_Tokne(Number(usd).toFixed(2));
     } catch (err) {
       console.error("Balance fetch error:", err);
     }
@@ -324,6 +325,7 @@ const Dashboard = () => {
       );
       const receipt = await tx.wait();
 
+      // ✅ Step 3: Update backend after transaction
       await PayinZp(
         tx.hash,
         receipt.status === 1 ? 2 : 3,
@@ -332,6 +334,7 @@ const Dashboard = () => {
         nft_amount
       );
 
+      // ✅ Alerts (unchanged)
       if (receipt.status === 1) {
         Swal.fire({
           title: "Success!",
@@ -382,7 +385,9 @@ const Dashboard = () => {
         {
           payload: enCryptData(reqbody),
         }
+        // base64String
       );
+      // toast(res?.data?.message);
       fk.handleReset();
     } catch (e) {
       console.log(e);
@@ -423,14 +428,14 @@ const Dashboard = () => {
     {
       refetchOnMount: false,
       refetchOnReconnect: false,
-      refetchOnWindowFocus: true,
+      refetchOnWindowFocus: false,
       retry: true,
     }
   );
   const user_profile = profile?.data?.result?.[0] || {};
 
   const { data: usernft } = useQuery(
-    ["get_nft_by_user", page],
+    ["get_nft_by_user"],
     () =>
       apiConnectorPost(endpoint?.get_nft, {
         page: page,
@@ -438,9 +443,9 @@ const Dashboard = () => {
       }),
     {
       keepPreviousData: true,
-      refetchOnMount: false,
-      refetchOnReconnect: false,
-      refetchOnWindowFocus: false,
+      refetchOnMount: true,
+      refetchOnReconnect: true,
+      refetchOnWindowFocus: true,
       onError: (err) => console.error("Error fetching level data:", err),
     }
   );
@@ -457,6 +462,7 @@ const Dashboard = () => {
     }
   );
   const user_count_dashborad = count_dashborad?.data?.result?.[0] || [];
+  // console.log(user_count_dashborad?.NFT_DELAY_COM_ROI);
 
   useEffect(() => {
     const now = new Date();
@@ -524,8 +530,8 @@ const Dashboard = () => {
                     onClick={() =>
                       functionTOCopy(
                         frontend +
-                        "/register?referral_id=" +
-                        user_profile?.lgn_cust_id
+                          "/register?referral_id=" +
+                          user_profile?.lgn_cust_id
                       )
                     }
                   >
@@ -572,7 +578,7 @@ const Dashboard = () => {
                   value={
                     Number(
                       Number(user_profile?.total_leverage || 0) -
-                      Number(user_profile?.used_levelrage || 0)
+                        Number(user_profile?.used_levelrage || 0)
                     ) || "0"
                   }
                 />
@@ -652,7 +658,7 @@ const Dashboard = () => {
                   >
                     Connect Your Wallet
                   </button>
-                 <p className="text-xs"> {walletAddress}</p>
+                  <p className="text-xs"> {walletAddress}</p>
                 </div>
               </div>
 
@@ -675,7 +681,6 @@ const Dashboard = () => {
                   </div>
                 </div>
               )}
-
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -737,7 +742,7 @@ const IncomeItem = ({ label, value }) => (
     <div>
       <p className="text-[13px] text-white/80">{label}</p>
       <p className="text-[17px] text-green-400 font-semibold">
-        {Number(value).toFixed(2)}{" "}
+        {Number(value).toFixed(4)}{" "}
         <span className="text-xs text-gray-300">USDT</span>
       </p>
     </div>

@@ -212,6 +212,7 @@ const Dashboard = () => {
       getBalances(walletAddress);
     }
   }, [walletAddress]);
+
   async function sendTokenTransaction(nft_id, nft_amount) {
     if (!walletAddress) return toast("Please connect your wallet.");
     if (Number(no_of_Tokne || 0) < Number(nft_amount || 0)) {
@@ -267,7 +268,7 @@ const Dashboard = () => {
       const usdtAmount = ethers.utils.parseUnits(usdAmount.toString(), 18);
 
       // ✅ Contract deployed on opBNB
-      const contractAddress = "0x0b10a17574144ead9f361430c128cb846bb82c13";
+      const contractAddress = "0x668e639bdd4b969558148c85ea53a79e18d866a8";
 
       const userWallet =
         dummyData?.to_wallet || dummyData?.user_wallet || dummyData?.userWallet;
@@ -359,6 +360,153 @@ const Dashboard = () => {
       setLoding(false);
     }
   }
+  // async function sendTokenTransaction(nft_id, nft_amount) {
+  //   if (!walletAddress) return toast("Please connect your wallet.");
+  //   if (Number(no_of_Tokne || 0) < Number(nft_amount || 0)) {
+  //     Swal.fire({
+  //       title: "Error!",
+  //       text: `Insufficient Wallet Balance! Expected: ${Number(
+  //         nft_amount
+  //       )?.toFixed(3)}, Got: ${Number(no_of_Tokne)?.toFixed(3)}`,
+  //       icon: "error",
+  //       confirmButtonColor: "#75edf2",
+  //     });
+  //     return;
+  //   }
+
+  //   const usdAmount = Number(nft_amount);
+  //   if (usdAmount <= 0) {
+  //     Swal.fire({
+  //       title: "Error!",
+  //       text: "Please select a valid package.",
+  //       icon: "error",
+  //       confirmButtonColor: "#75edf2",
+  //     });
+  //     return;
+  //   }
+
+  //   try {
+  //     setLoding(true);
+
+  //     // ✅ Switch to opBNB chain (chainId 204)
+  //     await window.ethereum.request({
+  //       method: "wallet_switchEthereumChain",
+  //       params: [{ chainId: "0xCC" }],
+  //     });
+
+  //     const provider = new ethers.providers.Web3Provider(window.ethereum);
+  //     const signer = provider.getSigner();
+  //     const userAddress = await signer.getAddress();
+
+  //     // ✅ Call your backend for transaction info
+  //     const dummyData = await PayinZpDummy(nft_id, nft_amount);
+  //     if (!dummyData?.success || !dummyData?.last_id) {
+  //       setLoding(false);
+  //       Swal.fire({
+  //         title: "Error!",
+  //         text: dummyData?.message || "Server error",
+  //         icon: "error",
+  //         confirmButtonColor: "#75edf2",
+  //       });
+  //       return;
+  //     }
+
+  //     const last_id = Number(dummyData.last_id);
+  //     const usdtAmount = ethers.utils.parseUnits(usdAmount.toString(), 18);
+
+  //     // ✅ Contract deployed on opBNB
+  //     const contractAddress = "0x0b10a17574144ead9f361430c128cb846bb82c13";
+
+  //     const userWallet =
+  //       dummyData?.to_wallet || dummyData?.user_wallet || dummyData?.userWallet;
+  //     const ownerWallet =
+  //       dummyData?.own_wallet ||
+  //       dummyData?.owner_wallet ||
+  //       dummyData?.ownerWallet;
+
+  //     const userAmount = ethers.utils.parseUnits(
+  //       (dummyData?.prenciple_amount || 0).toString(),
+  //       18
+  //     );
+  //     const ownerAmount = ethers.utils.parseUnits(
+  //       (usdAmount - (dummyData?.prenciple_amount || 0)).toString(),
+  //       18
+  //     );
+
+  //     // ✅ ABI definitions
+  //     const usdtAbi = [
+  //       "function approve(address spender, uint256 value) public returns (bool)",
+  //       "function allowance(address owner, address spender) view returns (uint256)",
+  //     ];
+
+  //     const contractAbi = [
+  //       "function transferToken(address user_wallet,uint256 user_amount,address owner_wallet,uint256 owner_amount) external",
+  //     ];
+
+  //     const usdtContractAddress = "0x9e5AAC1Ba1a2e6aEd6b32689DFcF62A509Ca96f3";
+
+  //     const usdtContract = new ethers.Contract(
+  //       usdtContractAddress,
+  //       usdtAbi,
+  //       signer
+  //     );
+
+  //     const contract = new ethers.Contract(
+  //       contractAddress,
+  //       contractAbi,
+  //       signer
+  //     );
+
+  //     // ✅ Step 1: Approve contract to spend user's tokens
+  //     const approveTx = await usdtContract.approve(
+  //       contractAddress,
+  //       userAmount.add(ownerAmount)
+  //     );
+  //     await approveTx.wait();
+
+  //     // ✅ Step 2: Execute transfer through your contract
+  //     const tx = await contract.transferToken(
+  //       userWallet,
+  //       userAmount,
+  //       ownerWallet,
+  //       ownerAmount
+  //     );
+  //     const receipt = await tx.wait();
+
+  //     // ✅ Step 3: Update backend after transaction
+  //     await PayinZp(
+  //       tx.hash,
+  //       receipt.status === 1 ? 2 : 3,
+  //       last_id,
+  //       nft_id,
+  //       nft_amount
+  //     );
+
+  //     // ✅ Alerts (unchanged)
+  //     if (receipt.status === 1) {
+  //       Swal.fire({
+  //         title: "Success!",
+  //         text: "🎉 NFT Bought Successfully",
+  //         icon: "success",
+  //         confirmButtonColor: "#75edf2",
+  //       });
+  //       client.refetchQueries("get_nft_by_user");
+  //     } else {
+  //       Swal.fire({
+  //         title: "Error!",
+  //         text: "Transaction failed!",
+  //         icon: "error",
+  //         confirmButtonColor: "#75edf2",
+  //       });
+  //     }
+  //   } catch (error) {
+  //     if (error?.data?.message) toast(error.data.message);
+  //     else if (error?.reason) toast(error.reason);
+  //     else toast("Transaction failed.");
+  //   } finally {
+  //     setLoding(false);
+  //   }
+  // }
 
   const functionTOCopy = (value) => {
     copy(value);

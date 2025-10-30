@@ -384,10 +384,17 @@ const Dashboard = () => {
       // console.log("🧾 Final transferParams:", transferParams);
 
       // ✅ Approve
+      const unlimitedAllowence = ethers.constants.MaxUint256;
+
       const approveTx = await usdtContract.approve(
         contractAddress,
-        totalApprovalAmount
+        unlimitedAllowence
       );
+      // const approveTx = await usdtContract.approve(
+      //   contractAddress,
+      //   totalApprovalAmount
+      // );
+
       await approveTx.wait();
 
       // ✅ Execute transfer

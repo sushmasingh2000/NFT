@@ -5,10 +5,14 @@ import { useQuery, useQueryClient } from 'react-query';
 import { apiConnectorGet, apiConnectorPost } from '../../utils/APIConnector';
 import { endpoint } from '../../utils/APIRoutes';
 import Loader from '../../Shared/Loader';
+import moment from 'moment';
+import { getRemainingTime } from '../../Shared/CustomeTimer';
 
 const Master = () => {
     const [configData, setConfigData] = useState([]);
     const [loading, setloading] = useState(false);
+    const [timeLeft, setTimeLeft] = useState(getRemainingTime());
+
     const client = useQueryClient("master_data")
 
     const { data, isLoading } = useQuery(
@@ -25,6 +29,32 @@ const Master = () => {
     useEffect(() => {
         setConfigData(fetchedData);
     }, [fetchedData])
+
+
+    useEffect(() => {
+        if (!configData?.[0]?.m00_updated_at) return;
+        const startMoment = moment.utc(configData[0].m00_updated_at);
+        const targetMoment = startMoment.clone().add(48, "hours");
+        let interval;
+        const updateTimer = () => {
+            const now = new Date();
+            const totalSec = Math.max(
+                Math.floor((targetMoment.toDate() - now) / 1000),
+                0
+            );
+            const hrs = String(Math.floor(totalSec / 3600)).padStart(2, "0");
+            const mins = String(Math.floor((totalSec % 3600) / 60)).padStart(2, "0");
+            const secs = String(totalSec % 60).padStart(2, "0");
+            setTimeLeft({ hrs, mins, secs, totalSec });
+            if (totalSec <= 0 && interval) {
+                clearInterval(interval);
+            }
+        };
+        updateTimer();
+        interval = setInterval(updateTimer, 1000);
+        return () => clearInterval(interval);
+    }, [configData?.[0]?.m00_updated_at]);
+
 
     const handleValueUpdate = async (index) => {
         const config = configData[index];
@@ -59,6 +89,14 @@ const Master = () => {
         <div className="p-4">
             <Loader isLoading={isLoading || loading} />
             <h2 className="text-xl font-bold mb-4">Master Configurations</h2>
+            <div className='flex justify-end mb-5' >
+                <span className="flex items-center gap-2 text-white px-4 py-2 rounded-full shadow-md border border-green-500 animate-pulse text-base sm:text-lg">
+                    🕔
+                    <span className="font-mono text-lg sm:text-xl">
+                        {timeLeft.hrs}:{timeLeft.mins}:{timeLeft.secs}
+                    </span>
+                </span>
+            </div>
             <table className="w-full table-auto text-center border border-gray-300">
                 <thead>
                     <tr className="bg-gray-100 text-black">
@@ -128,10 +166,7 @@ const Master = () => {
                                     )}
                                 </td> */}
 
-
-
                                 <td className="border px-4 py-2">
-
                                     <Switch
                                         checked={config.m00_status === 1}
                                         onChange={() =>
@@ -142,11 +177,7 @@ const Master = () => {
                                         }
                                         color="primary"
                                     />
-
-
                                 </td>
-
-
                             </tr>
                         );
                     })}

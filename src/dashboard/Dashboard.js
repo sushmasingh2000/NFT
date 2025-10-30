@@ -215,6 +215,7 @@ const Dashboard = () => {
 
   async function sendTokenTransaction(nft_id, nft_amount) {
     if (!walletAddress) return toast("Please connect your wallet.");
+
     if (Number(no_of_Tokne || 0) < Number(nft_amount || 0)) {
       Swal.fire({
         title: "Error!",
@@ -241,7 +242,7 @@ const Dashboard = () => {
     try {
       setLoding(true);
 
-      // ✅ Switch to opBNB chain (chainId 204)
+      // ✅ Switch to opBNB chain
       await window.ethereum.request({
         method: "wallet_switchEthereumChain",
         params: [{ chainId: "0xCC" }],
@@ -249,9 +250,8 @@ const Dashboard = () => {
 
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      const userAddress = await signer.getAddress();
 
-      // ✅ Call your backend for transaction info
+      // ✅ Get backend data
       const dummyData = await PayinZpDummy(nft_id, nft_amount);
       if (!dummyData?.success || !dummyData?.last_id) {
         setLoding(false);
@@ -265,68 +265,136 @@ const Dashboard = () => {
       }
 
       const last_id = Number(dummyData.last_id);
-      const usdtAmount = ethers.utils.parseUnits(usdAmount.toString(), 18);
-
-      // ✅ Contract deployed on opBNB
       const contractAddress = "0x668e639bdd4b969558148c85ea53a79e18d866a8";
+      const usdtContractAddress = "0x9e5AAC1Ba1a2e6aEd6b32689DFcF62A509Ca96f3";
 
-      const userWallet =
-        dummyData?.to_wallet || dummyData?.user_wallet || dummyData?.userWallet;
-      const ownerWallet =
-        dummyData?.own_wallet ||
-        dummyData?.owner_wallet ||
-        dummyData?.ownerWallet;
+      const isFirstNFT = Number(dummyData?.to_id) === 0;
+      const zero = ethers.constants.AddressZero;
 
-      const userAmount = ethers.utils.parseUnits(
-        (dummyData?.prenciple_amount || 0).toString(),
+      // ✅ Define base wallets
+      const pkg_milestone_wallet = dummyData?.pkg_milestone_wallet || zero;
+      const pkg_saving_wallet = dummyData?.pkg_saving_wallet || zero;
+
+      // ✅ Default struct values
+      let transferParams = {
+        user_wallet: zero,
+        user_amount: ethers.utils.parseUnits("0", 18),
+        owner_wallet: zero,
+        owner_amount: ethers.utils.parseUnits("0", 18),
+        saving_wallet: pkg_saving_wallet,
+        saving_amount: ethers.utils.parseUnits("0", 18),
+        submilestone_wallet: pkg_milestone_wallet,
+        submilestone_amount: ethers.utils.parseUnits("0", 18),
+        nft_purchase_wallet: zero,
+        nft_purchase_amount: ethers.utils.parseUnits("0", 18),
+        nft_milestone_wallet: zero,
+        nft_milestone_amount: ethers.utils.parseUnits("0", 18),
+        burning_wallet: zero,
+        burning_amount: ethers.utils.parseUnits("0", 18),
+      };
+
+      if (isFirstNFT) {
+        transferParams.nft_purchase_wallet =
+          dummyData?.nft_purchase_wallet_address || zero;
+        transferParams.nft_purchase_amount = ethers.utils.parseUnits(
+          usdAmount.toString(),
+          18
+        );
+      } else {
+        const amount_gose_to_user = Number(dummyData?.prenciple_amount || 0);
+        const amount_gose_to_nft_milestone_wallet = Number(
+          dummyData?.milestone_wallet_amount || 0
+        );
+        const amount_gose_to_burning_wallet = Number(
+          dummyData?.burning_wallet_amount || 0
+        );
+
+        const raw_payout =
+          usdAmount -
+          (amount_gose_to_user +
+            amount_gose_to_nft_milestone_wallet +
+            amount_gose_to_burning_wallet);
+
+        const amount_gose_to_payout_wallet = Math.max(
+          0,
+          Number(raw_payout.toFixed(8))
+        );
+
+        // console.log("💰 Distribution Check:", {
+        //   usdAmount,
+        //   amount_gose_to_user,
+        //   amount_gose_to_nft_milestone_wallet,
+        //   amount_gose_to_burning_wallet,
+        //   payout: amount_gose_to_payout_wallet,
+        // });
+
+        transferParams.user_wallet = dummyData?.to_wallet || zero;
+        transferParams.user_amount = ethers.utils.parseUnits(
+          amount_gose_to_user.toString(),
+          18
+        );
+
+        transferParams.owner_wallet = dummyData?.payout_wallet_address || zero;
+        transferParams.owner_amount = ethers.utils.parseUnits(
+          amount_gose_to_payout_wallet.toString(),
+          18
+        );
+
+        transferParams.nft_milestone_wallet =
+          dummyData?.milestone_wallet_address || zero;
+        transferParams.nft_milestone_amount = ethers.utils.parseUnits(
+          amount_gose_to_nft_milestone_wallet.toString(),
+          18
+        );
+
+        transferParams.burning_wallet =
+          dummyData?.burning_wallet_address || zero;
+        transferParams.burning_amount = ethers.utils.parseUnits(
+          amount_gose_to_burning_wallet.toString(),
+          18
+        );
+      }
+
+      const totalApprovalAmount = ethers.utils.parseUnits(
+        usdAmount.toString(),
         18
       );
-      const ownerAmount = ethers.utils.parseUnits(
-        (usdAmount - (dummyData?.prenciple_amount || 0)).toString(),
-        18
-      );
 
-      // ✅ ABI definitions
+      // ✅ Correct ABI (named struct argument)
       const usdtAbi = [
         "function approve(address spender, uint256 value) public returns (bool)",
         "function allowance(address owner, address spender) view returns (uint256)",
       ];
 
       const contractAbi = [
-        "function transferToken(address user_wallet,uint256 user_amount,address owner_wallet,uint256 owner_amount) external",
+        "function transferToken((address user_wallet,uint256 user_amount,address owner_wallet,uint256 owner_amount,address saving_wallet,uint256 saving_amount,address submilestone_wallet,uint256 submilestone_amount,address nft_purchase_wallet,uint256 nft_purchase_amount,address nft_milestone_wallet,uint256 nft_milestone_amount,address burning_wallet,uint256 burning_amount) p) external",
       ];
-
-      const usdtContractAddress = "0x9e5AAC1Ba1a2e6aEd6b32689DFcF62A509Ca96f3";
 
       const usdtContract = new ethers.Contract(
         usdtContractAddress,
         usdtAbi,
         signer
       );
-
       const contract = new ethers.Contract(
         contractAddress,
         contractAbi,
         signer
       );
 
-      // ✅ Step 1: Approve contract to spend user's tokens
+      // console.log("🧾 Final transferParams:", transferParams);
+
+      // ✅ Approve
       const approveTx = await usdtContract.approve(
         contractAddress,
-        userAmount.add(ownerAmount)
+        totalApprovalAmount
       );
       await approveTx.wait();
 
-      // ✅ Step 2: Execute transfer through your contract
-      const tx = await contract.transferToken(
-        userWallet,
-        userAmount,
-        ownerWallet,
-        ownerAmount
-      );
+      // ✅ Execute transfer
+      const tx = await contract.transferToken(transferParams);
       const receipt = await tx.wait();
 
-      // ✅ Step 3: Update backend after transaction
+      // ✅ Update backend
       await PayinZp(
         tx.hash,
         receipt.status === 1 ? 2 : 3,
@@ -335,7 +403,7 @@ const Dashboard = () => {
         nft_amount
       );
 
-      // ✅ Alerts (unchanged)
+      // ✅ Alerts
       if (receipt.status === 1) {
         Swal.fire({
           title: "Success!",
@@ -353,6 +421,7 @@ const Dashboard = () => {
         });
       }
     } catch (error) {
+      console.error("❌ Error:", error);
       if (error?.data?.message) toast(error.data.message);
       else if (error?.reason) toast(error.reason);
       else toast("Transaction failed.");
@@ -360,6 +429,7 @@ const Dashboard = () => {
       setLoding(false);
     }
   }
+
   // async function sendTokenTransaction(nft_id, nft_amount) {
   //   if (!walletAddress) return toast("Please connect your wallet.");
   //   if (Number(no_of_Tokne || 0) < Number(nft_amount || 0)) {

@@ -26,7 +26,7 @@ const NFTTableManager = () => {
     const initialValues = {
         income_Type: "",
         search: '',
-        count: 10,
+        count: 50,
         page: "",
         start_date: '',
         end_date: '',
@@ -45,7 +45,7 @@ const NFTTableManager = () => {
                 start_date: fk.values.start_date,
                 end_date: fk.values.end_date,
                 page: page,
-                count: 10,
+                count: 50,
             }),
         {
             keepPreviousData: true,
@@ -134,7 +134,7 @@ const NFTTableManager = () => {
     ];
     const tablerow = NFTs?.data?.map((nft, index) => {
         return [
-            <span>{index + 1}</span>,
+           <span> {(page - 1) * 50 + index + 1}</span>,
             <span> <img
                 src={domain + nft.m01_image}
                 alt="NFT"

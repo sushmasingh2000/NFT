@@ -660,7 +660,7 @@ const Dashboard = () => {
   const user_profile = profile?.data?.result?.[0] || {};
 
   const { data: usernft } = useQuery(
-    ["get_nft_by_user"],
+    ["get_nft_by_user" , page],
     () =>
       apiConnectorPost(endpoint?.get_nft, {
         page: page,
@@ -796,14 +796,14 @@ const Dashboard = () => {
                 />
                 <InfoItem
                   label="Used Leverage "
-                  value={user_profile?.used_levelrage || "0"}
+                  value={user_profile?.used_leverage || "0"}
                 />
                 <InfoItem
                   label=" Leverage Remaining "
                   value={
                     Number(
                       Number(user_profile?.total_leverage || 0) -
-                        Number(user_profile?.used_levelrage || 0)
+                        Number(user_profile?.used_leverage || 0)
                     ) || "0"
                   }
                 />

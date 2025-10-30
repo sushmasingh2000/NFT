@@ -13,7 +13,7 @@ const Activation = () => {
   const client = useQueryClient();
   const initialValues = {
     search: "",
-    pageSize: 10,
+    count: 10,
     start_date: "",
     end_date: "",
   };
@@ -37,7 +37,7 @@ const Activation = () => {
         start_date: fk.values.start_date,
         end_date: fk.values.end_date,
         pageNumber: page,
-        pageSize: "10",
+        count: "10",
         wallet_type:"FUND"
       }),
     {
@@ -67,7 +67,7 @@ const Activation = () => {
         {moment.utc(row.tr07_created_at).format("DD-MM-YYYY HH:mm:ss")}
       </span>,
       <span>{row.tr07_trans_id}</span>,
-      <span>{Number(row.tr07_amount).toFixed(2)}</span>,
+      <span>{Number(row.tr07_amount).toFixed(4)}</span>,
       // <span>{row.tr07_wallet || 'N/A'}</span>,
       <span>{row.tr07_description || "N/A"}</span>,
     ];

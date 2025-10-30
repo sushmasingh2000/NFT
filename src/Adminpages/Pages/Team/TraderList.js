@@ -35,7 +35,7 @@ const TraderList = () => {
                 end_date: fk.values.end_date,
                 trade_type: fk.values.trade_type,
                 page: page,
-                count: '10',
+                count: 50,
             }),
         {
             keepPreviousData: true,
@@ -66,7 +66,7 @@ const TraderList = () => {
 
     const tablerow = allData?.data?.map((row, index) => {
         return [
-            <span>{(page - 1) * 10 + index + 1}</span>,
+           <span> {(page - 1) * 50 + index + 1}</span>,
             <span>{row.lgn_cust_id}</span>,
             <span>{row.m02_dist_id}</span>,
             <span>{row.lgn_name}</span>,

@@ -19,6 +19,7 @@ import TraderRejct from "../Adminpages/Pages/Team/subinvestor/InvestorReject";
 import TraderSucess from "../Adminpages/Pages/Team/subinvestor/InvestorSuccess";
 import TraderList from "../Adminpages/Pages/Team/TraderList";
 import UserDetail from "../Adminpages/Pages/Team/User";
+import UserTreeAdmin from "../Adminpages/Pages/Team/UserTree";
 import TopUp from "../Adminpages/Pages/Topup";
 // import TopUpDetail from "../Adminpages/Pages/TopUP/TopUpDetail";
 import AdminTicketList from "../Adminpages/Ticket/List";
@@ -43,6 +44,12 @@ export const adminroutes = [
     path: "/banner",
     component: <Banner />,
     navItem: "NFT Image",
+  },
+   {
+    id: 2,
+    path: "/user_tree/:id",
+    component: <UserTreeAdmin />,
+    navItem: "User Tree Data",
   },
   {
     id: 2,

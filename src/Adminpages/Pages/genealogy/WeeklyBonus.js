@@ -12,7 +12,7 @@ const MILESTONE = () => {
   const initialValues = {
     income_Type: "",
     search: '',
-    count: 10,
+    count: 50,
     page: "",
     start_date: '',
     end_date: '',
@@ -33,7 +33,7 @@ const MILESTONE = () => {
         start_date: fk.values.start_date,
         end_date: fk.values.end_date,
         page: page,
-        count: 10,
+        count: 50,
       }),
     {
       keepPreviousData: true,
@@ -57,7 +57,7 @@ const MILESTONE = () => {
    ];
    const tablerow = allData?.data?.map((row, index) => {
      return [
-      <span> {(page - 1) * 10 + index + 1}</span>,
+      <span> {(page - 1) * 50 + index + 1}</span>,
        <span>{moment(row.ledger_created_at)?.format("DD-MM-YYYY")}</span>,
        <span>{row.lgn_cust_id || "--"}</span>,
        <span> {row.tr07_amount ||'$0.00'}</span>,
@@ -102,7 +102,7 @@ const MILESTONE = () => {
           <button
             onClick={() => {
               setPage(1);
-              client.invalidateQueries(["get_level_admin"]);
+              client.invalidateQueries(["get_roiroi"]);
             }}
             type="submit"
             className="bg-blue-500 text-gray-900 font-bold py-2 px-4 rounded-full hover:bg-dark-color transition-colors w-full sm:w-auto text-sm"

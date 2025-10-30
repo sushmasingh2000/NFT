@@ -21,6 +21,9 @@ export const endpoint = {
 
   get_member_dashboard_view: `${domain}/api/v1/get-member-dashboard-admin-view`,
 
+  //treeadmin
+  get_member_downline_tree_by_admin: `${domain}/api/v1/get-member-downline-tree-by-admin`,
+
   //nft
   create_nft: `${domain}/api/v1/craete-nft`,
   get_nft_Admin: `${domain}/api/v1/get-nft-admin`,

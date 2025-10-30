@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { apiConnectorGet, apiConnectorPost } from "../../../utils/APIConnector";
-import { endpoint } from "../../../utils/APIRoutes";
+import { endpoint, frontend } from "../../../utils/APIRoutes";
 import CustomToPagination from "../../../Shared/Pagination";
 import { useFormik } from "formik";
 import CustomTable from "../../Shared/CustomTable";
@@ -20,6 +20,8 @@ import {
   saveUsername,
   saveWalletAddress,
 } from "../../../Shared/redux/slices/counterSlice";
+import { CopyAll } from "@mui/icons-material";
+import copy from "copy-to-clipboard";
 const UserDetail = () => {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -52,7 +54,7 @@ const UserDetail = () => {
   const initialValues = {
     income_Type: "",
     search: "",
-    count: 10,
+    count: 50,
     page: "",
     start_date: "",
     end_date: "",
@@ -76,7 +78,7 @@ const UserDetail = () => {
         start_date: fk.values.start_date,
         end_date: fk.values.end_date,
         page: page,
-        count: 10,
+        count: 50,
       }),
     {
       keepPreviousData: true,
@@ -262,6 +264,10 @@ const UserDetail = () => {
     }
   };
 
+  const functionTOCopy = (value) => {
+      copy(value);
+      toast.success("Copied to clipboard!", { id: 1 });
+    };
   const IncomeItem = ({ label, value }) => (
     <div className="flex flex-col items-center justify-center bg-white hover:bg-white/20 transition rounded-xl p-3 backdrop-blur-sm border border-white/10 shadow-md">
       <p className="text-xs text-black">{label}</p>
@@ -290,15 +296,14 @@ const UserDetail = () => {
 
   const tablerow = allData?.data?.map((row, index) => {
     return [
-      <span> {(page - 1) * 10 + index + 1}</span>,
-      <span
-        className="!text-blue-600"
-        onClick={() => navigateToUserPanel(row.lgn_wallet_add)}
-      >
-        {row.lgn_cust_id || "--"}
+      <span> {(page - 1) * 50 + index + 1}</span>,
+      <span className="!text-blue-600">
+        <span  onClick={() => navigateToUserPanel(row.lgn_wallet_add)}> {row.lgn_cust_id || "--"}</span>
+       &nbsp; <CopyAll className="!text-green-600" onClick={() => functionTOCopy(row.lgn_cust_id) }/>
       </span>,
       <span>{row.spon_id || "--"}</span>,
-      <span>{row.lgn_name || "--"}</span>,
+      <span  className="!text-blue-600"
+        onClick={() => navigate(`/user_tree/${row.tr03_reg_id}`)}>{row.lgn_name || "--"}</span>,
       // <span>{row.lgn_email || "--"}</span>,
       // // <span>{row.lgn_mobile}</span>,
       // <span>{row?.lgn_mobile || "--"}</span>,

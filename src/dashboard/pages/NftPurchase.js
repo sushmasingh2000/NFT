@@ -43,7 +43,7 @@ const NFTPurchase = () => {
       keepPreviousData: true,
       refetchOnMount: false,
       refetchOnReconnect: false,
-      refetchOnWindowFocus: false,
+      refetchOnWindowFocus: true,
       onError: (err) => console.error("Error fetching NFT data:", err),
     }
   );
@@ -78,8 +78,13 @@ const NFTPurchase = () => {
       <span>{row.m01_name}</span>,
       <span>{parseFloat(row.tr10_buy_price).toFixed(2)}</span>,
       <span
-        className={`${row.tr10_sell_req === "Pending" ? "text-green-400" : "text-rose-500"
+        className={`${!row.tr10_sell_req
+          ? "text-rose-500" // HOLD = red
+          : row.tr10_sell_req === "Pending"
+            ? "text-green-400" // SELL = green
+            : "text-yellow-400" // SOLD = yellow
           }`}
+      // className={`${row.tr10_sell_req === "Pending" ? "text-green-400" : "text-rose-500"  }`}
       >
         {!row.tr10_sell_req
           ? "HOLD"

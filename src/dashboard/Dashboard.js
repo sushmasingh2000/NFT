@@ -653,7 +653,7 @@ const Dashboard = () => {
   const user_profile = profile?.data?.result?.[0] || {};
 
   const { data: usernft } = useQuery(
-    ["get_nft_by_user"],
+    ["get_nft_by_user" , page],
     () =>
       apiConnectorPost(endpoint?.get_nft, {
         page: page,

@@ -412,6 +412,7 @@ const Dashboard = () => {
 
       // ✅ Alerts
       if (receipt.status === 1) {
+        await requestAccount()
         Swal.fire({
           title: "Success!",
           text: "🎉 NFT Bought Successfully",

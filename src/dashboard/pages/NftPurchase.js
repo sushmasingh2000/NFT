@@ -42,7 +42,7 @@ const NFTPurchase = () => {
     {
       keepPreviousData: true,
       refetchOnMount: false,
-      refetchOnReconnect: false,
+      refetchOnReconnect: true,
       refetchOnWindowFocus: true,
       onError: (err) => console.error("Error fetching NFT data:", err),
     }

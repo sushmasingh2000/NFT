@@ -789,14 +789,14 @@ const Dashboard = () => {
                 />
                 <InfoItem
                   label="Used Leverage "
-                  value={user_profile?.used_levelrage || "0"}
+                  value={user_profile?.used_leverage || "0"}
                 />
                 <InfoItem
                   label=" Leverage Remaining "
                   value={
                     Number(
                       Number(user_profile?.total_leverage || 0) -
-                        Number(user_profile?.used_levelrage || 0)
+                        Number(user_profile?.used_leverage || 0)
                     ) || "0"
                   }
                 />

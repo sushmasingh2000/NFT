@@ -61,7 +61,7 @@ const PayoutDetails = () => {
       <span>{(page - 1) * 10 + index + 1}</span>,
       <span>{moment.utc(row.tr07_created_at).format("DD-MM-YYYY HH:mm:ss")}</span>,
       <span>{row.tr07_trans_id}</span>,
-      <span>{Number(row.tr07_amount).toFixed(2)}</span>,
+      <span>{Number(row.tr07_amount).toFixed(4)}</span>,
       // <span>{row.tr07_wallet || 'N/A'}</span>,
       <span>{row.tr07_description || 'N/A'}</span>,
 

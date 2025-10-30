@@ -63,7 +63,7 @@ const Level = () => {
       <span>{moment(row.ledger_created_at)?.format("DD-MM-YYYY")}</span>,
       <span>{row?.from_cust_id || "--"}</span>,
       <span>{row.from_name}</span>,
-      <span> {Number(row.tr07_amount || 0)?.toFixed(2) || '$0.00'}</span>,
+      <span> {Number(row.tr07_amount || 0)?.toFixed(4) || '$0.00'}</span>,
       // <span>{Number(row.jnr_topup_wallet)?.toFixed(2) || '--'}</span>,
       // <span>{row.ledger_des || '--'}</span>,
     ];

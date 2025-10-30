@@ -103,7 +103,7 @@ const NFT_DELAY_COM_ROI = () => {
           <button
             onClick={() => {
               setPage(1);
-              client.invalidateQueries(["get_level_admin"]);
+              client.invalidateQueries(["get_sddelay_roi"]);
             }}
             type="submit"
             className="bg-blue-500 text-gray-900 font-bold py-2 px-4 rounded-full hover:bg-dark-color transition-colors w-full sm:w-auto text-sm"

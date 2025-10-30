@@ -69,7 +69,7 @@ const INRPayout = () => {
       <span>{row.tr07_trans_id}</span>,
       <span>{row.lgn_name || 'N/A'}</span>,
       <span>{row.lgn_email || 'N/A'}</span>,
-      <span>{Number(row.tr07_amount).toFixed(2)}</span>,
+      <span>{row.tr07_amount}</span>,
       // <span>{row.tr07_wallet || 'N/A'}</span>,
       // <span>{row.tr07_description || 'N/A'}</span>,
 
@@ -112,7 +112,7 @@ const INRPayout = () => {
             <button
               onClick={() => {
                 setPage(1);
-                client.invalidateQueries(["get_withdrawal_Admin"]);
+                client.invalidateQueries(["get_actiavtion_admin_payout"]);
               }}
               type="submit"
               className="bg-blue-500 text-gray-900 font-bold py-2 px-4 rounded-full hover:bg-dark-color transition-colors w-full sm:w-auto text-sm"

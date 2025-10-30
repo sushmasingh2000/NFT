@@ -16,7 +16,7 @@ const INRPaying = () => {
   const [page, setPage] = useState(1)
   const initialValuesssss = {
     search: '',
-    count: 10,
+    count: 50,
     page: "",
     start_date: '',
     end_date: '',
@@ -37,7 +37,7 @@ const INRPaying = () => {
         start_date: fk.values.start_date,
         end_date: fk.values.end_date,
         page: page,
-        count: "10",
+        count: 50,
       }),
     {
       keepPreviousData: true,
@@ -64,7 +64,7 @@ const INRPaying = () => {
 
   const tablerow = allData?.data?.map((row, index) => {
     return [
-      <span>{(page - 1) * 10 + index + 1}</span>,
+      <span> {(page - 1) * 50 + index + 1}</span>,
       <span>{moment.utc(row.tr07_created_at).format("DD-MM-YYYY HH:mm:ss")}</span>,
       <span>{row.tr07_trans_id}</span>,
       <span>{row.lgn_name || 'N/A'}</span>,

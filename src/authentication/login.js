@@ -11,14 +11,14 @@ import { endpoint } from "../utils/APIRoutes";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
-  const [walletAddress, setWalletAddress] = useState("0x87b110a158db7be48838310fde1afeb3fe4ae508");
+  const [walletAddress, setWalletAddress] = useState(null);
   const [walletAddressArray, setwalletAddressArray] = useState([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   requestAccount();
-  // }, []);
+  useEffect(() => {
+    requestAccount();
+  }, []);
 
   async function requestAccount() {
     setLoading(true);

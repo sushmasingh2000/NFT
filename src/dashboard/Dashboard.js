@@ -710,48 +710,44 @@ const Dashboard = () => {
   //   return () => clearInterval(interval);
   // }, []);
 
-  useEffect(() => {
-  const now = new Date();
+ useEffect(() => {
+  const setupTimer = () => {
+    const now = new Date();
 
-  // Start of today at 00:00
-  const startDate = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
-    0,
-    0,
-    0,
-    0
-  );
-
-  // Target time: today at 3:00 AM
-  let endDate = new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate(),
-    3,
-    0,
-    0,
-    0
-  );
-
-  // Agar abhi 3 baje ke baad hai, to next din ke 3 baje target set karo
-  if (now >= endDate) {
-    endDate = new Date(
+    // Start of today at 3:00 PM
+    let startDate = new Date(
       now.getFullYear(),
       now.getMonth(),
-      now.getDate() + 1,
-      3,
+      now.getDate(),
+      15, // 15 = 3:00 PM
       0,
       0,
       0
     );
-  }
+
+    // End time = next day's 3:00 PM
+    let endDate = new Date(startDate);
+    endDate.setDate(startDate.getDate() + 1);
+
+    // Agar abhi 3PM se pehle hai → previous day ka 3PM se cycle start kare
+    if (now < startDate) {
+      startDate.setDate(startDate.getDate() - 1);
+      endDate.setDate(endDate.getDate() - 1);
+    }
+
+    return endDate;
+  };
+
+  let endDate = setupTimer();
 
   const interval = setInterval(() => {
     const updated = getRemainingTime(endDate);
     setTimeLeft(updated);
-    if (updated.totalSec <= 0) clearInterval(interval);
+
+    // Jab countdown 0 ho jaye to next 3PM cycle start ho
+    if (updated.totalSec <= 0) {
+      endDate = setupTimer(); // reset next day ke liye
+    }
   }, 1000);
 
   return () => clearInterval(interval);

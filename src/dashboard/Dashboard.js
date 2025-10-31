@@ -696,14 +696,10 @@ const Dashboard = () => {
       await Promise.all([
         refetch(), // user profile
         incomerefetch(), // income
+        requestAccount(),
         client.refetchQueries(["get_nft_by_user"]), // NFTs
       ]);
-
-      if (walletAddress) {
-        await getBalances(walletAddress); // wallet balances
-      }
-
-      // toast.success("Dashboard refreshed!");
+      toast.success("Dashboard refreshed!");
     } catch (error) {
       console.error("Refresh failed:", error);
       toast.error("Failed to refresh dashboard.");
@@ -808,7 +804,8 @@ const Dashboard = () => {
             onClick={handleFullRefresh}
             className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md font-semibold transition"
           >
-            <Refresh className="!text-white" />
+            
+            <Refresh className={`${loding ? "animate-spin" : ""} !text-white`} />
             Refresh
           </button>
         </div>

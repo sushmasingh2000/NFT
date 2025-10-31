@@ -11,7 +11,7 @@ import { apiConnectorGet, apiConnectorPost } from "../utils/APIConnector";
 import { domain, endpoint, frontend, token_contract } from "../utils/APIRoutes";
 import { enCryptData } from "../utils/Secret";
 import copy from "copy-to-clipboard";
-import { CopyAll } from "@mui/icons-material";
+import { CopyAll, Refresh } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -648,7 +648,7 @@ const Dashboard = () => {
     }
   }
 
-  const { data: profile } = useQuery(
+  const { data: profile , refetch } = useQuery(
     ["get_profile_user"],
     () => apiConnectorGet(endpoint?.member_profile_detail),
     {
@@ -677,7 +677,7 @@ const Dashboard = () => {
   );
   const user_nft = usernft?.data?.result || [];
 
-  const { data: count_dashborad } = useQuery(
+  const { data: count_dashborad , refetch:incomerefetch } = useQuery(
     ["get_count_dashborad"],
     () => apiConnectorGet(endpoint?.get_member_dashboard_api),
     {
@@ -690,25 +690,73 @@ const Dashboard = () => {
   const user_count_dashborad = count_dashborad?.data?.result?.[0] || [];
   // console.log(user_count_dashborad?.NFT_DELAY_COM_ROI);
 
+  // useEffect(() => {
+  //   const now = new Date();
+  //   const startDate = new Date(
+  //     now.getFullYear(),
+  //     now.getMonth(),
+  //     now.getDate(),
+  //     0,
+  //     0,
+  //     0,
+  //     0
+  //   );
+  //   const endDate = new Date(startDate.getTime() + 24 * 60 * 60 * 1000);
+  //   const interval = setInterval(() => {
+  //     const updated = getRemainingTime(endDate);
+  //     setTimeLeft(updated);
+  //     if (updated.totalSec <= 0) clearInterval(interval);
+  //   }, 1000);
+  //   return () => clearInterval(interval);
+  // }, []);
+
   useEffect(() => {
-    const now = new Date();
-    const startDate = new Date(
+  const now = new Date();
+
+  // Start of today at 00:00
+  const startDate = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+    0,
+    0,
+    0,
+    0
+  );
+
+  // Target time: today at 3:00 AM
+  let endDate = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate(),
+    3,
+    0,
+    0,
+    0
+  );
+
+  // Agar abhi 3 baje ke baad hai, to next din ke 3 baje target set karo
+  if (now >= endDate) {
+    endDate = new Date(
       now.getFullYear(),
       now.getMonth(),
-      now.getDate(),
-      0,
+      now.getDate() + 1,
+      3,
       0,
       0,
       0
     );
-    const endDate = new Date(startDate.getTime() + 24 * 60 * 60 * 1000);
-    const interval = setInterval(() => {
-      const updated = getRemainingTime(endDate);
-      setTimeLeft(updated);
-      if (updated.totalSec <= 0) clearInterval(interval);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
+  }
+
+  const interval = setInterval(() => {
+    const updated = getRemainingTime(endDate);
+    setTimeLeft(updated);
+    if (updated.totalSec <= 0) clearInterval(interval);
+  }, 1000);
+
+  return () => clearInterval(interval);
+}, []);
+
 
   useEffect(() => {
     if (
@@ -742,9 +790,9 @@ const Dashboard = () => {
               Buy NFT
             </h2>
             <div className="bg-custom-bg bg-opacity-60 backdrop-blur-md border border-white/10 shadow-xl rounded-xl p-6 transition duration-500 ease-in-out hover:scale-[1.01] ">
-              <div className="flex justify-between items-center mb-4">
+              <div className="flex  justify-between items-center mb-4">
                 <h3 className="text-2xl font-bold">User Details</h3>
-                <div className="flex gap-5 justify-end">
+                <div className="flex lg:flex-row flex-col gap-5 justify-end">
                   <button
                     className="px-4 py-1 border border-white/20 font-extrabold rounded-md text-sm hover:bg-white/10"
                     onClick={() => navigate("/topup_data")}
@@ -766,12 +814,12 @@ const Dashboard = () => {
                 </div>
               </div>
 
-              <p className="flex flex-col sm:flex-row items-center justify-between gap-3 text-center font-semibold mb-6 text-gray-100">
+              <p className="flex  flex-row items-center justify-between gap-3 text-center font-semibold mb-6 text-gray-100">
                 <span className="text-white px-4 py-2 rounded-full shadow-md text-lg">
                   User ID:{" "}
                   <span className="font-bold">
                     {user_profile?.lgn_cust_id || "N/A"}
-                  </span>
+                  </span>  <Refresh className="!cursor-pointer" onClick={refetch}/>
                 </span>
 
                 <span className="flex items-center gap-2 text-white px-4 py-2 rounded-full shadow-md border border-green-500 animate-pulse text-base sm:text-lg">
@@ -782,9 +830,9 @@ const Dashboard = () => {
                 </span>
               </p>
 
-              {/* User Info Grid */}
               {/* User Profile Details */}
               <div className="grid grid-cols-2 gap-x-6 gap-y-4 text-sm font-medium mb-4">
+               
                 <InfoItem
                   label="Current Package"
                   value={user_profile?.m03_pkg_name || "N/A"}
@@ -829,10 +877,10 @@ const Dashboard = () => {
             </h2>
             <div className=" bg-custom-bg bg-opacity-60 backdrop-blur-md border border-white/10 shadow-xl rounded-xl p-6 transition duration-500 ease-in-out hover:scale-[1.01]">
               <div className="text-center mb-6">
-                <p className="text-sm">Total Income:</p>
+                <p className="text-sm">Total Income:</p> 
                 <p className="text-3xl font-extrabold text-green-400">
                   {Number(user_count_dashborad?.total_income || 0).toFixed(4)}{" "}
-                  <span className="text-sm text-white">USDT</span>
+                  <span className="text-sm text-white">USDT</span> <Refresh className="!cursor-pointer" onClick={incomerefetch}/>
                 </p>
               </div>
 
@@ -892,7 +940,7 @@ const Dashboard = () => {
                 <div className="my-4 w-full max-w-sm mx-auto">
                   <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black border border-gray-700 rounded-2xl shadow-lg p-5 text-white flex flex-col sm:flex-row sm:justify-between items-center transition-transform transform hover:scale-[1.02]">
                     <div className="flex flex-col items-center sm:items-start mb-3 sm:mb-0">
-                      <span className="text-sm text-gray-400">BNB Balance</span>
+                      <p className="flex gap-2"><span className="text-sm text-gray-400">BNB Balance</span> <Refresh className="!cursor-pointer" onClick={requestAccount}/></p>
                       <span className="text-lg font-bold text-yellow-400">
                         {balances?.bnb || "0.0000"}
                       </span>

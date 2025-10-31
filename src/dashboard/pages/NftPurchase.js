@@ -7,6 +7,7 @@ import CustomToPagination from "../../Shared/Pagination";
 import { useFormik } from "formik";
 import moment from "moment";
 import { TextField } from "@mui/material";
+import { Refresh } from "@mui/icons-material";
 
 const NFTPurchase = () => {
   const [page, setPage] = useState(1);
@@ -21,7 +22,7 @@ const NFTPurchase = () => {
     enableReinitialize: true,
   });
 
-  const { data, isLoading } = useQuery(
+  const { data, isLoading, refetch } = useQuery(
     [
       "get_nft_details",
       fk.values.search,
@@ -97,7 +98,7 @@ const NFTPurchase = () => {
   return (
     <div className="p-2">
       <div className="bg-gray-800 rounded-lg shadow-lg p-3 text-white border border-gray-700 mb-6">
-        <h2 className="text-xl font-semibold mb-4 text-gray-200">History</h2>
+        <h2 className="text-xl font-semibold mb-4 text-gray-200">History  <Refresh className="!cursor-pointer" onClick={refetch}/></h2>
 
         {/* <div className="flex flex-col sm:flex-wrap md:flex-row items-center gap-3 sm:gap-4 w-full text-sm sm:text-base">
 

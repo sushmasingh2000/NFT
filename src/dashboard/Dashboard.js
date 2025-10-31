@@ -648,7 +648,7 @@ const Dashboard = () => {
     }
   }
 
-  const { data: profile , refetch } = useQuery(
+  const { data: profile, refetch } = useQuery(
     ["get_profile_user"],
     () => apiConnectorGet(endpoint?.member_profile_detail),
     {
@@ -661,7 +661,7 @@ const Dashboard = () => {
   const user_profile = profile?.data?.result?.[0] || {};
 
   const { data: usernft } = useQuery(
-    ["get_nft_by_user" , page],
+    ["get_nft_by_user", page],
     () =>
       apiConnectorPost(endpoint?.get_nft, {
         page: page,
@@ -677,7 +677,7 @@ const Dashboard = () => {
   );
   const user_nft = usernft?.data?.result || [];
 
-  const { data: count_dashborad , refetch:incomerefetch } = useQuery(
+  const { data: count_dashborad, refetch: incomerefetch } = useQuery(
     ["get_count_dashborad"],
     () => apiConnectorGet(endpoint?.get_member_dashboard_api),
     {
@@ -688,6 +688,30 @@ const Dashboard = () => {
     }
   );
   const user_count_dashborad = count_dashborad?.data?.result?.[0] || [];
+
+  const handleFullRefresh = async () => {
+    setLoding(true);
+
+    try {
+      await Promise.all([
+        refetch(), // user profile
+        incomerefetch(), // income
+        client.refetchQueries(["get_nft_by_user"]), // NFTs
+      ]);
+
+      if (walletAddress) {
+        await getBalances(walletAddress); // wallet balances
+      }
+
+      // toast.success("Dashboard refreshed!");
+    } catch (error) {
+      console.error("Refresh failed:", error);
+      toast.error("Failed to refresh dashboard.");
+    } finally {
+      setLoding(false);
+    }
+  };
+
   // console.log(user_count_dashborad?.NFT_DELAY_COM_ROI);
 
   // useEffect(() => {
@@ -710,48 +734,48 @@ const Dashboard = () => {
   //   return () => clearInterval(interval);
   // }, []);
 
- useEffect(() => {
-  const setupTimer = () => {
-    const now = new Date();
+  useEffect(() => {
+    const setupTimer = () => {
+      const now = new Date();
 
-    // Start of today at 3:00 PM
-    let startDate = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate(),
-      15, // 15 = 3:00 PM
-      0,
-      0,
-      0
-    );
+      // Start of today at 3:00 PM
+      let startDate = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        15, // 15 = 3:00 PM
+        0,
+        0,
+        0
+      );
 
-    // End time = next day's 3:00 PM
-    let endDate = new Date(startDate);
-    endDate.setDate(startDate.getDate() + 1);
+      // End time = next day's 3:00 PM
+      let endDate = new Date(startDate);
+      endDate.setDate(startDate.getDate() + 1);
 
-    // Agar abhi 3PM se pehle hai → previous day ka 3PM se cycle start kare
-    if (now < startDate) {
-      startDate.setDate(startDate.getDate() - 1);
-      endDate.setDate(endDate.getDate() - 1);
-    }
+      // Agar abhi 3PM se pehle hai → previous day ka 3PM se cycle start kare
+      if (now < startDate) {
+        startDate.setDate(startDate.getDate() - 1);
+        endDate.setDate(endDate.getDate() - 1);
+      }
 
-    return endDate;
-  };
+      return endDate;
+    };
 
-  let endDate = setupTimer();
+    let endDate = setupTimer();
 
-  const interval = setInterval(() => {
-    const updated = getRemainingTime(endDate);
-    setTimeLeft(updated);
+    const interval = setInterval(() => {
+      const updated = getRemainingTime(endDate);
+      setTimeLeft(updated);
 
-    // Jab countdown 0 ho jaye to next 3PM cycle start ho
-    if (updated.totalSec <= 0) {
-      endDate = setupTimer(); // reset next day ke liye
-    }
-  }, 1000);
+      // Jab countdown 0 ho jaye to next 3PM cycle start ho
+      if (updated.totalSec <= 0) {
+        endDate = setupTimer(); // reset next day ke liye
+      }
+    }, 1000);
 
-  return () => clearInterval(interval);
-}, []);
+    return () => clearInterval(interval);
+  }, []);
 
 
   useEffect(() => {
@@ -779,6 +803,16 @@ const Dashboard = () => {
   ></div> */}
       <Loader isLoading={loding} />
       <div className="relative z-10 px-6 py-6 !overscroll-auto !bg-black">
+        <div className="flex justify-end items-center mb-4">
+          <button
+            onClick={handleFullRefresh}
+            className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md font-semibold transition"
+          >
+            <Refresh className="!text-white" />
+            Refresh
+          </button>
+        </div>
+
         <div className="flex flex-col lg:flex-row gap-8 ">
           {/* Left Card */}
           <div className="w-full lg:w-1/ ">
@@ -800,8 +834,8 @@ const Dashboard = () => {
                     onClick={() =>
                       functionTOCopy(
                         frontend +
-                          "/register?referral_id=" +
-                          user_profile?.lgn_cust_id
+                        "/register?referral_id=" +
+                        user_profile?.lgn_cust_id
                       )
                     }
                   >
@@ -815,7 +849,7 @@ const Dashboard = () => {
                   User ID:{" "}
                   <span className="font-bold">
                     {user_profile?.lgn_cust_id || "N/A"}
-                  </span>  <Refresh className="!cursor-pointer" onClick={refetch}/>
+                  </span> 
                 </span>
 
                 <span className="flex items-center gap-2 text-white px-4 py-2 rounded-full shadow-md border border-green-500 animate-pulse text-base sm:text-lg">
@@ -828,7 +862,7 @@ const Dashboard = () => {
 
               {/* User Profile Details */}
               <div className="grid grid-cols-2 gap-x-6 gap-y-4 text-sm font-medium mb-4">
-               
+
                 <InfoItem
                   label="Current Package"
                   value={user_profile?.m03_pkg_name || "N/A"}
@@ -848,7 +882,7 @@ const Dashboard = () => {
                   value={
                     Number(
                       Number(user_profile?.total_leverage || 0) -
-                        Number(user_profile?.used_leverage || 0)
+                      Number(user_profile?.used_leverage || 0)
                     ) || "0"
                   }
                 />
@@ -873,10 +907,10 @@ const Dashboard = () => {
             </h2>
             <div className=" bg-custom-bg bg-opacity-60 backdrop-blur-md border border-white/10 shadow-xl rounded-xl p-6 transition duration-500 ease-in-out hover:scale-[1.01]">
               <div className="text-center mb-6">
-                <p className="text-sm">Total Income:</p> 
+                <p className="text-sm">Total Income:</p>
                 <p className="text-3xl font-extrabold text-green-400">
                   {Number(user_count_dashborad?.total_income || 0).toFixed(4)}{" "}
-                  <span className="text-sm text-white">USDT</span> <Refresh className="!cursor-pointer" onClick={incomerefetch}/>
+                  <span className="text-sm text-white">USDT</span>
                 </p>
               </div>
 
@@ -936,7 +970,7 @@ const Dashboard = () => {
                 <div className="my-4 w-full max-w-sm mx-auto">
                   <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black border border-gray-700 rounded-2xl shadow-lg p-5 text-white flex flex-col sm:flex-row sm:justify-between items-center transition-transform transform hover:scale-[1.02]">
                     <div className="flex flex-col items-center sm:items-start mb-3 sm:mb-0">
-                      <p className="flex gap-2"><span className="text-sm text-gray-400">BNB Balance</span> <Refresh className="!cursor-pointer" onClick={requestAccount}/></p>
+                     <span className="text-sm text-gray-400">BNB Balance</span> 
                       <span className="text-lg font-bold text-yellow-400">
                         {balances?.bnb || "0.0000"}
                       </span>

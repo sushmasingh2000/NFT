@@ -57,7 +57,8 @@ const NFTPurchase = () => {
     <span>NFT ID</span>,
     <span>Transaction ID</span>,
     <span>Hash</span>,
-    <span>NFT Name</span>,
+    <span>Sold  Hash</span>,
+    <span>Sold Transaction ID</span>,
     <span>Amount ($)</span>,
     <span> Status</span>,
   ];
@@ -76,7 +77,14 @@ const NFTPurchase = () => {
       >
         View in opBNB
       </span>,
-      <span>{row.m01_name}</span>,
+      <span  className="!text-green-500 cursor-pointer" >
+        {row.sold_hash ? 
+        <span onClick={() =>
+          (document.location.href = `https://opbnbscan.com/tx/${row.sold_hash}`)
+        }> View in opBNB     </span> : "--"
+        }
+      </span>,
+      <span>{row.sold_transaction_id || "---"}</span>,
       <span>{parseFloat(row.tr10_buy_price).toFixed(2)}</span>,
       <span
         className={`${!row.tr10_sell_req

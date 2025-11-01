@@ -29,12 +29,12 @@ const PayoutDetails = () => {
     () =>
       apiConnectorPost(endpoint?.roi_income_api, {
         income_type: "OUT",
-        wallet_type: "FUND",
+        // wallet_type: "FUND",
         search: formik.values.search,
         start_date: formik.values.start_date,
         end_date: formik.values.end_date,
-        pageNumber: page,
-        pageSize: "10",
+        page: page,
+        count: "10",
       }),
     {
       keepPreviousData: true,
@@ -52,7 +52,7 @@ const PayoutDetails = () => {
     <span>Date</span>,
     <span>Transaction ID</span>,
     <span>Amount ($)</span>,
-    // <span>Wallet</span>,
+    <span>Hash</span>,
     <span>Description</span>,
   ];
 
@@ -62,7 +62,9 @@ const PayoutDetails = () => {
       <span>{moment.utc(row.tr07_created_at).format("DD-MM-YYYY HH:mm:ss")}</span>,
       <span>{row.tr07_trans_id}</span>,
       <span>{Number(row.tr07_amount).toFixed(4)}</span>,
-      // <span>{row.tr07_wallet || 'N/A'}</span>,
+     <span className='text-green-700' onClick={() =>
+          (document.location.href = `https://opbnbscan.com/tx/${row.block_hash}`)
+        }> View in opBNB     </span>,
       <span>{row.tr07_description || 'N/A'}</span>,
 
     ];

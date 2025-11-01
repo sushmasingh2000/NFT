@@ -9,6 +9,7 @@ import Level from "../dashboard/pages/income/Level";
 import NFTDelay from "../dashboard/pages/income/NFTDELAY";
 import NFTLevel from "../dashboard/pages/income/NFTLEVEL";
 import NFTTRAD from "../dashboard/pages/income/NftTrad";
+import NFTWalletHistory from "../dashboard/pages/income/NFTWallet";
 import REWARD from "../dashboard/pages/income/REWARD";
 import Salryfn from "../dashboard/pages/income/Salary";
 import InvestorProfile from "../dashboard/pages/InvestorProfile";
@@ -21,6 +22,7 @@ import Profile from "../dashboard/pages/Profile";
 import Team from "../dashboard/pages/TeamTree/Team";
 import TicketRaise from "../dashboard/pages/Ticket/AddTicket";
 import UserSupportChat from "../dashboard/pages/Ticket/ChatTicket";
+import NFTFund from "../dashboard/pages/TopUp/NFTFund";
 import TopupWithContWithoutPull from "../dashboard/pages/TopUp/TopUp";
 import TradingRegistration from "../dashboard/pages/TradingRegistration";
 import Wallet from "../dashboard/pages/Wallet";
@@ -41,6 +43,14 @@ export const routes = [
     element: (
       <MainLayout>
         <TopupWithContWithoutPull />{" "}
+      </MainLayout>
+    ),
+  },
+  {
+    path: "/nft_fund",
+    element: (
+      <MainLayout>
+        <NFTFund />{" "}
       </MainLayout>
     ),
   },
@@ -137,6 +147,14 @@ export const routes = [
     element: (
       <MainLayout>
         <NFTDelay />{" "}
+      </MainLayout>
+    ),
+  },
+   {
+    path: "/wallet_history",
+    element: (
+      <MainLayout>
+        <NFTWalletHistory />{" "}
       </MainLayout>
     ),
   },

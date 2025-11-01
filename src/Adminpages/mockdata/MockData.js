@@ -134,6 +134,29 @@ export const all_Data = [
     subcomponent: [],
   },
   {
+    id: 14,
+    navLink: "/nft_topup_admin",
+    navItem: "NFT TopUp ",
+    navIcon: (
+      <span>
+        <SelfImprovement color="#15317E" fontSize="medium" />
+      </span>
+    ),
+    subcomponent: [],
+  },
+  
+  {
+    id: 11,
+    navLink: "/wallet_admin_report",
+    navItem: "NFT Wallet Report",
+    navIcon: (
+      <span>
+        <Games color="#15317E" fontSize="medium" />
+      </span>
+    ),
+    subcomponent: [],
+  },
+  {
     id: 11,
     navLink: "/inr_Paying",
     navItem: "TopUp Report",

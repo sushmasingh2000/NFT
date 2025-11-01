@@ -12,6 +12,8 @@ export const endpoint = {
   admin_login_api: `${domain}/api/v1/admin-login`,
 
   customer_api: `${domain}/api/v1/member-name-by-cust-id`,
+  member_payout_nft_wallet: `${domain}/api/v1/member-payout-nft-wallet`,
+  
 
   //img
   create_nft_image: `${domain}/api/v1/craete-image-nft-cat`,
@@ -38,9 +40,12 @@ export const endpoint = {
 
   get_package: `${domain}/api/v1/get-package`,
   member_topup_admin: `${domain}/api/v1/member-topup-by-admin`,
+  member_topup_nft_wallet_admin: `${domain}/api/v1/member-topup-nft-wallet-by-admin`,
   activation_request: `${domain}/api/v1/activation-request`,
   dummy_activation_request: `${domain}/api/v1/activation-dummy-request`,
   activation_request: `${domain}/api/v1/activation-request`,
+   nft_wallet_activation_request: `${domain}/api/v1/activation-request-wallet`,
+  dummy_nft_wallet_activation_request: `${domain}/api/v1/activation-dummy-request-nft-wallet`,
 
   dummy_activation_request_nft: `${domain}/api/v1/activation-dummy-request-nft`,
   activation_request_nft: `${domain}/api/v1/activation-request-nft`,

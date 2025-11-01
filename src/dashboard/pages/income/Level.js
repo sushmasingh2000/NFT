@@ -60,7 +60,7 @@ const Level = () => {
   const tablerow = allData?.data?.map((row, index) => {
     return [
       <span> {(page - 1) * 10 + index + 1}</span>,
-      <span>{moment(row.ledger_created_at)?.format("DD-MM-YYYY")}</span>,
+      <span>{moment(row.tr07_created_at)?.format("DD-MM-YYYY")}</span>,
       <span>{row?.from_cust_id || "--"}</span>,
       <span>{row.from_name}</span>,
       <span> {Number(row.tr07_amount || 0)?.toFixed(4) || '$0.00'}</span>,

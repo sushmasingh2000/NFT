@@ -7,8 +7,6 @@ import { apiConnectorGet } from "../../../utils/APIConnector";
 import { endpoint } from "../../../utils/APIRoutes";
 
 const Salryfn = () => {
-  // const [page, setPage] = useState(1);
-  // const client = useQueryClient();
   const [timeLeft, setTimeLeft] = useState(getRemainingTime());
 
   const initialValues = {
@@ -23,36 +21,6 @@ const Salryfn = () => {
     initialValues: initialValues,
     enableReinitialize: true,
   });
-  // const { data, isLoading } = useQuery(
-  //   [
-  //     "get_milestone",
-  //     fk.values.search,
-  //     fk.values.start_date,
-  //     fk.values.end_date,
-  //     page,
-  //   ],
-  //   () =>
-  //     apiConnectorPost(endpoint?.roi_income_api, {
-  //       income_type: "MILESTONE",
-  //       search: fk.values.search,
-  //       start_date: fk.values.start_date,
-  //       end_date: fk.values.end_date,
-  //       page: page,
-  //       wallet_type: "INCOME",
-
-  //       count: 10,
-  //     }),
-  //   {
-  //     keepPreviousData: true,
-  //     refetchOnMount: false,
-  //     refetchOnReconnect: false,
-  //     refetchOnWindowFocus: false,
-  //     onError: (err) => console.error("Error fetching direct data:", err),
-  //   }
-  // );
-
-  // const allData = data?.data?.result || [];
-
   const { data: profile } = useQuery(
     ["get_profile_user"],
     () => apiConnectorGet(endpoint?.member_profile_detail),
@@ -68,10 +36,8 @@ const Salryfn = () => {
   const rankDate = moment(user_profile?.tr03_rank_date);
   const today = moment();
 
-  // difference in days from rank date to today
   const diffDays = today.diff(rankDate, "days");
 
-  // decide which date to show
   const displayDate =
     diffDays <= 15 ? rankDate.add(15, "days") : rankDate.add(30, "days");
 

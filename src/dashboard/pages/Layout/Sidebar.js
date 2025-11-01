@@ -54,6 +54,7 @@ const Sidebar = () => {
       icon: <FaCheck />,
       subItems: [
         { title: "Activation ", path: "/topup_data" },
+        { title: "NFT Fund ", path: "/nft_fund" },
         { title: "Activation Report", path: "/activation" },
       ],
     },
@@ -62,19 +63,6 @@ const Sidebar = () => {
       icon: <FaWallet />,
       path: "/payout_details",
     },
-
-
-    // {
-    //   title: "Associate Reg",
-    //   icon: <FaCheck />,
-    //   path: "/associate_registration",
-    // },
-    // {
-    //   title: "Trade Account Details",
-    //   icon: <FaCheck />,
-    //   path: "/trading_registration",
-    // },
-    // { title: "Invester History", icon: <FaUserAlt />, path: "/investor" },
 
     {
       title: "Income",
@@ -86,6 +74,8 @@ const Sidebar = () => {
         { title: "NFT Level Income", path: "/income/nft_level" },
         { title: " Delay Compensation", path: "/income/nft_delay" },
         { title: "MileStone Reward", path: "/income/direct" },
+        { title: "NFT Wallet History", path: "/wallet_history" },
+        
       ],
     },
 
@@ -100,31 +90,7 @@ const Sidebar = () => {
     },
     { title: "Profile", icon: <FaUserCog />, path: "/profile" },
 
-    // { title: "Cahback", icon: <FaWallet />, path: "/cashback" },
-    //  {
-    //     title: "Fund",
-    //     icon: <FaMoneyBillWave />,
-    //     subItems: [
-    //         { title: "Fund Request", path: "/fund" },
-    //         { title: "Transfer", path: "/fund-tranfer" }
-    //     ],
-    // },
-
-    // { title: "Invester Amount", icon: <FaWallet />, path: "/fund-tranfer" },
-    // { title: "Withdrawal", icon: <FaExchangeAlt />, path: "/withdrawal" },
-
-   
-    // {
-    //   title: "Support",
-    //   icon: <FaNetworkWired />,
-    //   subItems: [
-    //     // { title: "Ticket", path: "/add_ticket" },
-    //     { title: "Ticket", path: "/chat_ticket" },
-    //     // { title: "Inbox", path: "/add_ticket" },
-    //   ],
-    // },
-
-    // { title: "Support", icon: <FaHeadset />, path: "/dashboard" },
+    
     {
       title: "Logout",
       icon: <FaSignOutAlt />,

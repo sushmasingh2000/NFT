@@ -840,13 +840,21 @@ const Dashboard = () => {
                     label="NFT Wallet"
                     value={user_profile?.tr03_nft_wallet || "N/A"}
                   />
+                   <button
+                    type="button"
+                    onClick={() => navigate('/nft_fund')}
+                    className="bg-green-500 hover:bg-green-600 text-white font-semibold h-fit p-2 rounded transition w-fit"
+                  >
+                    Paying
+                  </button>
                   <button
                     type="button"
                     onClick={() => setIsPayoutModalOpen(true)}
-                    className="bg-orange-500 hover:bg-orange-600 text-white font-semibold h-fit p-2 rounded transition w-fit"
+                    className="bg-rose-500 hover:bg-rose-600 text-white font-semibold h-fit p-2 rounded transition w-fit"
                   >
                     Payout
                   </button>
+                 
 
                 </div>
               </div>

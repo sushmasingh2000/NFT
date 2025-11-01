@@ -13,7 +13,7 @@ export const apiConnectorGet = async (endpoint, params = {}) => {
       params: params,
     });
     if (response?.data?.message === "Invalid Token") {
-      toast("Login in another device ", { id: 1 });
+      alert("Login in another device ", { id: 1 });
       localStorage.clear();
       window.location.href = `${frontend}`;
       return;
@@ -36,12 +36,12 @@ export const apiConnectorPost = async (endpoint, reqBody) => {
         },
       }   
     );
-    // if (response?.data?.message === "Invalid Token") {
-    //   toast("Login in another device ", { id: 1 });
-    //   localStorage.clear();
-    //   window.location.href = `${frontend}`;
-    //   return;
-    // }
+    if (response?.data?.message === "Invalid Token") {
+      alert("Login in another device ", { id: 1 });
+      localStorage.clear();
+      window.location.href = `${frontend}`;
+      return;
+    }
     return response;
   } catch (e) {
     return {

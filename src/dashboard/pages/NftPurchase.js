@@ -56,8 +56,8 @@ const NFTPurchase = () => {
     <span>Date/Time</span>,
     <span>NFT ID</span>,
     <span>Transaction ID</span>,
-    <span>Hash</span>,
-    <span>Sold  Hash</span>,
+    // <span>Hash</span>,
+    // <span>Sold  Hash</span>,
     <span>Sold Transaction ID</span>,
     <span>Amount ($)</span>,
     <span> Status</span>,
@@ -69,21 +69,21 @@ const NFTPurchase = () => {
       <span>{moment(row.tr10_buy_date).format("DD-MM-YYYY HH:mm:ss")}</span>,
       <span>{row.m02_dist_id}</span>,
       <span>{row.tr10_trans_id}</span>,
-      <span
-        onClick={() =>
-          (document.location.href = `https://opbnbscan.com/tx/${row.tr08_trans_hash}`)
-        }
-        className="!text-blue-500 cursor-pointer"
-      >
-        View in opBNB
-      </span>,
-      <span  className="!text-green-500 cursor-pointer" >
-        {row.sold_hash ? 
-        <span onClick={() =>
-          (document.location.href = `https://opbnbscan.com/tx/${row.sold_hash}`)
-        }> View in opBNB     </span> : "--"
-        }
-      </span>,
+      // <span
+      //   onClick={() =>
+      //     (document.location.href = `https://opbnbscan.com/tx/${row.tr08_trans_hash}`)
+      //   }
+      //   className="!text-blue-500 cursor-pointer"
+      // >
+      //   View in opBNB
+      // </span>,
+      // <span  className="!text-green-500 cursor-pointer" >
+      //   {row.sold_hash ? 
+      //   <span onClick={() =>
+      //     (document.location.href = `https://opbnbscan.com/tx/${row.sold_hash}`)
+      //   }> View in opBNB     </span> : "--"
+      //   }
+      // </span>,
       <span>{row.sold_transaction_id || "---"}</span>,
       <span>{parseFloat(row.tr10_buy_price).toFixed(2)}</span>,
       <span

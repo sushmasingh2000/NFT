@@ -840,12 +840,12 @@ const Dashboard = () => {
                     label="NFT Wallet"
                     value={user_profile?.tr03_nft_wallet || "N/A"}
                   />
-                   <button
+                  <button
                     type="button"
                     onClick={() => navigate('/nft_fund')}
-                    className="bg-green-500 hover:bg-green-600 text-white font-semibold h-fit p-2 rounded transition w-fit"
+                    className="bg-green-700 hover:bg-green-500 text-white font-semibold h-fit p-2 rounded transition w-fit"
                   >
-                    Paying
+                    Deposit
                   </button>
                   <button
                     type="button"
@@ -854,7 +854,7 @@ const Dashboard = () => {
                   >
                     Payout
                   </button>
-                 
+
 
                 </div>
               </div>
@@ -991,17 +991,26 @@ const Dashboard = () => {
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
           <div className="bg-gray-900 text-white rounded-xl p-6 w-[90%] max-w-md shadow-xl">
             <h2 className="text-xl font-semibold mb-4 text-center">Enter Payout Amount</h2>
+            <div className="flex flex-col mb-5">
+              <div className="flex justify-between items-center">
+                <div className="flex flex-col">
+                  <h3 className="text-white text-sm font-semibold">NFT Wallet Balance:</h3>
+                  <p className="text-green-400 font-bold text-lg mt-2 text-center">
+                    {user_profile?.tr03_nft_wallet } USDT
+                  </p>
+                </div>
+                <button
+                  onClick={() =>
+                    setPayoutAmount(Number(user_profile?.tr03_nft_wallet || 0))
+                  }
+                  className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg font-semibold"
+                >
+                  All
+                </button>
+              </div>
 
+            </div>
 
-            <div className="flex justify-end mb-5">
-              <button
-                onClick={() =>
-                  setPayoutAmount(Number(user_profile?.tr03_nft_wallet || 0))
-                }
-                className="bg-green-600 hover:bg-green-700 px-4 py-2  rounded-lg font-semibold"
-              >
-                All
-              </button></div>
             <input
               type="number"
               value={payoutAmount}

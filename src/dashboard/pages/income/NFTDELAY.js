@@ -51,104 +51,29 @@ const NFTDelay = () => {
     <span>S.No.</span>,
     <span>Date</span>,
     <span>NFT Id</span>,
-    // <span>User Name</span>,
-    <span>Amount ($)</span>,
-    // <span>TopUp Wallet</span>,
+    <span>Amount ($)</span>,,
     <span>Description</span>,
   ];
   const tablerow = allData?.data?.map((row, index) => {
     return [
       <span> {(page - 1) * 10 + index + 1}</span>,
-      <span>{moment(row.ledger_created_at)?.format("DD-MM-YYYY")}</span>,
+      <span>{moment(row.tr07_created_at)?.format("DD-MM-YYYY")}</span>,
       <span>{row?.m02_dist_id || "--"}</span>,
-      // <span>{row.from_name}</span>,
       <span> {Number(row.tr07_amount || 0)?.toFixed(4) || '$0.00'}</span>,
-      // <span>{Number(row.jnr_topup_wallet)?.toFixed(2) || '--'}</span>,
-      <span>{row.ledger_des || '--'}</span>,
+      <span>{row.tr07_description || '--'}</span>,
     ];
   });
   return (
     <div className="p-2">
       <div className="bg-gray-800 rounded-lg shadow-lg p-3 text-white border border-gray-700 mb-6">
         <h2 className="text-xl font-semibold mb-4 text-gray-200"> Delay Compensation</h2>
-
-        {/* <div className="flex flex-col sm:flex-wrap md:flex-row items-center gap-3 sm:gap-4 w-full text-sm sm:text-base">
-           <TextField
-            type="date"
-            label="Start Date"
-            name="start_date"
-            id="start_date"
-            value={fk.values.start_date}
-            onChange={fk.handleChange}
-            InputLabelProps={{
-              shrink: true,
-              style: { color: '#fff' },
-            }}
-            inputProps={{
-              style: { color: '#fff' },
-            }}
-            className="bg-gray-700 border border-gray-600 rounded-md  text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
-          />
-
-          <TextField
-            label="End Date"
-            type="date"
-            name="end_date"
-            id="end_date"
-            value={fk.values.end_date}
-            onChange={fk.handleChange}
-             InputLabelProps={{
-              shrink: true,
-              style: { color: '#fff' },
-            }}
-            inputProps={{
-              style: { color: '#fff' },
-            }}
-            className="bg-gray-700 border border-gray-600 rounded-md py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
-          />
-
-          <input
-            type="text"
-            name="search"
-            id="search"
-            value={fk.values.search}
-            onChange={fk.handleChange}
-            placeholder="User ID"
-            className="bg-gray-700 border border-gray-600 rounded-full py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
-          />
-          <button
-            onClick={() => {
-              setPage(1);
-              client.invalidateQueries(["get_level"]);
-            }}
-            type="submit"
-            className="bg-gold-color text-gray-900 font-bold py-2 px-4 rounded-full hover:bg-dark-color transition-colors w-full sm:w-auto text-sm"
-          >
-            Search
-          </button>
-          <button
-            onClick={() => {
-              fk.handleReset();
-              setPage(1);
-            }}
-            className="bg-gray-color text-gray-900 font-bold py-2 px-4 rounded-full hover:bg-black hover:text-white transition-colors w-full sm:w-auto text-sm"
-          >
-            Clear
-          </button>
-        </div> */}
       </div>
-
-
-      {/* Main Table Section */}
       <div className="bg-gray-800 rounded-lg shadow-lg p-3 text-white border border-gray-700">
         <CustomTable
           tablehead={tablehead}
           tablerow={tablerow}
           isLoading={isLoading}
         />
-
-
-        {/* Pagination */}
         <CustomToPagination
           page={page}
           setPage={setPage}

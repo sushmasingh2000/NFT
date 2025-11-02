@@ -56,7 +56,7 @@ const Activation = () => {
     <span>Date</span>,
     <span>Transaction ID</span>,
     <span>Amount ($)</span>,
-    // <span>Wallet</span>,
+    <span>Hash</span>,
     <span>Description</span>,
   ];
 
@@ -68,6 +68,12 @@ const Activation = () => {
       </span>,
       <span>{row.tr07_trans_id}</span>,
       <span>{Number(row.tr07_amount).toFixed(4)}</span>,
+       <span>
+                 {row.block_hash ? 
+                 <span className='text-green-500' onClick={() =>
+                (document.location.href = `https://opbnbscan.com/tx/${row.block_hash}`)
+            }> View in opBNB     </span> : "--" }
+                </span>,
       // <span>{row.tr07_wallet || 'N/A'}</span>,
       <span>{row.tr07_description || "N/A"}</span>,
     ];

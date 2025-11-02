@@ -7,6 +7,7 @@ import CustomToPagination from "../../Shared/Pagination";
 import { useFormik } from "formik";
 import moment from "moment";
 import { TextField } from "@mui/material";
+import { Refresh } from "@mui/icons-material";
 
 const NFTPurchase = () => {
   const [page, setPage] = useState(1);
@@ -21,7 +22,7 @@ const NFTPurchase = () => {
     enableReinitialize: true,
   });
 
-  const { data, isLoading } = useQuery(
+  const { data, isLoading, refetch } = useQuery(
     [
       "get_nft_details",
       fk.values.search,
@@ -55,8 +56,9 @@ const NFTPurchase = () => {
     <span>Date/Time</span>,
     <span>NFT ID</span>,
     <span>Transaction ID</span>,
-    <span>Hash</span>,
-    <span>NFT Name</span>,
+    // <span>Hash</span>,
+    // <span>Sold  Hash</span>,
+    <span>Sold Transaction ID</span>,
     <span>Amount ($)</span>,
     <span> Status</span>,
   ];
@@ -67,15 +69,22 @@ const NFTPurchase = () => {
       <span>{moment(row.tr10_buy_date).format("DD-MM-YYYY HH:mm:ss")}</span>,
       <span>{row.m02_dist_id}</span>,
       <span>{row.tr10_trans_id}</span>,
-      <span
-        onClick={() =>
-          (document.location.href = `https://opbnbscan.com/tx/${row.tr08_trans_hash}`)
-        }
-        className="!text-blue-500 cursor-pointer"
-      >
-        View in opBNB
-      </span>,
-      <span>{row.m01_name}</span>,
+      // <span
+      //   onClick={() =>
+      //     (document.location.href = `https://opbnbscan.com/tx/${row.tr08_trans_hash}`)
+      //   }
+      //   className="!text-blue-500 cursor-pointer"
+      // >
+      //   View in opBNB
+      // </span>,
+      // <span  className="!text-green-500 cursor-pointer" >
+      //   {row.sold_hash ? 
+      //   <span onClick={() =>
+      //     (document.location.href = `https://opbnbscan.com/tx/${row.sold_hash}`)
+      //   }> View in opBNB     </span> : "--"
+      //   }
+      // </span>,
+      <span>{row.sold_transaction_id || "---"}</span>,
       <span>{parseFloat(row.tr10_buy_price).toFixed(2)}</span>,
       <span
         className={`${!row.tr10_sell_req
@@ -97,7 +106,7 @@ const NFTPurchase = () => {
   return (
     <div className="p-2">
       <div className="bg-gray-800 rounded-lg shadow-lg p-3 text-white border border-gray-700 mb-6">
-        <h2 className="text-xl font-semibold mb-4 text-gray-200">History</h2>
+        <h2 className="text-xl font-semibold mb-4 text-gray-200">History  <Refresh className="!cursor-pointer" onClick={refetch}/></h2>
 
         {/* <div className="flex flex-col sm:flex-wrap md:flex-row items-center gap-3 sm:gap-4 w-full text-sm sm:text-base">
 

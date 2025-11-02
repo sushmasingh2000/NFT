@@ -11,9 +11,11 @@ import ROIBonus from "../Adminpages/Pages/genealogy/ROIBonus";
 import WeeklyBonus from "../Adminpages/Pages/genealogy/WeeklyBonus";
 import INRPaying from "../Adminpages/Pages/INRPayment/INRPaying";
 import INRPayout from "../Adminpages/Pages/INRPayment/INRPayout";
+import WalletReport from "../Adminpages/Pages/INRPayment/WalletReport";
 import Master from "../Adminpages/Pages/Master";
 import NFTAssign from "../Adminpages/Pages/NFTAssign";
 import NFTManager from "../Adminpages/Pages/NFTCreate";
+import NFTTopUp from "../Adminpages/Pages/NFTTopUp";
 import ContactDetail from "../Adminpages/Pages/Team/Contactlist";
 import TraderRejct from "../Adminpages/Pages/Team/subinvestor/InvestorReject";
 import TraderSucess from "../Adminpages/Pages/Team/subinvestor/InvestorSuccess";
@@ -141,6 +143,19 @@ export const adminroutes = [
     path: "/trader_detail",
     component: <TraderList/>,
     navItem: "Invester ",
+  },
+   {
+    id: 43,
+    path: "/wallet_admin_report",
+    component: <WalletReport/>,
+    navItem: "NFT Wallet Report ",
+  },
+  
+  {
+    id: 43,
+    path: "/nft_topup_admin",
+    component: <NFTTopUp/>,
+    navItem: "NFT TopUp ",
   },
     {
     id: 43,

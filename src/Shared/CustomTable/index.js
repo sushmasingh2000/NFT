@@ -52,24 +52,36 @@ const CustomTable = ({
                 </td>
               </tr>
             ) : (
-              tablerow.map((row, rowIndex) => (
-                <tr
-                  key={rowIndex}
-                  className="hover:bg-gray-600/30 hover:text-white transition-colors cursor-pointer"
-                >
-                  {Array.isArray(row) &&
-                    row.map((cell, cellIndex) => (
-                      <td
-                        key={cellIndex}
-                        className="border border-green-400 border-opacity-50 px-4 py-3 whitespace-nowrap text-sm text-gray-200"
-                      >
-                        {cell}
-                      </td>
-                    ))}
-                </tr>
-              ))
+              tablerow.map((row, rowIndex) => {
+                // ✅ Detect if this row should be red
+                const isMemberRow = row.some(
+                  (cell) => cell?.props?.className?.includes("bg-red-400")
+                );
+
+                return (
+                  <tr
+                    key={rowIndex}
+                    className={`hover:bg-gray-600/30 hover:text-white transition-colors ${isMemberRow ? "bg-red-400 hover:bg-red-400" : ""
+                      }`}
+                  >
+                    {Array.isArray(row) &&
+                      row.map((cell, cellIndex) => (
+                        <td
+                          key={cellIndex}
+                          className="border border-green-400 border-opacity-50 px-4 py-3 whitespace-nowrap text-sm text-gray-200"
+                        >
+                          {/* remove 'block' here so it stays inline */}
+                          {React.cloneElement(cell, {
+                            className: cell.props.className?.replace("block", "inline-block"),
+                          })}
+                        </td>
+                      ))}
+                  </tr>
+                );
+              })
             )}
           </tbody>
+
         </table>
       </div>
     </div>

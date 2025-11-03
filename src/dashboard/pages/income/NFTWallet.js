@@ -53,24 +53,58 @@ const NFTWalletHistory = () => {
         <span>Date</span>,
         <span>Transaction Id</span>,
         <span>Amount ($)</span>,
+        <span>  Type </span>,
         <span>Hash </span>,
         <span>Description</span>,
     ];
+
     const tablerow = allData?.data?.map((row, index) => {
+        const isMemberPayout = row?.tr07_description?.trim()?.startsWith("Member Payout");
+
         return [
-            <span> {(page - 1) * 10 + index + 1}</span>,
-            <span>{moment(row.tr07_created_at)?.format("DD-MM-YYYY")}</span>,
-            <span>{row?.tr07_trans_id || "--"}</span>,
-            <span>{Number(row.tr07_amount || 0)?.toFixed(4) || '$0.00'}</span>,
-            <span>
-                 {row.block_hash ? 
-                 <span className='text-green-500' onClick={() =>
-                (document.location.href = `https://opbnbscan.com/tx/${row.block_hash}`)
-            }> View in opBNB     </span> : "--" }
-                </span>,
-            <span>{row.tr07_description || '--'}</span>,
+            <span className={isMemberPayout ? "bg-red-400/30 p-3" : ""}>
+                {(page - 1) * 10 + index + 1}
+            </span>,
+            <span className={isMemberPayout ? "bg-red-400/30 p-3" : ""}>
+                {moment(row.tr07_created_at)?.format("DD-MM-YYYY")}
+            </span>,
+            <span className={isMemberPayout ? "bg-red-400/30 p-3" : ""}>
+                {row?.tr07_trans_id || "--"}
+            </span>,
+            <span className={isMemberPayout ? "bg-red-400/30 p-3" : ""}>
+                {Number(row.tr07_amount || 0)?.toFixed(4) || "$0.00"}
+            </span>,
+            <span
+                className={`${row?.tr07_credit === 1 ? "text-green-500" : "text-red-500"} ${isMemberPayout ? "bg-red-400/30 p-3" : ""
+                    }`}
+            >
+                {row?.tr07_credit === 1 ? "CR" : "DR"}
+            </span>,
+            <span
+                className={isMemberPayout ? "bg-red-400/30 p-3" : ""}
+            >
+                {row.block_hash ? (
+                    <span
+                        className="text-green-500 cursor-pointer"
+                        onClick={() =>
+                            (document.location.href = `https://opbnbscan.com/tx/${row.block_hash}`)
+                        }
+                    >
+                        View in opBNB
+                    </span>
+                ) : (
+                    "--"
+                )}
+            </span>,
+            <span
+                className={isMemberPayout ? "bg-red-400/30 p-3" : ""}
+            >
+                {row.tr07_description || "--"}
+            </span>,
         ];
     });
+
+
     return (
         <div className="p-2">
             <div className="bg-gray-800 rounded-lg shadow-lg p-3 text-white border border-gray-700 mb-6">

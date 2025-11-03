@@ -62,26 +62,26 @@ const NFTWalletHistory = () => {
         const isMemberPayout = row?.tr07_description?.trim()?.startsWith("Member Payout");
 
         return [
-            <span className={isMemberPayout ? "bg-red-400/30 p-3" : ""}>
+            <span className={isMemberPayout ? "text-red-400 p-3" : ""}>
                 {(page - 1) * 10 + index + 1}
             </span>,
-            <span className={isMemberPayout ? "bg-red-400/30 p-3" : ""}>
+            <span className={isMemberPayout ? "text-red-400 p-3" : ""}>
                 {moment(row.tr07_created_at)?.format("DD-MM-YYYY")}
             </span>,
-            <span className={isMemberPayout ? "bg-red-400/30 p-3" : ""}>
+            <span className={isMemberPayout ? "text-red-400 p-3" : ""}>
                 {row?.tr07_trans_id || "--"}
             </span>,
-            <span className={isMemberPayout ? "bg-red-400/30 p-3" : ""}>
+            <span className={isMemberPayout ? "text-red-400 p-3" : ""}>
                 {Number(row.tr07_amount || 0)?.toFixed(4) || "$0.00"}
             </span>,
             <span
-                className={`${row?.tr07_credit === 1 ? "text-green-500" : "text-red-500"} ${isMemberPayout ? "bg-red-400/30 p-3" : ""
+                className={`${row?.tr07_credit === 1 ? "text-green-500" : "text-red-500"} ${isMemberPayout ? "text-red-400 p-3" : ""
                     }`}
             >
                 {row?.tr07_credit === 1 ? "CR" : "DR"}
             </span>,
             <span
-                className={isMemberPayout ? "bg-red-400/30 p-3" : ""}
+                className={isMemberPayout ? "text-red-400 p-3" : ""}
             >
                 {row.block_hash ? (
                     <span
@@ -97,7 +97,7 @@ const NFTWalletHistory = () => {
                 )}
             </span>,
             <span
-                className={isMemberPayout ? "bg-red-400/30 p-3" : ""}
+                className={isMemberPayout ? "text-red-400 p-3" : ""}
             >
                 {row.tr07_description || "--"}
             </span>,

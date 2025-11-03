@@ -144,7 +144,7 @@ const Team = () => {
             setAnchorEl(e.currentTarget);
           }}
         >
-          {nodeDatum.name}
+          {nodeDatum.name}  ({nodeDatum.lgn_cust_id})
         </text>
       </g>
     );

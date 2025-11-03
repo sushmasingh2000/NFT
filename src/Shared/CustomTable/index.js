@@ -55,13 +55,13 @@ const CustomTable = ({
               tablerow.map((row, rowIndex) => {
                 // ✅ Detect if this row should be red
                 const isMemberRow = row.some(
-                  (cell) => cell?.props?.className?.includes("bg-red-400")
+                  (cell) => cell?.props?.className?.includes("text-red-400")
                 );
 
                 return (
                   <tr
                     key={rowIndex}
-                    className={`hover:bg-gray-600/30 hover:text-white transition-colors ${isMemberRow ? "bg-red-400 hover:bg-red-400" : ""
+                    className={`hover:bg-gray-600/30 hover:text-white transition-colors ${isMemberRow ? "text-red-400 hover:text-red-400" : ""
                       }`}
                   >
                     {Array.isArray(row) &&

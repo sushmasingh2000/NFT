@@ -16,7 +16,7 @@ import {
   FaWallet,
 } from "react-icons/fa";
 import { useQuery } from "react-query";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../../../assets/favicon.png";
 import { apiConnectorGet } from "../../../utils/APIConnector";
 import { endpoint } from "../../../utils/APIRoutes";
@@ -36,14 +36,14 @@ const Sidebar = () => {
       setActiveMenu(title);
       setActiveSubMenu("");
       setShowSidebar(false);
-      if (path) navigate(path);
+      // if (path) navigate(path);
     }
   };
 
   const handleSubItemClick = (menuTitle, subItem) => {
     setActiveMenu(`${menuTitle} > ${subItem.title}`);
     setShowSidebar(false);
-    if (subItem.path) navigate(subItem.path);
+    // if (subItem.path) navigate(subItem.path);
   };
 
   const menuItems = [
@@ -75,7 +75,7 @@ const Sidebar = () => {
         { title: " Delay Compensation", path: "/income/nft_delay" },
         { title: "MileStone Reward", path: "/income/direct" },
         { title: "NFT Wallet History", path: "/wallet_history" },
-        
+
       ],
     },
 
@@ -90,7 +90,7 @@ const Sidebar = () => {
     },
     { title: "Profile", icon: <FaUserCog />, path: "/profile" },
 
-    
+
     {
       title: "Logout",
       icon: <FaSignOutAlt />,
@@ -111,7 +111,7 @@ const Sidebar = () => {
           </button>
           {/* <h1 className="text-xl font-semibold">Dashboard</h1> */}
           <div className="flex items-center space-x-2 font-medium">
-           <img src={logo} alt="" className="h-10 filter brightness-200"/>
+            <img src={logo} alt="" className="h-10 filter brightness-200" />
           </div>
         </div>
       </div>
@@ -142,88 +142,82 @@ const Sidebar = () => {
 
         {/* Menu Items */}
         <nav className="flex-1 p-2 space-y-1 text-sm overflow-y-auto example">
-          {menuItems.map((item, i) => {
-            const isMenuActive =
-              activeMenu === item.title ||
-              activeMenu.startsWith(`${item.title} >`);
-            const isSubOpen = activeSubMenu === item.title;
+        {menuItems.map((item, i) => {
+  const isMenuActive =
+    activeMenu === item.title ||
+    activeMenu.startsWith(`${item.title} >`);
+  const isSubOpen = activeSubMenu === item.title;
 
+  return (
+    <div key={i} className="border-b border-gray-700 pb-1 mb-1">
+      {/* Main Menu */}
+      <div
+        onClick={() => {
+          if (item.subItems) {
+            // Only toggle submenu if it has subitems
+            handleMenuClick(item.title, true);
+          } else if (item.path) {
+            // For simple menu items -> open in new tab
+            window.open(item.path, "_blank");
+          } else if (item.onClick) {
+            item.onClick();
+          }
+        }}
+        className={`flex items-center justify-between p-2 rounded cursor-pointer transition font-medium ${
+          isMenuActive
+            ? "bg-gold-color text-black"
+            : "hover:bg-gray-800 text-white"
+        }`}
+      >
+        <div className="flex gap-2 items-center space-x-2 pl-3">
+          <span
+            className={`text-lg ${
+              isMenuActive ? "text-black" : "text-color"
+            }`}
+          >
+            {item.icon}
+          </span>
+          <span>{item.title}</span>
+        </div>
+        {item.subItems && (
+          <span>
+            {isSubOpen ? <FaAngleDown /> : <FaAngleRight />}
+          </span>
+        )}
+      </div>
+
+      {/* Submenu */}
+      {item.subItems && isSubOpen && (
+        <div className="ml-8 mt-1 space-y-1">
+          {item.subItems.map((sub, index) => {
+            const isSubActive =
+              activeMenu === `${item.title} > ${sub.title}`;
             return (
-              <div key={i} className="border-b border-gray-700 pb-1 mb-1">
-                {item.external ? (
-                  <a
-                    href={item.path}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    download={item.download}
-                    className={`flex items-center justify-between p-2 rounded cursor-pointer transition font-medium ${isMenuActive
-                      ? "bg-gold-color text-black"
-                      : "hover:bg-gray-800 text-white"
-                      }`}
-                  >
-                    <div className="flex gap-2 items-center space-x-2 pl-3">
-                      <span
-                        className={`text-lg ${isMenuActive ? "text-black" : "text-color"
-                          }`}
-                      >
-                        {item.icon}
-                      </span>
-                      <span>{item.title}</span>
-                    </div>
-                  </a>
-                ) : (
-                  // For internal links
-                  <div
-                    onClick={() => {
-                      if (item.onClick) {
-                        item.onClick();
-                      } else {
-                        handleMenuClick(item.title, !!item.subItems, item.path);
-                      }
-                    }}
-                    className={`flex items-center justify-between p-2 rounded cursor-pointer transition font-medium ${isMenuActive
-                      ? "bg-gold-color text-black"
-                      : "hover:bg-gray-800 text-white"
-                      }`}
-                  >
-                    <div className="flex gap-2 items-center space-x-2 pl-3">
-                      <span
-                        className={`text-lg ${isMenuActive ? "text-black" : "text-color"
-                          }`}
-                      >
-                        {item.icon}
-                      </span>
-                      <span>{item.title}</span>
-                    </div>
-                    {item.subItems &&
-                      (isSubOpen ? <FaAngleDown /> : <FaAngleRight />)}
-                  </div>
-                )}
-
-                {/* Submenu */}
-                {item.subItems && isSubOpen && (
-                  <div className="ml-8 mt-1 space-y-1">
-                    {item.subItems.map((sub, index) => {
-                      const isSubActive =
-                        activeMenu === `${item.title} > ${sub.title}`;
-                      return (
-                        <div
-                          key={index}
-                          onClick={() => handleSubItemClick(item.title, sub)}
-                          className={`px-3 py-1 rounded cursor-pointer transition ${isSubActive
-                            ? "bg-gold-color text-black"
-                            : "hover:bg-gray-700 text-white"
-                            }`}
-                        >
-                          {sub.title}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
+              <div
+                key={index}
+                onClick={() => {
+                  handleSubItemClick(item.title, sub);
+                  if (sub.path) {
+                    window.open(sub.path, "_blank");
+                  }
+                }}
+                className={`px-3 py-1 rounded cursor-pointer transition ${
+                  isSubActive
+                    ? "bg-gold-color text-black"
+                    : "hover:bg-gray-700 text-white"
+                }`}
+              >
+                {sub.title}
               </div>
             );
           })}
+        </div>
+      )}
+    </div>
+  );
+})}
+
+
         </nav>
       </aside>
     </>

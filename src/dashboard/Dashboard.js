@@ -964,8 +964,8 @@ const Dashboard = () => {
                   </div>
                   <div className="flex justify-between">
                     <div className="flex flex-col">
-                      <p>NFT: {nft.m02_dist_id}</p>
-                      <p className="text-sm text-gray-300">Price</p>
+                      {/* <p>NFT: {nft.m02_dist_id}</p> */}
+                      <p className="text-sm text-gray-300">Price </p>
                       <p className="text-lg font-bold mb-4 text-white">
                         {Number(nft.m02_curr_price).toFixed(4)} USDT
                       </p>{" "}

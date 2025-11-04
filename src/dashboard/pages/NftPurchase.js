@@ -55,10 +55,10 @@ const NFTPurchase = () => {
     <span>S.No.</span>,
     <span>Date/Time</span>,
     <span>NFT ID</span>,
-    <span>Transaction ID</span>,
+    // <span>Transaction ID</span>,
     // <span>Hash</span>,
     // <span>Sold  Hash</span>,
-    <span>Sold Transaction ID</span>,
+    // <span>Sold Transaction ID</span>,
     <span>Amount ($)</span>,
     <span> Status</span>,
   ];
@@ -68,7 +68,7 @@ const NFTPurchase = () => {
       <span>{(page - 1) * 10 + index + 1}</span>,
       <span>{moment(row.tr10_buy_date).format("DD-MM-YYYY HH:mm:ss")}</span>,
       <span>{row.m02_dist_id}</span>,
-      <span>{row.tr10_trans_id}</span>,
+      // <span>{row.tr10_trans_id}</span>,
       // <span
       //   onClick={() =>
       //     (document.location.href = `https://opbnbscan.com/tx/${row.tr08_trans_hash}`)
@@ -84,7 +84,7 @@ const NFTPurchase = () => {
       //   }> View in opBNB     </span> : "--"
       //   }
       // </span>,
-      <span>{row.sold_transaction_id || "---"}</span>,
+      // <span>{row.sold_transaction_id || "---"}</span>,
       <span>{parseFloat(row.tr10_buy_price).toFixed(2)}</span>,
       <span
         className={`${!row.tr10_sell_req

@@ -54,7 +54,10 @@ const TraderList = () => {
         // <span>Email</span>,
         // <span>Mobile</span>,
         <span>NFT Name</span>,
-        <span>Amount ($)</span>,
+        <span>Buy Price ($)</span>,
+        <span>Sell Price ($)</span>,
+        <span>Appr. </span>,
+        <span>ROI </span>,
         <span>Transaction ID</span>,
         // <span>Hash</span>,
         <span>Old Status</span>,
@@ -74,6 +77,9 @@ const TraderList = () => {
             // <span>{row.lgn_mobile}</span>,
             <span>{row.m01_name}</span>,
             <span>{parseFloat(row.tr10_buy_price).toFixed(2)}</span>,
+            <span>{parseFloat(row.tr10_sell_price).toFixed(2)}</span>,
+            <span>{parseFloat(row.tr10_appri_profit).toFixed(2)}</span>,
+            <span>{parseFloat(row.tr10_roi_profit).toFixed(2)}</span>,
             <span>{row.tr10_trans_id}</span>,
             // <span
             //     onClick={() =>

@@ -38,6 +38,7 @@ const Dashboard = () => {
   const client = useQueryClient();
   const [loding, setLoding] = useState(false);
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
   const [timeLeft, setTimeLeft] = useState(getRemainingTime());
   const isBuyingRef = useRef(false);
   const pageIntervalRef = useRef(null);
@@ -560,9 +561,10 @@ const Dashboard = () => {
   const user_profile = profile?.data?.result?.[0] || {};
 
 
-  const getNFTData = async () => {
+  const getNFTData = async (search) => {
     try {
       const res = await apiConnectorPost(endpoint?.get_nft, {
+        search: search,
         page: page,
         count: "12",
         isreserve: "no"
@@ -915,6 +917,42 @@ const Dashboard = () => {
               {" "}
               NFT Market Place
             </h2>
+            {user_nft?.result?.isShow && (
+              <div className="flex lg:flex-row flex-col gap-2 py-5">
+
+                <input
+                  type="text"
+                  name="search"
+                  id="search"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="NFT ID"
+                  className="bg-gray-700 border border-gray-600 rounded py-2 px-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto text-sm"
+                />
+                <button
+                  onClick={() => {
+                    setPage(1);
+                    getNFTData(search);
+                  }}
+                  type="submit"
+                  className="bg-gold-color text-gray-900 font-bold py-2 px-4 rounded-full hover:bg-dark-color transition-colors w-full sm:w-auto text-sm"
+                >
+                  Search
+                </button>
+                <button
+                  onClick={() => {
+                    setSearch("");
+                    setPage(1);
+                    getNFTData("");
+                  }}
+                  className="bg-gray-color text-gray-900 font-bold py-2 px-4 rounded-full hover:bg-black hover:text-white transition-colors w-full sm:w-auto text-sm"
+                >
+                  Clear
+                </button>
+
+              </div>
+            )}
+
             {/* <div className="flex flex-wrap justify-start ">
               <div className="my-4 w-full max-w-sm mx-auto">
                 <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black border border-gray-700 rounded-2xl shadow-lg p-5 text-white flex flex-col justify-center items-center transition-transform transform hover:scale-[1.02]">
@@ -964,7 +1002,9 @@ const Dashboard = () => {
                   </div>
                   <div className="flex justify-between">
                     <div className="flex flex-col">
-                      {/* <p>NFT: {nft.m02_dist_id}</p> */}
+                      {user_nft?.result?.isShow && (
+                      <p>NFT: {nft.m02_dist_id}</p>
+                      )}
                       <p className="text-sm text-gray-300">Price </p>
                       <p className="text-lg font-bold mb-4 text-white">
                         {Number(nft.m02_curr_price).toFixed(4)} USDT
@@ -996,7 +1036,7 @@ const Dashboard = () => {
                 <div className="flex flex-col">
                   <h3 className="text-white text-sm font-semibold">NFT Wallet Balance:</h3>
                   <p className="text-green-400 font-bold text-lg mt-2 text-center">
-                    {user_profile?.tr03_nft_wallet } USDT
+                    {user_profile?.tr03_nft_wallet} USDT
                   </p>
                 </div>
                 <button

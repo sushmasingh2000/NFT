@@ -94,7 +94,7 @@ const TraderList = () => {
                     ? "Bought"
                     : "--"}
             </span>,
-            <span>{moment?.utc(row.tr10_buy_date).format("DD-MM-YYYY HH:mm:ss")}</span>,
+            <span>{moment(row.tr10_buy_date).format("DD-MM-YYYY HH:mm:ss")}</span>,
             <span
                 className={`${!row.tr10_sell_req
                     ? "text-rose-400" // HOLD = red
@@ -109,7 +109,7 @@ const TraderList = () => {
                         ? "SELL"
                         : "SOLD"}
             </span>,
-            <span>{moment?.utc(row.tr10_updated_at).format("DD-MM-YYYY HH:mm:ss")}</span>,
+            <span>{moment(row.tr10_updated_at).format("DD-MM-YYYY HH:mm:ss")}</span>,
         ];
     });
 

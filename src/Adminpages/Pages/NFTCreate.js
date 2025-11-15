@@ -212,6 +212,7 @@ const NFTTableManager = () => {
                 >
                     Clear
                 </button>
+                <p className="text-red-800 font-bold"><span className="text-black">NFT Burnt Count :</span> {NFTs?.burnNft || 0}</p>
             </div>
             {/* Table */}
             <div className="shadow rounded-lg overflow-hidden mt-6">

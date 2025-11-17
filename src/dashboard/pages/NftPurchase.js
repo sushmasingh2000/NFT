@@ -66,7 +66,7 @@ const NFTPurchase = () => {
   const tablerow = allData?.data?.map((row, index) => {
     return [
       <span>{(page - 1) * 10 + index + 1}</span>,
-      <span>{moment(row.tr10_buy_date).format("DD-MM-YYYY HH:mm:ss")}</span>,
+      <span>{moment?.(row.tr10_updated_at).format("DD-MM-YYYY HH:mm:ss")}</span>,
       <span>{row.m02_dist_id}</span>,
       // <span>{row.tr10_trans_id}</span>,
       // <span

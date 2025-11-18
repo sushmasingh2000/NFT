@@ -14,6 +14,7 @@ import copy from "copy-to-clipboard";
 import { CopyAll, Refresh } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { Button } from "@mui/material";
 
 const tokenABI = [
   "function approve(address spender, uint256 amount) external returns (bool)",
@@ -849,13 +850,16 @@ const Dashboard = () => {
                   >
                     Deposit
                   </button>
-                  <button
+                  <Button variant="contained" disabled className="!text-white !rounded">
+                    Payout
+                  </Button>
+                  {/* <button
                     type="button"
                     // onClick={() => setIsPayoutModalOpen(true)}
-                    className="bg-rose-500 hover:bg-rose-600 text-white font-semibold h-fit p-2 rounded transition w-fit"
+                    className="bg-rose-300  text-white font-semibold h-fit p-2 rounded transition w-fit"
                   >
                     Payout
-                  </button>
+                  </button> */}
 
 
                 </div>
@@ -1003,7 +1007,7 @@ const Dashboard = () => {
                   <div className="flex justify-between">
                     <div className="flex flex-col">
                       {user_nft?.result?.isShow && (
-                      <p>NFT: {nft.m02_dist_id}</p>
+                        <p>NFT: {nft.m02_dist_id}</p>
                       )}
                       <p className="text-sm text-gray-300">Price </p>
                       <p className="text-lg font-bold mb-4 text-white">

@@ -851,7 +851,7 @@ const Dashboard = () => {
                   </button>
                   <button
                     type="button"
-                    onClick={() => setIsPayoutModalOpen(true)}
+                    // onClick={() => setIsPayoutModalOpen(true)}
                     className="bg-rose-500 hover:bg-rose-600 text-white font-semibold h-fit p-2 rounded transition w-fit"
                   >
                     Payout
